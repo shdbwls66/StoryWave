@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: storywave
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/storywave
+    username: root
+    password: '0000'
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  thymeleaf:
+    cache: false # ??? ???? ?? -> ?? ? ?? ???
+    prefix: classpath:/templates/ # ??? ?? ??
+    suffix: .html # ??? ?? ???
+    mode: HTML # HTML5 ??
+    encoding: UTF-8 # ??? ??

@@ -1,0 +1,291 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: #EDE7DF;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    width: 100%;
+    height: 69px;
+    padding: 15px 0;
+    background-color: #EDE7DF;
+    z-index: 10;
+}
+
+.nav_bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #EDE7DF;
+    z-index: 10;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+h3 {
+    font-size: 10pt;
+}
+
+.menu_detail {
+    font-size: 8pt;
+}
+
+.menu_cont {
+    display: flex;
+    flex-direction: column;
+    padding: 0 17px;
+    align-items: end;
+    font-size: 10pt;
+}
+
+.storywave_img {
+    height: 85px;
+}
+
+.menu_cont2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-self: flex-end;
+    padding-top: 28px;
+    gap: 28px;
+}
+
+#search-input {
+    padding: 3px 10px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    vertical-align: bottom;
+}
+
+#search_btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    height: 14px;
+}
+
+.search_img {
+    height: 14px;
+}
+
+.user_menu {
+    display: flex;
+    align-self: flex-end;
+}
+
+.firstLine {
+    display: inline-flex;
+    border-style: solid;
+}
+
+.mainCont {
+    display: flex;
+    padding: 35vh 16px 23px 16px;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    gap: 10px;
+}
+
+.post_menu {
+    display: flex;
+    width: 100%;
+    height: 65px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+}
+
+/*모달*/
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    z-index: 20;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 30px 0 #00000033;
+    justify-content: center;
+    align-items: center;
+}
+
+/*모달 내용*/
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 250px;
+    gap: 6px;
+    background-color: #EDE7DF;
+}
+
+.modalTitle {
+    font-size: 20pt;
+
+}
+
+.modalP {
+    font-size: 12pt;
+}
+
+.commentModalBtn, .postModalBtn {
+    width: 125px;
+    height: 33px;
+    color: black;
+    background-color: white;
+    border-radius: 4px;
+    font-size: 12pt;
+    cursor: pointer;
+}
+
+.modalBtnCont {
+    display: flex;
+    flex-direction: row;
+    padding-top: 12px;
+    gap: 24px;
+}
+
+.post_menu2 {
+    align-self: end;
+    font-size: 10pt;
+}
+
+.post_cont, .comments_cont {
+    width: 100%;
+    height: 100vh;
+    font-size: 10pt;
+    background-color: #F9F7F4;
+    display: flex;
+    flex-direction: column;
+}
+
+.post_title {
+    background-color: white;
+    padding: 6px 9px;
+}
+
+.post_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 9px;
+    font-size: 10pt;
+    list-style: none;
+}
+
+.post_user, .post_count {
+    display: flex;
+    gap: 29px;
+}
+
+.post_contents_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 17px 9px;
+    height: 100%;
+}
+
+.post_thumbs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: end;
+    align-self: center;
+    gap: 5px;
+    padding-bottom: 9px;
+}
+
+#thumbs_btn {
+    width: 15px;
+    height: 15px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.thumbs_img {
+    width: 15px;
+    height: 15px;
+}
+
+/* 댓글 리스트를 감싸는 박스 */
+.comments_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    padding: 36px 16px;
+}
+
+/* 생성되는 댓글 데이터 리스트 */
+.comments{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* 하나의 댓글 */
+.comment{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+}
+
+.content_comment {
+    padding: 10px 6px;
+    text-align: start;
+    background-color: white;
+}
+
+.created_comment {
+    font-size: 8pt;
+}
+
+.comment_write, .updateModal {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: end;
+    gap: 21px;
+    padding: 20px 52px;
+}
+
+#comment, #modifyContent {
+    height: 54px;
+    border: none;
+    width: 100%;
+    font-size: 10pt;
+    text-align: start;
+    padding: 19px 10px;
+}
+
+#comment_btn, #update_btn {
+    width: 70px;
+    height: 33px;
+    color: black;
+    background-color: white;
+    border: none;
+    font-size: 10pt;
+    cursor: pointer;
+}
