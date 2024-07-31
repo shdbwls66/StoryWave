@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface PostRepository extends JpaRepository<Posts, Integer> {
+public interface PostRepository extends JpaRepository<Posts, Long> {
     List<Posts> findByTitleContaining(String keyword);
 
-    Optional<Posts> findByUsers_UserIdAndPostId(String userId, Integer postId);
+    Optional<Posts> findByUsers_UserIdAndPostId(String userId, Long postId);
 
 }

@@ -13,8 +13,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class CommentDto {
-    private Integer commentId;
-    private Integer postId;
+    private Long commentId;
+    private Long postId;
     private String userId;
     private String nickname;
     private String content;

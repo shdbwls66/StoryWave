@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class PostDto implements Serializable {
-  private Integer postId;
-  private Integer postTypeId;
+  private Long postId;
+  private Long postTypeId;
   private String userId;
   private String title;
   private String content;
@@ -72,7 +72,7 @@ public class PostDto implements Serializable {
               });
     }
 //    if (this.user_id != null) {
-//      setUser_id(posts.getUsers().getId());
+//      setUser_id(posts.getUsers().getPostId());
 //    } else {
 //      setUser_id(null);
 //    }

@@ -1,8 +1,8 @@
-package com.ormi.storywave.posts;
+package com.ormi.storywave.users;
 
-import com.ormi.storywave.users.UserRepository;
-import com.ormi.storywave.users.Users;
-import com.ormi.storywave.users.UsersDto;
+import com.ormi.storywave.posts.PostDto;
+import com.ormi.storywave.posts.PostRepository;
+import com.ormi.storywave.posts.Posts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class PostsService {
+public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public PostsService(PostRepository postRepository, UserRepository userRepository){
+    public PostService(PostRepository postRepository, UserRepository userRepository){
         this.postRepository = postRepository;
         this.userRepository = userRepository;
     }
@@ -36,7 +36,7 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<PostDto> getPostById(Integer id) {
+    public Optional<PostDto> getPostById(Long id) {
         return postRepository.findById(id)
                 .map(PostDto::fromPost);
     }
@@ -56,7 +56,7 @@ public class PostsService {
     }
 
     // 글쓴이만 포스트 수정 가능
-    public Optional<PostDto> updatePost(Integer postId, PostDto updatePostDto, String userId) {
+    public Optional<PostDto> updatePost(Long postId, PostDto updatePostDto, String userId) {
         return postRepository
                 .findById(postId)
                 .filter(posts -> posts.getUsers().getUserId().equals(userId))
@@ -70,7 +70,7 @@ public class PostsService {
     }
 
     // 글쓴이나, role이 admin인 사람만 포스트 삭제 가능
-    public boolean deletePosts(Integer postId, String userId) {
+    public boolean deletePosts(Long postId, String userId) {
         UsersDto users =
                 userRepository.findById(userId)
                         .map(UsersDto::fromUsers)

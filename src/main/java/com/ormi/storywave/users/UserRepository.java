@@ -12,9 +12,9 @@ public interface UserRepository extends JpaRepository<Users, String> {
 
     boolean existsByEmail(String email);
 
-    Optional<Users> findByPosts_PostId(Integer postId);
+    Optional<Users> findByPosts_PostId(Long postId);
 
-    Optional<Users> findByComments_CommentId(Integer commentId);
+    Optional<Users> findByComments_CommentId(Long commentId);
 
     Optional<Users> findByUserId(String userId);
 }

@@ -29,7 +29,7 @@ public class CommentService {
     this.userRepository = userRepository;
   }
 
-  public CommentDto createComment(CommentDto commentDto, Integer postId, String userId) {
+  public CommentDto createComment(CommentDto commentDto, Long postId, String userId) {
     Posts posts =
             postRepository
                     .findById(postId)
@@ -49,13 +49,13 @@ public class CommentService {
 
   // 모든 댓글 조회
   @Transactional(readOnly = true)
-  public List<CommentDto> getAllComments(Integer postId) {
+  public List<CommentDto> getAllComments(Long postId) {
     return commentRepository.findByPosts_PostId(postId).stream()
             .map(CommentDto::fromComment)
             .collect(Collectors.toList());
   }
 
-  public CommentDto getCommentById(Integer commentId) {
+  public CommentDto getCommentById(Long commentId) {
     return commentRepository
             .findById(commentId)
             .map(CommentDto::fromComment)
@@ -64,7 +64,7 @@ public class CommentService {
 
   // 댓글 작성자만 수정 가능
   public Optional<CommentDto> updateComment(
-          Integer postId, Integer commentId, CommentDto commentDto, String userId) {
+          Long postId, Long commentId, CommentDto commentDto, String userId) {
     return commentRepository
             .findByPosts_PostIdAndCommentId(postId, commentId)
             .filter(comment -> comment.getUsers().getUserId().equals(userId))
@@ -77,7 +77,7 @@ public class CommentService {
   }
 
   // 댓글 작성자나, 운영자만 댓글 삭제 가능
-  public boolean deleteComment(Integer postId, Integer commentId, String userId) {
+  public boolean deleteComment(Long postId, Long commentId, String userId) {
     UsersDto users =
             userRepository
                     .findById(userId)
@@ -85,7 +85,7 @@ public class CommentService {
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
     return commentRepository
             .findByPosts_PostIdAndCommentId(postId, commentId)
-            .filter(posts -> posts.getUsers().getUserId().equals(userId) || users.getRole().equals("admin"))
+            .filter(comment -> comment.getUsers().getUserId().equals(userId) || users.getRole().equals("admin"))
             .map(
                     comment -> {
                       commentRepository.delete(comment);

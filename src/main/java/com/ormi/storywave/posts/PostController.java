@@ -2,6 +2,7 @@ package com.ormi.storywave.posts;
 
 import com.ormi.storywave.comment.CommentDto;
 import com.ormi.storywave.comment.CommentRepository;
+import com.ormi.storywave.users.PostService;
 import com.ormi.storywave.users.UserRepository;
 import com.ormi.storywave.users.UsersDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,30 +13,24 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/home")
 public class PostController {
-  private final PostsService postsService;
+  private final PostService postService;
   private final UserRepository userRepository;
   private final CommentRepository commentRepository;
 
   @Autowired
-  public PostController(PostsService postsService, UserRepository userRepository, CommentRepository commentRepository) {
-    this.postsService = postsService;
+  public PostController(PostService postService, UserRepository userRepository, CommentRepository commentRepository) {
+    this.postService = postService;
     this.userRepository = userRepository;
     this.commentRepository = commentRepository;
-  }
-
-  @GetMapping("/post/login")
-  @ResponseBody
-  public String login(Model model) {
-    return "board/로그인 화면 파일 이름";
   }
 
   // 게시물 상세화면 조회
   @GetMapping("/post/{postId}")
   public String postsDetail(
-          @PathVariable("postId") Integer postId, @RequestParam("userId") String userId, Model model) {
+          @PathVariable("postId") Long postId, @RequestParam("userId") String userId, Model model) {
     System.out.println("postsDetail 실행");
     PostDto posts =
-            postsService
+            postService
                     .getPostById(postId)
                     .orElseThrow(() -> new IllegalArgumentException("해당 포스트는 존재하지 않습니다."));
 
@@ -61,6 +56,21 @@ public class PostController {
     model.addAttribute("role", role); // 권한
 
     model.addAttribute("comments", posts.getCommentsList().size()); // 댓글 개수
+
+    return "board/posts_detail";
+  }
+
+  @GetMapping("/post/{postId}/comments/{commentId}")
+  public String commentsControl(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @RequestParam("userId") String userId, Model model){
+    CommentDto comment = commentRepository
+            .findById(commentId)
+            .map(CommentDto::fromComment)
+            .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 댓글입니다."));
+
+    // 댓글 단 유저
+    String commentWriter = comment.getUserId();
+    model.addAttribute("commentWriter", commentWriter);
+    model.addAttribute("comment", comment);
 
     return "board/posts_detail";
   }

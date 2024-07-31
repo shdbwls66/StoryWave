@@ -37,7 +37,7 @@ public class UserController {
         System.out.println(loginDto.getUserId());
         System.out.println(loginDto.getPassword());
         String userId = userService.loginUser(loginDto);
-//        return "home/{id}";
+//        return "home/{postId}";
 //        return "index_afterLogin"; // 해당 html에 맵핑이 안 된 게 많아서 에러 발생. 해결하면 이걸로 변경
         return "home";
     }

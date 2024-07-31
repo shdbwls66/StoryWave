@@ -8,6 +8,12 @@ spring:
     password: '0000'
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   jackson:
     serialization:
       write-dates-as-timestamps: false
@@ -26,3 +32,11 @@ spring:
     suffix: .html # ??? ?? ???
     mode: HTML # HTML5 ??
     encoding: UTF-8 # ??? ??
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+file:
+  upload-dir: /path/to/upload/directory

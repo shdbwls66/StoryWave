@@ -20,28 +20,28 @@ public class CommentAPIController {
   @PostMapping("/{postId}/comments")
   public ResponseEntity<CommentDto> createComment(
           @RequestBody CommentDto commentDto,
-          @PathVariable("postId") Integer postId,
+          @PathVariable("postId") Long postId,
           @RequestParam("userId") String userId) {
     CommentDto createdComment = commentService.createComment(commentDto, postId, userId);
     return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
   }
 
   @GetMapping("/{postId}/comments")
-  public ResponseEntity<List<CommentDto>> getAllComment(@PathVariable("postId") Integer postId) {
+  public ResponseEntity<List<CommentDto>> getAllComment(@PathVariable("postId") Long postId) {
     List<CommentDto> commentDtos = commentService.getAllComments(postId);
     return ResponseEntity.ok(commentDtos);
   }
 
   @GetMapping("/{postId}/comments/{commentId}")
   public CommentDto getCommentById(
-          @PathVariable("postId") Integer postId, @PathVariable("commentId") Integer commentId) {
+          @PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @RequestParam("userId") String userId) {
     return commentService.getCommentById(commentId);
   }
 
   @PutMapping("/{postId}/comments/{commentId}")
   public ResponseEntity<CommentDto> updateComment(
-          @PathVariable("postId") Integer postId,
-          @PathVariable("commentId") Integer commentId,
+          @PathVariable("postId") Long postId,
+          @PathVariable("commentId") Long commentId,
           @RequestBody CommentDto commentDto,
           @RequestParam("userId") String userId) {
     return commentService
@@ -51,7 +51,7 @@ public class CommentAPIController {
   }
 
   @DeleteMapping("/{postId}/comments/{commentId}")
-  public ResponseEntity<Integer> deleteComment(@PathVariable("postId") Integer postId, @PathVariable("commentId") Integer commentId, @RequestParam("userId") String userId) {
+  public ResponseEntity<Void> deleteComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @RequestParam("userId") String userId) {
     commentService.deleteComment(postId, commentId, userId);
     return ResponseEntity.noContent().build();
   }
