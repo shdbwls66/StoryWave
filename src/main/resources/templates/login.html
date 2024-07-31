@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<!--<th:block th:fragment="headerLayout">-->
+<head>
+    <meta charset="UTF-8">
+    <title>StoryWave</title>
+    <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
+    <!--    <link rel="stylesheet" th:href="@{/indexCss.css}">-->
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #EDE7DF;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            position: fixed;
+            flex-direction: column;
+            width: 100%;
+            height: 69px;
+            padding: 15px 0;
+            background-color: #EDE7DF;
+            z-index: 10;
+        }
+
+        .nav_bar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            background-color: #EDE7DF;
+            z-index: 10;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        h3 {
+            font-size: 10pt;
+        }
+
+        span {
+            font-size: 8pt;
+        }
+
+        .menu_cont {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            font-size: 10pt;
+        }
+
+        .storywave_img {
+            height: 85px;
+        }
+
+        .menu_cont2 {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-self: flex-end;
+            padding-top: 28px;
+            gap: 28px;
+        }
+
+        #search-input {
+            padding: 3px 10px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            vertical-align: bottom;
+        }
+
+        #search_btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            height: 14px;
+        }
+
+        .search_img {
+            height: 14px;
+        }
+
+        .user_menu {
+            display: flex;
+            align-self: flex-end;
+        }
+
+        .firstLine {
+            display: inline-flex;
+            border-style:solid;
+        }
+        .login-container {
+            width: 400px;
+            height: 400px;
+            padding: 40px;
+            position: absolute;
+            margin-left: -200px;
+            margin-top: -200px;
+            left: 50%;
+            top: 50%;
+        }
+
+        #login-form > input {
+            width: 100%;
+            height: 48px;
+            padding: 0 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            background-color: white;
+            border: none;
+        }
+
+        #login-btn {
+            width: 100px;
+            height: 48px;
+            background-color: white;
+            border-width: medium;
+            border-radius: 10px;
+            box-shadow: 1px 1px 1px 1px gray;
+            margin-top: 30px;
+            margin-left: 110px;
+            margin-bottom: 40px;
+            cursor: pointer
+        }
+
+        .login-container > div {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <!-- 헤더 -->
+    <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
+    <div class="nav_bar">
+        <a th:href="@{/home}" class="storywave_logo">
+            <img class="storywave_img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+        </a>
+        <nav class="menu_cont">
+            <form class="search_form">
+                <label for="search-input"></label>
+                <input id="search-input" class="search_box" type="search" name="search_input">
+                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
+            </form>
+            <div class="menu_cont2">
+                <a>공지사항</a>
+                <a>영화 <span>리뷰/서평</span></a>
+                <a>도서 <span>리뷰/서평</span></a>
+                <div class="user_menu">
+                    <a th:href="@{/user/join}">회원가입</a>
+                    <span>|</span>
+                    <a th:href="@{/user/login}">로그인</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <hr class="firstLine">
+</header>
+<main>
+    <div class="login-container">
+        <form th:action="@{/user/login}" method="post" id="login-form">
+            <input type="text" name="userId" placeholder="아이디" required>
+            <input type="password" name="password" placeholder="패스워드" required>
+            <button id="login-btn">로그인</button>
+        </form>
+        <div><a th:href="@{/user/join}">회원가입</a></div>
+        <div>
+            <a th:href="@{/foundId}">아이디 찾기</a>
+            <span>/ </span>
+            <a th:href="@{/foundpw}">비밀번호 찾기</a>
+        </div>
+    </div>
+</main>
+</body>
+<!--</th:block>-->
+</html>

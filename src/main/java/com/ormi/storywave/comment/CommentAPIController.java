@@ -19,9 +19,9 @@ public class CommentAPIController {
 
   @PostMapping("/{postId}/comments")
   public ResponseEntity<CommentDto> createComment(
-      @RequestBody CommentDto commentDto,
-      @PathVariable("postId") Integer postId,
-      @RequestParam("userId") Integer userId) {
+          @RequestBody CommentDto commentDto,
+          @PathVariable("postId") Integer postId,
+          @RequestParam("userId") String userId) {
     CommentDto createdComment = commentService.createComment(commentDto, postId, userId);
     return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
   }
@@ -34,24 +34,24 @@ public class CommentAPIController {
 
   @GetMapping("/{postId}/comments/{commentId}")
   public CommentDto getCommentById(
-      @PathVariable("postId") Integer postId, @PathVariable("commentId") Integer commentId) {
+          @PathVariable("postId") Integer postId, @PathVariable("commentId") Integer commentId) {
     return commentService.getCommentById(commentId);
   }
 
   @PutMapping("/{postId}/comments/{commentId}")
   public ResponseEntity<CommentDto> updateComment(
-      @PathVariable("postId") Integer postId,
-      @PathVariable("commentId") Integer commentId,
-      @RequestBody CommentDto commentDto,
-      @RequestParam("userId") Integer userId) {
+          @PathVariable("postId") Integer postId,
+          @PathVariable("commentId") Integer commentId,
+          @RequestBody CommentDto commentDto,
+          @RequestParam("userId") String userId) {
     return commentService
-        .updateComment(postId, commentId, commentDto, userId)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+            .updateComment(postId, commentId, commentDto, userId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
   }
 
   @DeleteMapping("/{postId}/comments/{commentId}")
-  public ResponseEntity<Integer> deleteComment(@PathVariable("postId") Integer postId, @PathVariable("commentId") Integer commentId, @RequestParam("userId") Integer userId) {
+  public ResponseEntity<Integer> deleteComment(@PathVariable("postId") Integer postId, @PathVariable("commentId") Integer commentId, @RequestParam("userId") String userId) {
     commentService.deleteComment(postId, commentId, userId);
     return ResponseEntity.noContent().build();
   }

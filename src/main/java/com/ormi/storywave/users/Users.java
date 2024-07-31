@@ -3,11 +3,9 @@ package com.ormi.storywave.users;
 import com.ormi.storywave.comment.Comment;
 import com.ormi.storywave.posts.Posts;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,35 +16,35 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
+@Builder
+//@EntityListeners(AuditingEntityListener.class)
 public class Users {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Integer id;
+    @Column(name ="user_id", nullable = false)
+    private String userId;
 
-    @Column
-    private String username;
-
-    @Column
+    @Column(nullable = false)
     private String password;
 
-    @Column
-    private String nickname;
-
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column
+    @Column(nullable = false, unique = true)
+    private String nickname;
+
+    @Column(nullable = false)
     private String role;
 
-    @Column
-    private String active_status;
+    @Column(name = "active_status", nullable = false)
+    private boolean activeStatus;
 
-    @Column
-    private LocalDateTime created_at;
+    //    @CreatedDate
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    @Column
-    private LocalDateTime updated_at;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Column
     @OneToMany(mappedBy = "users")
