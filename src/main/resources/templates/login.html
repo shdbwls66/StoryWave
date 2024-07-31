@@ -133,6 +133,11 @@
             cursor: pointer
         }
 
+        #error-message {
+            font-size: 10px;
+            color: red;
+        }
+
         .login-container > div {
             text-align: center;
             margin-bottom: 30px;
@@ -172,6 +177,8 @@
         <form th:action="@{/user/login}" method="post" id="login-form">
             <input type="text" name="userId" placeholder="아이디" required>
             <input type="password" name="password" placeholder="패스워드" required>
+            <div id="error-message" th:text="${message}"></div>
+<!--            <span th:text="${message}"></span>-->
             <button id="login-btn">로그인</button>
         </form>
         <div><a th:href="@{/user/join}">회원가입</a></div>
