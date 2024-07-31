@@ -282,9 +282,9 @@
     </tr>
     </tbody>
   </table>
-    <div class="pagination" id="pagination">
-      <!-- 페이지네이션 버튼이 여기 표시 -->
-    </div>
+  <div class="pagination" id="pagination">
+    <!-- 페이지네이션 버튼이 여기 표시 -->
+  </div>
 </main>
 </body>
 <script>
@@ -362,6 +362,11 @@
     // 게시글 표시
     function displayPosts(posts, page, totalItems) {
       let nonNoticeCount = 0;
+      const nonNoticePostsBeforePage = totalPosts
+              .filter(post => !post.categories.some(category => category.board.postTypeId === 0))
+              .slice(0, 5)
+              .length;
+
       postList.innerHTML = posts.map((post, index) => {
         if (post.categories.some(category => category.board.postTypeId === 0)) {
           return `
@@ -378,7 +383,7 @@
           nonNoticeCount++;
           return `
         <tr>
-          <td>${(page - 1) * postsPerPage + nonNoticeCount}</td>
+          <td>${(page - 1) * postsPerPage -(page !==1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
           <td><a href="/posts/${post.id}">${post.title}</a></td>
           <td>${post.author}</td>
           <td>${new Date(post.updated_at).toLocaleString()}</td>
