@@ -97,11 +97,11 @@ public class UserService {
     }
 
     public String loginUser(UserRequest.LoginDto loginDto) {
+
         // 로그인 정보와 일치하는 객체 불러오기
         Optional<UsersDto> foundUser = userRepository.findById(loginDto.getUserId())
                 .map(UsersDto::fromUsers);
 
-        // 예외가 발생했을 때 경고창이 뜨는 걸로 수정..? 혹은 새로운 페이지 뜨게..?(display=none이 바뀌게)
         // 일치하는 사용자가 없는 경우
         if (foundUser.isEmpty()) {
             throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
@@ -110,6 +110,12 @@ public class UserService {
         // 해당 아이디에 비밀번호가 일치하지 않는 경우
         if(!foundUser.get().getPassword().equals(loginDto.getPassword())) {
             throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
+        }
+
+        // 정지 회원인 경우 추가 필요
+        if (!foundUser.get().isActiveStatus()) {
+            // 영구 정지, 일시 정지를 위한 테이블 필요
+
         }
 
         return foundUser.get().getUserId();
