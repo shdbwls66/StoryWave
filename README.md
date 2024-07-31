@@ -78,3 +78,4 @@ FOREIGN KEY (category_id) REFERENCES category(id)
 category랑 post와의 관계 테이블 post_category를 추가함
 board가 id가 필요없을 것 같고 숫자가 두개랑 헷갈려서 id를 뺐음
 post_type_id가 일단 숫자로 되어 있어서 0이 공지사항 1이 영화 2가 book으로 생각하고 설계
+나중에 문자로 변경해도 된다고 생각
