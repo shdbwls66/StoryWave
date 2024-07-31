@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="icon" href="photo/StoryWaveLogo.png" type="image/x-icon">
+    <!--    <link rel="stylesheet" th:href="@{/indexCss.css}">-->
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-color: #EDE7DF;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            display: flex;
+            position: fixed;
+            flex-direction: column;
+            width: 100%;
+            height: 69px;
+            padding: 15px 0;
+            background-color: #EDE7DF;
+            z-index: 10;
+        }
+
+        .nav_bar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            background-color: #EDE7DF;
+            z-index: 10;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        h3 {
+            font-size: 10pt;
+        }
+
+        span {
+            font-size: 8pt;
+        }
+
+        .menu_cont {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            font-size: 10pt;
+        }
+
+        .storywave_img {
+            height: 85px;
+        }
+
+        .menu_cont2 {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-self: flex-end;
+            padding-top: 28px;
+            gap: 28px;
+        }
+
+        #search-input {
+            padding: 3px 10px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            vertical-align: bottom;
+        }
+
+        #search_btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            height: 14px;
+        }
+
+        .search_img {
+            height: 14px;
+        }
+
+        .user_menu {
+            display: flex;
+            align-self: flex-end;
+        }
+
+        .firstLine {
+            display: inline-flex;
+            border-style:solid;
+        }
+
+        .mainCont {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .button_cont {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .myPageMenu {
+            width: 125px;
+            height: 33px;
+            color: black;
+            background-color: white;
+            border-radius: 4px;
+            font-size: 12pt;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <!-- 헤더 -->
+    <h1 style="display: none">스토리웨이브 마이페이지 화면</h1>
+    <div class="nav_bar">
+        <a class="storywave_logo" href="">
+            <img class="storywave_img" src="photo/StoryWaveLogo.png" alt="홈 화면 이동">
+        </a>
+        <nav class="menu_cont">
+            <form class="search_form">
+                <label for="search-input"></label>
+                <input id="search-input" class="search_box" type="search" name="search_input">
+                <button id="search_btn"><img class="search_img" src="photo/search.png" alt="검색 버튼"></button>
+            </form>
+            <div class="menu_cont2">
+                <a th:href="">공지사항</a>
+                <a th:href="">영화 <span>리뷰/서평</span></a>
+                <a th:href="">도서 <span>리뷰/서평</span></a>
+                <div class="user_menu">
+<!--                    <a th:href="@{}">마이페이지</a>-->
+                    <a href="mypage.html">마이페이지</a>
+                    <span>|</span>
+<!--                    <a th:href="@{}">로그아웃</a>-->
+                    <a href="home.html">로그아웃</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <hr class="firstLine">
+</header>
+<main class="mainCont">
+    <h2 style="display: none">메인 컨텐츠</h2>
+    <div class="button_cont">
+        <button type="button" class="myPageMenu">내 게시물</button>
+        <button type="button" class="myPageMenu">내 댓글</button>
+        <button type="button" class="myPageMenu">회원정보 수정</button>
+        <button type="button" class="myPageMenu">탈퇴하기</button>
+    </div>
+</main>
+</body>
+</html>
