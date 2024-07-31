@@ -22,10 +22,10 @@ public class Posts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
-    private Integer id;
+    private Integer postId;
 
-    @Column
-    private Integer post_type_id;
+    @Column(name = "post_type_id")
+    private Integer postTypeId;
 
     @Column
     private String title;
@@ -33,11 +33,11 @@ public class Posts {
     @Column
     private String content;
 
-    @Column
-    private LocalDateTime created_at;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @Column
-    private LocalDateTime updated_at;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Column
     private Integer thumbs;

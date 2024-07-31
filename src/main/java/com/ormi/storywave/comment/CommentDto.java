@@ -13,32 +13,32 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class CommentDto {
-    private Integer comment_id;
-    private Integer post_id;
-    private Integer user_id;
+    private Integer commentId;
+    private Integer postId;
+    private String userId;
     private String nickname;
     private String content;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static CommentDto fromComment(Comment comment) {
         return CommentDto.builder()
-                .comment_id(comment.getId())
-                .post_id(comment.getPosts().getId())
-                .user_id(comment.getUsers().getId())
+                .commentId(comment.getCommentId())
+                .postId(comment.getPosts().getPostId())
+                .userId(comment.getUsers().getUserId())
                 .nickname(comment.getUsers().getNickname())
                 .content(comment.getContent())
-                .created_at(comment.getCreated_at())
-                .updated_at(comment.getUpdated_at())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
                 .build();
     }
 
     public Comment toComment() {
         Comment comment = new Comment();
-        comment.setId(comment_id);
+        comment.setCommentId(commentId);
         comment.setContent(content);
-        comment.setCreated_at(created_at);
-        comment.setUpdated_at(updated_at);
+        comment.setCreatedAt(createdAt);
+        comment.setUpdatedAt(updatedAt);
         return comment;
     }
 }

@@ -26,7 +26,7 @@ public class PostAPIController {
 
   // 포스트 생성
   @PostMapping
-  public ResponseEntity<PostDto> createPosts(@RequestBody PostDto postDto, @RequestParam("userId") Integer userId) {
+  public ResponseEntity<PostDto> createPosts(@RequestBody PostDto postDto, @RequestParam("userId") String userId) {
     PostDto createdPosts = postsService.createPosts(postDto, userId);
     return new ResponseEntity<>(createdPosts, HttpStatus.CREATED);
   }
@@ -35,15 +35,15 @@ public class PostAPIController {
   @GetMapping("/{postId}")
   public ResponseEntity<PostDto> getPostById(@PathVariable("postId") Integer postId) {
     return postsService
-        .getPostById(postId)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+            .getPostById(postId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
   }
 
   // 특정 제목 키워드로 검색
   @GetMapping("/search/title")
   public ResponseEntity<List<PostDto>> getPostsByTitleContaining(
-      @RequestParam("keyword") String keyword) {
+          @RequestParam("keyword") String keyword) {
     List<PostDto> posts = postsService.getPostsByTitleContaining(keyword);
     return ResponseEntity.ok(posts);
   }
@@ -51,15 +51,15 @@ public class PostAPIController {
   // 특정 게시물 수정
   @PutMapping("/{postId}")
   public ResponseEntity<PostDto> updatePost(
-      @PathVariable("postId") Integer id, @RequestBody PostDto updatePostDto, @RequestParam("userId") Integer userId) {
+          @PathVariable("postId") Integer id, @RequestBody PostDto updatePostDto, @RequestParam("userId") String userId) {
     return postsService
-        .updatePost(id, updatePostDto, userId)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+            .updatePost(id, updatePostDto, userId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
   }
 
   @DeleteMapping("{postId}")
-  public ResponseEntity<Void> deletePosts(@PathVariable("postId") Integer id, @RequestParam("userId") Integer userId) {
+  public ResponseEntity<Void> deletePosts(@PathVariable("postId") Integer id, @RequestParam("userId") String userId) {
     boolean deleted = postsService.deletePosts(id, userId);
     return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
   }

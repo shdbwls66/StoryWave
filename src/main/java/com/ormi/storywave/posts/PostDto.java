@@ -16,60 +16,60 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class PostDto implements Serializable {
-  private Integer id;
-  private Integer post_type_id;
-  private Integer user_id;
+  private Integer postId;
+  private Integer postTypeId;
+  private String userId;
   private String title;
   private String content;
-  private LocalDateTime created_at;
-  private LocalDateTime updated_at;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
   private Integer thumbs;
-  private Integer comments_count;
+  private Integer commentsCount;
   private List<CommentDto> commentsList=new ArrayList<>();
 
   public static PostDto fromPost(Posts posts) {
     PostDto postDto =
-        PostDto.builder()
-            .id(posts.getId())
-            .post_type_id(posts.getPost_type_id())
-            .title(posts.getTitle())
-            .content(posts.getContent())
-            .created_at(posts.getCreated_at())
-            .updated_at(posts.getUpdated_at())
-            .thumbs(posts.getThumbs())
-            .build();
+            PostDto.builder()
+                    .postId(posts.getPostId())
+                    .postTypeId(posts.getPostTypeId())
+                    .title(posts.getTitle())
+                    .content(posts.getContent())
+                    .createdAt(posts.getCreatedAt())
+                    .updatedAt(posts.getUpdatedAt())
+                    .thumbs(posts.getThumbs())
+                    .build();
 
     if (posts.getComments() != null) {
       postDto.setCommentsList(
-          posts.getComments().stream()
-                  .map(CommentDto::fromComment)
-                  .collect(Collectors.toList()));
+              posts.getComments().stream()
+                      .map(CommentDto::fromComment)
+                      .collect(Collectors.toList()));
     }
 
     if (posts.getUsers() != null) {
-      postDto.setUser_id(posts.getUsers().getId());
+      postDto.setUserId(posts.getUsers().getUserId());
     } else {
-      postDto.setUser_id(null);
+      postDto.setUserId(null);
     }
     return postDto;
   }
 
   public Posts toPost() {
     Posts posts = new Posts();
-    posts.setId(this.id);
-    posts.setPost_type_id(this.post_type_id);
+    posts.setPostId(this.postId);
+    posts.setPostTypeId(this.postTypeId);
     posts.setTitle(this.title);
     posts.setContent(this.content);
-    posts.setCreated_at(this.created_at);
-    posts.setUpdated_at(this.updated_at);
+    posts.setCreatedAt(this.createdAt);
+    posts.setUpdatedAt(this.updatedAt);
     posts.setThumbs(this.thumbs);
 
     if (this.commentsList != null) {
       this.commentsList.forEach(
-          commentDto -> {
-            Comment comment = new Comment();
-            posts.addComment(comment);
-          });
+              commentDto -> {
+                Comment comment = new Comment();
+                posts.addComment(comment);
+              });
     }
 //    if (this.user_id != null) {
 //      setUser_id(posts.getUsers().getId());

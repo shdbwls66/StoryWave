@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Posts, Integer> {
     List<Posts> findByTitleContaining(String keyword);
 
-    Optional<Posts> findByUsers_IdAndId(Integer usersId, Integer postId);
+    Optional<Posts> findByUsers_UserIdAndPostId(String userId, Integer postId);
 
 }

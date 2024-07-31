@@ -252,7 +252,7 @@
     <!-- 헤더 -->
     <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
     <div class="nav_bar">
-        <a class="storywave_logo">
+        <a th:href="@{/home}" class="storywave_logo">
             <img class="storywave_img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu_cont">
@@ -266,9 +266,9 @@
                 <a>영화 <span>리뷰/서평</span></a>
                 <a>도서 <span>리뷰/서평</span></a>
                 <div class="user_menu"> <!-- 로그인 전 user_menu 입니다.-->
-                    <a>회원가입</a>
+                    <a th:href="@{/user/join}">회원가입</a>
                     <span>|</span>
-                    <a>로그인</a>
+                    <a th:href="@{user/login}">로그인</a>
                 </div>
             </div>
         </nav>
@@ -285,11 +285,11 @@
             </div>
             <table> <!--공지사항 게시판 번호 -->
                 <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>공지사항 제목</th>
-                        <th>날짜</th>
-                    </tr>
+                <tr>
+                    <th>id</th>
+                    <th>공지사항 제목</th>
+                    <th>날짜</th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr>
@@ -309,11 +309,11 @@
             </div>
             <table>
                 <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>베스트 게시물 제목</th>
-                        <th>날짜</th>
-                    </tr>
+                <tr>
+                    <th>id</th>
+                    <th>베스트 게시물 제목</th>
+                    <th>날짜</th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr>
@@ -335,11 +335,11 @@
             </div>
             <table> <!--best 게시판 번호 -->
                 <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>영화 게시물 제목</th>
-                        <th>날짜</th>
-                    </tr>
+                <tr>
+                    <th>id</th>
+                    <th>영화 게시물 제목</th>
+                    <th>날짜</th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr>
@@ -360,11 +360,11 @@
             </div>
             <table>
                 <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>도서 게시물 제목</th>
-                        <th>날짜</th>
-                    </tr>
+                <tr>
+                    <th>id</th>
+                    <th>도서 게시물 제목</th>
+                    <th>날짜</th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr>

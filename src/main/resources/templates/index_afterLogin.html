@@ -231,7 +231,7 @@
     <!-- 헤더 -->
     <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
     <div class="nav_bar">
-        <a class="storywave_logo" href="">
+        <a class="storywave_logo" th:href="@{index_afterLogin.html}">
             <img class="storywave_img" src="photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu_cont">
@@ -247,7 +247,7 @@
                 <div class="user_menu">
                     <a th:href="">마이페이지</a>
                     <span>|</span>
-                    <a th:href="">로그아웃</a>
+                    <a th:href="@{/home}">로그아웃</a>
                 </div>
             </div>
         </nav>

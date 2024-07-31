@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,32 +28,91 @@ public class UserService {
 
     public UsersDto createUser(UsersDto usersDto) {
         Users users = usersDto.toUsers();
-        users.setCreated_at(LocalDateTime.now());
+        users.setCreatedAt(LocalDateTime.now());
         Users savedUsers = userRepository.save(users);
         return UsersDto.fromUsers(savedUsers);
     }
 
-    public Optional<UsersDto> getUserById(Integer userId) {
+    public Optional<UsersDto> getUserById(String userId) {
         return userRepository.findById(userId)
                 .map(UsersDto::fromUsers);
     }
 
-    public Optional<UsersDto> updateUser(Integer userId, UsersDto updatedUsers) {
+    public Optional<UsersDto> updateUser(String userId, UsersDto updatedUsers) {
         return userRepository.findById(userId)
                 .map(users -> {
                     users.setPassword(updatedUsers.getPassword());
                     users.setNickname(updatedUsers.getNickname());
-                    users.setUpdated_at(LocalDateTime.now());
+                    users.setUpdatedAt(LocalDateTime.now());
                     return UsersDto.fromUsers(userRepository.save(users));
                 });
     }
 
-    public boolean deleteUser(Integer userId) {
+    public boolean deleteUser(String userId) {
         return userRepository.findById(userId)
                 .map(u->{
                     userRepository.delete(u);
                     return true;
                 })
                 .orElse(false);
+    }
+
+    @Transactional
+    public UsersDto addUser(UserRequest.JoinDto joinDto) {
+        //default 값 부여
+        String defaultRole = "user";
+        boolean defaultStatus = true;
+
+        // 중복 확인 버튼으로 구현하는 게 낫나...? 어려우면 그냥 바로 확인할 수 있도록 수정(display=none)
+//        // 아이디 중복 확인
+        if (userRepository.existsByUserId(joinDto.getUserId())) {
+            throw new IllegalArgumentException("이미 사용중인 아이디입니다.");
+        }
+
+
+//
+//        // 닉네임 중복 확인
+//        if (userRepository.existsByNickname(joinDto.getNickname())) {
+//            throw new IllegalArgumentException("이미 사용중인 닉네임입니다.");
+//        }
+
+        // 이메일 중복 확인
+//        if (userRepository.existsByEmail(userDto.getEmail())) {
+//            throw new IllegalArgumentException("해당 이메일로 등록된 아이디가 존재합니다");
+//        }
+
+
+        // 유저 객체 저장
+        Users savedUser = userRepository.save(
+                Users.builder()
+                        .userId(joinDto.getUserId())
+                        .password(joinDto.getPassword())
+                        .email(joinDto.getEmail())
+                        .nickname(joinDto.getNickname())
+                        .role(defaultRole)
+                        .activeStatus(defaultStatus)
+                        .createdAt(LocalDateTime.now())
+                        .build());
+        return UsersDto.fromUsers(savedUser);
+    }
+
+    public String loginUser(UserRequest.LoginDto loginDto) {
+        // 로그인 정보와 일치하는 객체 불러오기
+        Optional<UsersDto> foundUser = userRepository.findById(loginDto.getUserId())
+                .map(UsersDto::fromUsers);
+
+        // 예외가 발생했을 때 경고창이 뜨는 걸로 수정..? 혹은 새로운 페이지 뜨게..?(display=none이 바뀌게)
+        // 일치하는 사용자가 없는 경우
+        if (foundUser.isEmpty()) {
+            throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
+        }
+
+        // 해당 아이디에 비밀번호가 일치하지 않는 경우
+        if(!foundUser.get().getPassword().equals(loginDto.getPassword())) {
+            throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
+        }
+
+        return foundUser.get().getUserId();
+        // 객체를 반환하는 게 나은가..?(보완필요)
     }
 }

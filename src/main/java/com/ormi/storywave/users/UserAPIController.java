@@ -31,7 +31,7 @@ public class UserAPIController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UsersDto> getUserById(@PathVariable("userId") Integer userId) {
+    public ResponseEntity<UsersDto> getUserById(@PathVariable("userId") String userId) {
         return userService
                 .getUserById(userId)
                 .map(ResponseEntity::ok)
@@ -40,7 +40,7 @@ public class UserAPIController {
 
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UsersDto> updateUser(@PathVariable("userId") Integer userId, @RequestBody UsersDto usersDto) {
+    public ResponseEntity<UsersDto> updateUser(@PathVariable("userId") String userId, @RequestBody UsersDto usersDto) {
         return userService
                 .updateUser(userId, usersDto)
                 .map(ResponseEntity::ok)
@@ -48,7 +48,7 @@ public class UserAPIController {
     }
 
     @DeleteMapping("{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("userId") Integer userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("userId") String userId) {
         boolean deleted = userService.deleteUser(userId);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
