@@ -1,13 +1,16 @@
 spring:
   application:
     name: storywave
-
   datasource:
     url: jdbc:mysql://localhost:3306/storywave
     username: root
     password: '0000'
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
   jackson:
     serialization:
       write-dates-as-timestamps: false
@@ -20,9 +23,24 @@ spring:
       hibernate:
         format_sql: true
 
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    
   thymeleaf:
     cache: false # ??? ???? ?? -> ?? ? ?? ???
     prefix: classpath:/templates/ # ??? ?? ??
     suffix: .html # ??? ?? ???
     mode: HTML # HTML5 ??
     encoding: UTF-8 # ??? ??
+
+#   datasource:
+#     url: jdbc:mysql://localhost:3306/storywave
+#     username: root
+#     password: 1234
+#     driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+# server:
+#   port: 8081
