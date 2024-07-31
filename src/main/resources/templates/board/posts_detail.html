@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세 보기</title>
+    <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/posts_detailCss.css}">
+</head>
+<body>
+<header>
+    <!-- 헤더 -->
+    <h1 class="post_num" style="display: none" th:text="${posts.id}">게시물 상세 보기</h1>
+    <div class="nav_bar">
+        <a class="storywave_logo">
+            <img class="storywave_img" th:src="@{/photo/StoryWaveLogo.png}" alt="홈 화면 이동">
+        </a>
+        <nav class="menu_cont">
+            <form class="search_form">
+                <label for="search-input"></label>
+                <input id="search-input" class="search_box" type="search" name="search_input">
+                <button id="search_btn"><img class="search_img" th:src="@{/photo/search.png}" alt="검색 버튼"></button>
+            </form>
+            <div class="menu_cont2">
+                <a>공지사항</a>
+                <a>영화 <span class="menu_detail">리뷰/서평</span></a>
+                <a>도서 <span class="menu_detail">리뷰/서평</span></a>
+                <div class="user_menu">
+                    <!--                    <a th:href="@{/mypage.html}" th:text="">마이페이지</a>-->
+                    <a href="../mypage.html">마이페이지</a>
+                    <span>|</span>
+                    <!--                    <a th:href="@{/home.html}" th:text="">로그아웃</a>-->
+                    <a href="../home.html">로그아웃</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <hr class="firstLine">
+</header>
+<main class="mainCont">
+    <h2 style="display: none">메인 컨텐츠</h2>
+    <div class="post_menu">
+        <a>◀ 목록</a>
+        <nav class="post_menu2">
+            <a>수정</a>
+            <a style="cursor: pointer" id="delete_btn" onclick="postModal()">삭제</a>
+            <a>글쓰기</a>
+        </nav>
+    </div>
+
+    <!--    게시글 삭제 모달-->
+    <div id="deleteModal" class="modal">
+        <div class="modalContent">
+            <h3 class="modalTitle">게시글을 삭제하시겠습니까?</h3>
+            <p class="modalP">삭제한 게시글은 다시 복구할 수 없습니다.</p>
+            <div class="modalBtnCont">
+                <button id="modalCancelBtn" class="postModalBtn" onclick="closePostModal()">취소하기</button>
+                <button id="modalDeleteBtn" class="postModalBtn">삭제하기</button>
+            </div>
+        </div>
+    </div>
+    <section class="post_cont">
+        <h3 class="post_title" th:text="${posts.title}">글 제목</h3>
+        <p class="post_info">
+            <span class="post_user">
+                글쓴이<span th:text="${writer}"></span>
+                날짜<span class="post_create" th:text="${posts.created_at}"></span>
+            </span>
+            <span class="post_count">
+                공감<span class="thumbs" th:text="${posts.thumbs}">0</span>
+                댓글 수<span class="comment" th:text="${comments}">0</span>
+            </span>
+        </p>
+        <div class="post_contents_box">
+            <p class="post_contents" th:text="${posts.content}">
+                <!--                게시글의 내용이 들어갈 곳-->
+            </p>
+        </div>
+        <span class="post_thumbs">공감
+                <button id="thumbs_btn" onclick="countThumbs()">
+                    <img class="thumbs_img" th:src="@{/photo/Thumb up.png}" alt="">
+                </button>
+            <span id="thumbs_num" th:text="${posts.thumbs}" class="thumbs_num">0</span>
+        </span>
+    </section>
+    <section class="comments_cont">
+        <h3 style="display: none">댓글</h3>
+        <div class="comments_box">
+            <div id="commentList" class="comments">
+                <!--                댓글 데이터가 들어오는 곳입니다-->
+            </div>
+        </div>
+        <!-- 삭제 모달-->
+        <div id="commentDeleteModal" class="modal">
+            <span id="id_num" style="display: none">모달 번호 : ${comment.comment_id}</span>
+            <div class="modalContent">
+                <h3 class="modalTitle">댓글을 삭제하시겠습니까?</h3>
+                <p class="modalP">삭제한 댓글은 다시 복구할 수 없습니다.</p>
+                <div class="modalBtnCont">
+                    <button id="cancelBtn" class="commentModalBtn" onclick="closeCommentModal()">취소하기</button>
+                    <button id="deleteBtn" class="commentModalBtn">삭제하기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 수정 모달-->
+        <div id="commentUpdateModal" class="modal">
+            <div class="updateModal">
+                <label for="modifyContent" style="display: none"></label>
+                <textarea id="modifyContent" name="modifyComment" placeholder="수정할 내용을 입력해주세요"></textarea>
+                <button id="update_btn" type="button" onclick="closeModal()">저장</button>
+            </div>
+        </div>
+        <div class="comment_write">
+            <label for="comment" style="display: none"></label>
+            <textarea id="comment" name="comment" placeholder="댓글을 입력하세요."></textarea>
+            <button id="comment_btn" onclick=saveComment()>작성</button>
+        </div>
+    </section>
+</main>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/script.js"></script>
+<script th:inline="javascript">
+    window.onload = () => {
+        getAllComment();
+    }
+
+    // Get
+    function getAllComment() {
+        console.log("getAllComment 함수 실행")
+
+        const postId = [[${posts.id}]];
+        console.log(postId);
+
+        $.ajax({
+            url: `/api/post/${postId}/comments`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                let commentHtml = '';
+
+                if (response.length === 0) {
+                    document.querySelector('.comments').innerHTML = `<div><p>등록된 댓글이 없습니다.</p></div>`
+                    return;
+                }
+
+                response.forEach((comment) => {
+                    commentHtml += `
+                        <div class="comment">
+                            <span style="display: none">댓글 번호 : ${comment.comment_id}</span>
+                            <span style="display: none">유저 번호 : ${comment.user_id}</span>
+                            <span class="nickname_user">${comment.nickname}</span>
+                            <p class="content_comment">${comment.content}</p>
+                            <p class="created_comment">${comment.created_at}</p>
+                            <p>
+                                <button type="button" class="modify_comment" onclick="openCommentUpdateModal(${comment.comment_id})">수정</button>
+                                <button type="button" class="remove_comment" onclick="openCommentDeleteModal(${comment.comment_id})">삭제</button>
+                            </p>
+                        </div>
+
+                    `;
+
+                });
+
+                document.querySelector('.comments').innerHTML = commentHtml;
+                console.log(commentHtml);
+
+            },
+            error: function (request, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // Post comment
+    function saveComment() {
+        console.log("saveComment 함수 호출됨");
+        const comment = document.getElementById('comment').value;
+        console.log(comment)
+
+        if (!comment.trim()) {
+            alert('댓글을 입력해주세요.');
+            return;
+        }
+
+        const postId = [[${posts.id}]];
+        console.log(postId);
+
+        const userId = [[${users.id}]];
+        console.log(userId);
+
+        const params = {
+            postId: postId,
+            content: comment,
+            userId: userId
+        };
+
+        $.ajax({
+            url: `/api/post/${postId}/comments?userId=${userId}`,
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(params),
+            success: function (response) {
+                console.log(response);
+                getAllComment();
+                document.getElementById('comment').value = '';
+            },
+            error: function (request, status, error) {
+                console.log(error);
+            }
+        });
+
+    }
+
+    // 댓글 수정
+    function openCommentUpdateModal(commentId) {
+        const postId = [[${posts.id}]];
+        const userId = [[${users.id}]];
+        $.ajax({
+                url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    document.getElementById('modifyContent').value = response.content;
+                    document.getElementById('update_btn').setAttribute('onclick', `updateComment(${commentId})`);
+                    openModal();
+                },
+                error: function (request, status, error) {
+                    console.log(error);
+                }
+            }
+        )
+
+    }
+
+    function updateComment(commentId) {
+        console.log("updateComment 함수 실행")
+        const comment = document.getElementById('modifyContent').value;
+
+        const postId = [[${posts.id}]];
+        console.log(postId);
+
+        const userId = [[${users.id}]];
+        console.log(userId);
+
+        const params = {
+            postId: postId,
+            content: comment,
+            userId: userId
+        };
+
+        $.ajax({
+            url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
+            type: 'PUT',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(params),
+            success: function (response) {
+                alert("수정되었습니다.")
+                getAllComment();
+                closeModal();
+            },
+            error: function (request, status, error) {
+                alert(error);
+                closeModal();
+            }
+        });
+
+    }
+
+    // 댓글 삭제
+    function openCommentDeleteModal(commentId) {
+        const postId = [[${posts.id}]];
+        const userId = [[${users.id}]];
+
+        $.ajax({
+                url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    document.getElementById('cancelBtn').setAttribute('onclick', `closeCommentModal()`);
+                    document.getElementById('deleteBtn').setAttribute('onclick', `deleteComment(${commentId})`);
+                    openCommentModal();
+                },
+                error: function (request, status, error) {
+                    console.log(error);
+                    closeCommentModal();
+                }
+            }
+        )
+
+    }
+
+    function deleteComment(commentId) {
+        console.log("deleteComment 함수 실행")
+        const postId = [[${posts.id}]];
+        console.log(postId);
+
+        const userId = [[${users.id}]];
+        console.log(userId);
+
+        $.ajax({
+            url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
+            type: 'DELETE',
+            dataType: 'json',
+            success: function () {
+                console.log("댓글 삭제");
+                getAllComment();
+                closeCommentModal();
+            },
+            error: function (request, status, error) {
+                alert("댓글 삭제하지 못하였습니다.");
+                closeCommentModal();
+            }
+        });
+    }
+</script>
+</body>
+</html>
