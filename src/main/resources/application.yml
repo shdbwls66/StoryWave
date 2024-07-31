@@ -35,6 +35,8 @@ logging:
     mode: HTML # HTML5 ??
     encoding: UTF-8 # ??? ??
 
+file:
+  upload-dir: /path/to/upload/directory
 #   datasource:
 #     url: jdbc:mysql://localhost:3306/storywave
 #     username: root
