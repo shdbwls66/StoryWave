@@ -48,6 +48,15 @@ public class UserService {
                 });
     }
 
+    public boolean selectId(String userId) {
+        return userRepository.findById(userId).isPresent();
+    }
+
+    public boolean selectNickname(String nickname) {
+        System.out.println(nickname);
+        return userRepository.existsByNickname(nickname);
+    }
+
     public boolean deleteUser(String userId) {
         return userRepository.findById(userId)
                 .map(u->{
@@ -62,25 +71,6 @@ public class UserService {
         //default 값 부여
         String defaultRole = "user";
         boolean defaultStatus = true;
-
-        // 중복 확인 버튼으로 구현하는 게 낫나...? 어려우면 그냥 바로 확인할 수 있도록 수정(display=none)
-//        // 아이디 중복 확인
-        if (userRepository.existsByUserId(joinDto.getUserId())) {
-            throw new IllegalArgumentException("이미 사용중인 아이디입니다.");
-        }
-
-
-//
-//        // 닉네임 중복 확인
-//        if (userRepository.existsByNickname(joinDto.getNickname())) {
-//            throw new IllegalArgumentException("이미 사용중인 닉네임입니다.");
-//        }
-
-        // 이메일 중복 확인
-//        if (userRepository.existsByEmail(userDto.getEmail())) {
-//            throw new IllegalArgumentException("해당 이메일로 등록된 아이디가 존재합니다");
-//        }
-
 
         // 유저 객체 저장
         Users savedUser = userRepository.save(

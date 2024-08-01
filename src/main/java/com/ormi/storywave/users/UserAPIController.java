@@ -52,4 +52,29 @@ public class UserAPIController {
         boolean deleted = userService.deleteUser(userId);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/confirmId")
+    @ResponseBody
+    public ResponseEntity<Boolean> confirmId(String userId) {
+        boolean result = true;
+
+        if(userId.trim().isEmpty()) {
+            result = false;
+        } else {
+            result = !userService.selectId(userId);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/confirmNickname")
+    @ResponseBody
+    public ResponseEntity<Boolean> confirmNickname(String nickname) {
+        boolean result = true;
+        if(nickname.trim().isEmpty()) {
+            result = false;
+        } else {
+            result = !userService.selectNickname(nickname);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }
