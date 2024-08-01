@@ -4,6 +4,9 @@ import com.ormi.storywave.users.UserRepository;
 import com.ormi.storywave.users.Users;
 import com.ormi.storywave.users.UsersDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,5 +87,11 @@ public class PostsService {
                             return true;
                         })
                 .orElse(false);
+    }
+
+    // 페이지 번호, 크기를 기반으로 페이지네이션된 게시물 반환 메서드
+    public Page<Posts> findPaginated(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return postRepository.findAll(pageable);
     }
 }

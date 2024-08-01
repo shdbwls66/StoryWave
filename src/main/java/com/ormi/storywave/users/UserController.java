@@ -17,19 +17,19 @@ public class UserController {
 
     @GetMapping("/join")
     public String addUserForm(Model model) {
-        return "join";
+        return "join/join";
     }
 
     @PostMapping("/join")
     public String addUser(@ModelAttribute UserRequest.JoinDto joinDto) {
         UsersDto addedUser = userService.addUser(joinDto);
 //        model.addAttribute("user", addedUser);
-        return "welcome";
+        return "join/welcome";
     }
 
     @GetMapping("/login")
     public String loginForm() {
-        return "login";
+        return "login/login";
     }
 
     @PostMapping("/login")
@@ -39,10 +39,9 @@ public class UserController {
             String userId = userService.loginUser(loginDto);
         } catch (IllegalArgumentException e){
             model.addAttribute("message", e.getMessage());
-            return "login";
+            return "login/login";
         }
 
         return "home"; // index_afterLogin에 맵핑이 안 된 게 많아서 오류 발생. 추후 변경
-
     }
 }

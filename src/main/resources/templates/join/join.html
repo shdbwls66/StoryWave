@@ -18,25 +18,103 @@
             background-color: #EDE7DF;
             display: flex;
             flex-direction: column;
+            font-family: Arial, sans-serif; /* 기본 글꼴 설정 */
         }
 
         header {
             display: flex;
-            position: fixed;
             flex-direction: column;
+            align-items: center;
             width: 100%;
-            height: 69px;
             padding: 15px 0;
             background-color: #EDE7DF;
+            position: fixed;
+            top: 0;
             z-index: 10;
         }
 
-        .nav_bar {
+        .nav-bar {
             display: flex;
-            flex-direction: row;
-            justify-content: space-around;
+            justify-content: space-between;
+            align-items: center;
             background-color: #EDE7DF;
-            z-index: 10;
+            /*padding: 0 20px;*/
+            font-weight: bold;
+        }
+
+        .storywave-logo {
+            flex: 0;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .storywave-img {
+            height: 120px;
+        }
+
+        .menu-cont {
+            display: flex;
+            flex-direction: column;
+            flex: 2;
+        }
+
+        .menu-container {
+            display: flex;
+            align-items: center; /* 수직 가운데 정렬 */
+            width: 100%;
+        }
+
+        .menu-cont2 {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-right: 100px;
+            margin-top: 20px;
+            margin-left: 100px;
+            font-size: 20px;
+            gap: 80px; /* 메뉴 항목 간 간격 */
+            white-space: nowrap; /* 줄바꿈 없음 */
+        }
+
+        .sub-text {
+            font-size: 14px; /* 리뷰/서평 글씨 작게 */
+            margin-left: 10px;
+        }
+
+        .user-menu {
+            display: flex;
+            margin-top: 20px;
+            margin-left: auto; /* user_menu를 오른쪽 끝으로 밀어냄 */
+            font-size: 14px;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 9px;
+        }
+
+        #search-input {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        #search_btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search_img {
+            height: 20px;
         }
 
         a {
@@ -44,61 +122,12 @@
             color: black;
         }
 
-        h3 {
-            font-size: 10pt;
-        }
-
-        span {
-            font-size: 8pt;
-        }
-
-        .menu_cont {
-            display: flex;
-            flex-direction: column;
-            align-items: end;
-            font-size: 10pt;
-        }
-
-        .storywave_img {
-            height: 85px;
-        }
-
-        .menu_cont2 {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-self: flex-end;
-            padding-top: 28px;
-            gap: 28px;
-        }
-
-        #search-input {
-            padding: 3px 10px;
-            border: none;
-            border-radius: 8px;
-            outline: none;
-            vertical-align: bottom;
-        }
-
-        #search_btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            height: 14px;
-        }
-
-        .search_img {
-            height: 14px;
-        }
-
-        .user_menu {
-            display: flex;
-            align-self: flex-end;
-        }
-
         .firstLine {
             display: inline-flex;
-            border-style:solid;
+            border-style: solid;
+            width: 100%; /* 페이지 전체 너비 */
+            height: 0.5px; /* 두께 설정 */
+            background-color: #ddd;
         }
 
         .signup-container {
@@ -111,7 +140,7 @@
             left: 50%;
             top: 50%;
         }
-        #signup-form > div> input {
+        #signupForm > div> input {
             width:100%;
             /*width: 320px;*/
             height: 30px;
@@ -121,7 +150,7 @@
             border-radius: 6px;
             border: none;
         }
-        #signup-form > div {
+        #signupForm > div {
             margin-bottom: 20px;
         }
         button {
@@ -131,7 +160,7 @@
             cursor: pointer
 
         }
-        #signup-btn {
+        #signupBtn {
             width: 100px;
             height: 40px;
             font-weight: bold;
@@ -153,23 +182,24 @@
 </head>
 <body>
 <header>
-    <!-- 헤더 -->
     <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
-    <div class="nav_bar">
-        <a th:href="@{/home}" class="storywave_logo">
-            <img class="storywave_img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+    <div class="nav-bar">
+        <a th:href="@{/home}" class="storywave-logo">
+            <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
-        <nav class="menu_cont">
-            <form class="search_form">
-                <label for="search-input"></label>
-                <input id="search-input" class="search_box" type="search" name="search_input">
+        <nav class="menu-cont">
+            <form class="search-form">
+                <label for="search-input" style="display:none;">검색</label>
+                <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
                 <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
             </form>
-            <div class="menu_cont2">
-                <a>공지사항</a>
-                <a>영화 <span>리뷰/서평</span></a>
-                <a>도서 <span>리뷰/서평</span></a>
-                <div class="user_menu">
+            <div class="menu-container">
+                <div class="menu-cont2">
+                    <a href="#">공지사항</a>
+                    <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
+                </div>
+                <div class="user-menu">
                     <a th:href="@{/user/join}">회원가입</a>
                     <span>|</span>
                     <a th:href="@{/user/login}">로그인</a>
@@ -181,12 +211,12 @@
 </header>
 <main>
     <div class="signup-container">
-        <form th:action="@{/user/join}" method="post" id="signup-form">
+        <form th:action="@{/user/join}" method="post" id="signupForm">
             <div>
                 <label for="id">아이디</label><br>
                 <input type="text" id="id" name="userId" required>
 <!--                <button type="button" class="check-btn">중복확인</button>-->
-                <span id="confirm-id" class="check-ok"></span>
+                <span id="confirmId" class="check-ok"></span>
             </div>
 
             <div>
@@ -197,7 +227,7 @@
             <div>
                 <label for="passwordConfirm">비밀번호 확인</label><br>
                 <input type="password" id="passwordConfirm" name="passwordConfirm" required>
-                <span id="confirm-password" class="check-ok"></span>
+                <span id="confirmPassword" class="check-ok"></span>
             </div>
 
             <div>
@@ -208,9 +238,9 @@
             <div>
                 <label for="nickname">닉네임</label><br>
                 <input type="text" id="nickname" name="nickname" required>
-                <span id="confirm-nickname" class="check-ok"></span>
+                <span id="confirmNickname" class="check-ok"></span>
             </div>
-            <button type="submit" id="signup-btn">회원가입</button>
+            <button type="submit" id="signupBtn">회원가입</button>
         </form>
     </div>
 </main>
@@ -223,7 +253,7 @@
             // 아이디 조건 추가하기
 
             if (id === '' || id.length === 0) {
-                $("#confirm-id").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
+                $("#confirmId").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
                 return false;
             } else if (id.includes(''))
 
@@ -236,9 +266,9 @@
                 dataType : 'json',
                 success : function(result) {
                     if (result === true) {
-                        $("#confirm-id").css("color", "blue").text("사용 가능한 ID입니다.");
+                        $("#confirmId").css("color", "blue").text("사용 가능한 ID입니다.");
                     } else {
-                        $("#confirm-id").css("color", "red").text("중복된 ID가 존재합니다.");
+                        $("#confirmId").css("color", "red").text("중복된 ID가 존재합니다.");
                         $("#id").val('');
                     }
                 },
@@ -255,7 +285,7 @@
             let nickname = $("#nickname").val();
 
             if (nickname === '' || nickname.length === 0) {
-                $("#confirm-nickname").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
+                $("#confirmNickname").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
                 return false;
             } else if (nickname.includes(''))
 
@@ -268,9 +298,9 @@
                     dataType : 'json',
                     success : function(result) {
                         if (result === true) {
-                            $("#confirm-nickname").css("color", "blue").text("사용 가능한 닉네임입니다.");
+                            $("#confirmNickname").css("color", "blue").text("사용 가능한 닉네임입니다.");
                         } else {
-                            $("#confirm-nickname").css("color", "red").text("중복된 닉네임이 존재합니다.");
+                            $("#confirmNickname").css("color", "red").text("중복된 닉네임이 존재합니다.");
                             $("#nickname").val('');
                         }
                     },
@@ -287,11 +317,11 @@
         let passwordConfirm = $("#passwordConfirm").val();
 
         if(password.length === 0 && passwordConfirm.length === 0) {
-            $("#confirm-password").css("color", "blue").text("");
+            $("#confirmPassword").css("color", "blue").text("");
         } else if (passwordConfirm === $("#password").val()) {
-            $("#confirm-password").css("color", "blue").text("비밀번호가 일치합니다.");
+            $("#confirmPassword").css("color", "blue").text("비밀번호가 일치합니다.");
         } else {
-            $("#confirm-password").css("color", "red").text("비밀번호가 일치하지 않습니다.");
+            $("#confirmPassword").css("color", "red").text("비밀번호가 일치하지 않습니다.");
         }
     });
 
