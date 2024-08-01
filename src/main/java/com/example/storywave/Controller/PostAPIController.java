@@ -39,6 +39,7 @@ public class PostAPIController {
         // dto에서 엔티티로 변환
         Post createdPost = postService.createPost(post, imageFiles, categoryNames, post_type_id, thumbs);
 
+
         // 엔티티에서 Dto로 변환
         PostDto postDto = PostMapper.INSTANCE.postToPostDto(createdPost);
         return ResponseEntity.ok(postDto);

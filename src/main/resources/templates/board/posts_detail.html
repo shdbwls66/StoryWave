@@ -22,14 +22,12 @@
                 <button id="search_btn"><img class="search_img" th:src="@{/photo/search.png}" alt="검색 버튼"></button>
             </form>
             <div class="menu_cont2">
-                <a>공지사항</a>
-                <a>영화 <span class="menu_detail">리뷰/서평</span></a>
-                <a>도서 <span class="menu_detail">리뷰/서평</span></a>
+                <a th:href="@{/notices}">공지사항</a>
+                <a th:href="@{/movies}">영화 <span class="menu_detail">리뷰/서평</span></a>
+                <a th:href="@{/books}">도서 <span class="menu_detail">리뷰/서평</span></a>
                 <div class="user_menu">
-                    <!--                    <a th:href="@{/mypage.html}" th:text="">마이페이지</a>-->
                     <a>마이페이지</a>
                     <span>|</span>
-                    <!--                    <a th:href="@{/home.html}" th:text="">로그아웃</a>-->
                     <a th:href="@{/home}">로그아웃</a>
                 </div>
             </div>
@@ -87,7 +85,7 @@
         <h3 style="display: none">댓글</h3>
         <div class="comments_box">
             <div id="commentList" class="comments">
-                <!--                댓글 데이터가 들어오는 곳입니다-->
+                <!--  댓글 데이터가 들어오는 곳입니다 -->
             </div>
         </div>
         <!-- 삭제 모달-->
@@ -120,10 +118,27 @@
     </section>
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="/script.js"></script>
+<script src="/postsDetailScript.js"></script>
 <script th:inline="javascript">
     window.onload = () => {
         getAllComment();
+    }
+
+    let thumbsCount = [[${posts.thumbs}]];
+    console.log(thumbsCount);
+
+    // thumbs 수 카운트
+    function countThumbs(){
+        let hasClicked = false;
+
+        document.getElementById('thumbs_btn').onclick = function () {
+            if (!hasClicked) {
+                const thumbs_num = document.getElementById('thumbs_num');
+                thumbs_num.innerHTML = Number(thumbs_num.innerHTML) + 1;
+                thumbsCount += 1;
+                hasClicked = true;
+            }
+        }
     }
 
     // Get
@@ -146,6 +161,11 @@
                 }
 
                 response.forEach((comment) => {
+                    const currentUser = [[${users.userId}]];
+                    const commentUser = comment.userId;
+                    console.log("댓글 유저: ", commentUser);
+                    console.log("접속 유저: ", currentUser);
+
                     commentHtml += `
                         <div class="comment">
                             <span style="display: none">댓글 번호 : ${comment.comment_id}</span>
@@ -153,8 +173,12 @@
                             <p class="content_comment">${comment.content}</p>
                             <p class="created_comment">${comment.createdAt}</p>
                             <p>
-                                <button type="button" class="modify_comment" onclick="openCommentUpdateModal(${comment.commentId})">수정</button>
-                                <button type="button" class="remove_comment" onclick="openCommentDeleteModal(${comment.commentId})">삭제</button>
+                            ${
+                                comment.userId === currentUser ? `
+                                <button type="button" class="modify_comment" onClick="openCommentUpdateModal(${comment.commentId}, '${comment.userId}')">수정</button>
+                                <button type="button" class="remove_comment" onclick="openCommentDeleteModal(${comment.commentId}, '${comment.userId}')">삭제</button>
+                                ` : ' '
+                            }
                             </p>
                         </div>
 
@@ -214,33 +238,27 @@
     }
 
     // 댓글 수정
-    function openCommentUpdateModal(commentId) {
+    function openCommentUpdateModal(commentId, commentUserId) {
         const postId = [[${posts.postId}]];
         const userId = [[${users.userId}]];
-        const commentWriter = [[${commentWriter}]];
-        console.log([[${comment}]]);
-        console.log(commentWriter);
         console.log(userId);
 
-        if (!(commentWriter === userId)){
-            alert('수정 권한이 없습니다.');
-        } else {
-            $.ajax({
-                    url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (response) {
-                        document.getElementById('modifyContent').value = response.content;
-                        document.getElementById('update_btn').setAttribute('onclick', `updateComment(${commentId})`);
-                        document.getElementById('cancel_btn').setAttribute('onclick', `closeModal()`);
-                        openModal()
-                    },
-                    error: function (request, status, error) {
-                        console.log(error);
-                    }
+        $.ajax({
+                url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    document.getElementById('modifyContent').value = response.content;
+                    document.getElementById('update_btn').setAttribute('onclick', `updateComment(${commentId})`);
+                    document.getElementById('cancel_btn').setAttribute('onclick', `closeModal()`);
+                    openModal()
+                },
+                error: function (request, status, error) {
+                    console.log(error);
                 }
-            )
-        }
+            }
+        )
+
 
     }
 
@@ -280,7 +298,7 @@
     }
 
     // 댓글 삭제
-    function openCommentDeleteModal(commentId) {
+    function openCommentDeleteModal(commentId, commentUserId) {
         const postId = [[${posts.postId}]];
         const userId = [[${users.userId}]];
 
