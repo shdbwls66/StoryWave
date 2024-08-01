@@ -1,8 +1,7 @@
-package com.ormi.storywave.comment;
+package com.example.storywave.Controller;
 
+import com.example.storywave.Service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 @Controller

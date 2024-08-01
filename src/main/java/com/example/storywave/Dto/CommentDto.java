@@ -1,25 +1,43 @@
 package com.example.storywave.Dto;
 
-import com.example.storywave.Entity.Comment;
-import com.example.storywave.Entity.Post;
-import lombok.*;
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * DTO for {@link Comment}
- */
-@Value
-@NoArgsConstructor(force = true)
+import com.example.storywave.Entity.Comment;
+import lombok.*;
+
+//@Value
 @AllArgsConstructor
 @Getter
 @Setter
-public class CommentDto implements Serializable {
-    Long id;
-    Post post;
-    UserDto user_id;
-    String content;
-    LocalDateTime created_at;
-    LocalDateTime updated_at;
+@NoArgsConstructor
+@Builder
+public class CommentDto {
+  private Long commentId;
+  private Long postId;
+  private String userId;
+  private String nickname;
+  private String content;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
+
+  public static CommentDto fromComment(Comment comment) {
+    return CommentDto.builder()
+        .commentId(comment.getCommentId())
+        .postId(comment.getPost().getId())
+        .userId(comment.getUser().getUserId())
+        .nickname(comment.getUser().getNickname())
+        .content(comment.getContent())
+        .createdAt(comment.getCreatedAt())
+        .updatedAt(comment.getUpdatedAt())
+        .build();
+  }
+
+  public Comment toComment() {
+    Comment comment = new Comment();
+    comment.setCommentId(commentId);
+    comment.setContent(content);
+    comment.setCreatedAt(createdAt);
+    comment.setUpdatedAt(updatedAt);
+    return comment;
+  }
 }
