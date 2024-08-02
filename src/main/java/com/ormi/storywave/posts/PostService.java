@@ -117,9 +117,7 @@ public class PostService {
         StringBuilder updatedContent = new StringBuilder();
 
         int lastMatchEnd = 0;
-        int imageCount = 0;
         while (matcher.find()) {
-            imageCount++;
             String base64Image = matcher.group(1);
 
             String imagePath = saveImage(base64Image, post);
