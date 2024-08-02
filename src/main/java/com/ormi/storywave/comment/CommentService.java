@@ -6,6 +6,9 @@ import com.ormi.storywave.users.UserRepository;
 import com.ormi.storywave.users.Users;
 import com.ormi.storywave.users.UsersDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,5 +95,10 @@ public class CommentService {
                       return true;
                     })
             .orElse(false);
+  }
+
+  public Page<Comment> findPaginated(int page, int pageSize) {
+    Pageable pageable = PageRequest.of(page - 1, pageSize);
+    return commentRepository.findAll(pageable);
   }
 }

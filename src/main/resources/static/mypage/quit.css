@@ -1,0 +1,174 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #EDE7DF;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif; /* 기본 글꼴 설정 */
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 15px 0;
+    background-color: #EDE7DF;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #EDE7DF;
+    /*padding: 0 20px;*/
+    font-weight: bold;
+}
+
+.storywave-logo {
+    flex: 0;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.storywave-img {
+    height: 120px;
+}
+
+.menu-cont {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+}
+
+.menu-container {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    width: 100%;
+}
+
+.menu-cont2 {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-right: 100px;
+    margin-top: 20px;
+    margin-left: 100px;
+    font-size: 20px;
+    gap: 80px; /* 메뉴 항목 간 간격 */
+    white-space: nowrap; /* 줄바꿈 없음 */
+}
+
+.sub-text {
+    font-size: 14px; /* 리뷰/서평 글씨 작게 */
+    margin-left: 10px;
+}
+
+.user-menu {
+    display: flex;
+    margin-top: 20px;
+    margin-left: auto; /* user_menu를 오른쪽 끝으로 밀어냄 */
+    font-size: 14px;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+
+.search-form {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 9px;
+}
+
+#search-input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 12px;
+}
+
+#search_btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.search_img {
+    height: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.firstLine {
+    display: inline-flex;
+    border-style: solid;
+    width: 100%; /* 페이지 전체 너비 */
+    height: 0.5px; /* 두께 설정 */
+    background-color: #ddd;
+}
+
+main {
+    margin-top: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px; /* 전체 메인 영역의 여백 설정 */
+}
+
+.confirm {
+    text-align: center;
+    margin-top: 100px; /* 상단 여백 */
+}
+
+.confirm p:nth-of-type(1) {
+    margin-bottom: 30px; /* 제목과 본문 사이의 간격 */
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.confirm p:nth-of-type(2) {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 80px; /* 본문과 버튼 그룹 사이의 간격 */
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.button-group button {
+    padding: 16px 39px;
+    border: 2px solid #000;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px; /* 버튼 텍스트 크기 조정 */
+    box-shadow: 1px 4px 5px gray;
+    gap: 10px;
+}
+
+.cancel-btn {
+    background-color: white;
+    color: #000;
+    margin-right: 10px;
+}
+
+.confirm-btn {
+    background-color: white;
+    color: #000;
+    margin-left: 10px;
+}

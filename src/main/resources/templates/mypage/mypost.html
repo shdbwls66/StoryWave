@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내가 쓴 게시글</title>
+    <link rel="stylesheet" th:href="@{/mypage/mypost.css}">
+</head>
+<body>
+<header>
+    <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
+    <div class="nav-bar">
+        <a class="storywave-logo" th:href="@{/home}">
+            <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+        </a>
+        <nav class="menu-cont">
+            <form class="search-form">
+                <label for="search-input" style="display:none;">검색</label>
+                <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
+                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
+            </form>
+            <div class="menu-container">
+                <div class="menu-cont2">
+                    <a href="#">공지사항</a>
+                    <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
+                </div>
+                <div class="user-menu">
+                    <a th:href="@{/mypage}">마이페이지</a>
+                    <span>|</span>
+                    <a href="#">로그아웃</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <hr class="firstLine">
+</header>
+
+<main>
+    <h2>내 게시물</h2>
+    <table class="post-table">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>글쓴이</th>
+            <th>날짜</th>
+            <th>공감</th>
+            <th>댓글</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${posts}">
+            <td th:text="${post.id}"></td>
+            <td th:text="${post.title}"></td>
+            <td th:text="${post.author}"></td>
+            <td th:text="${post.date}"></td>
+            <td th:text="${post.likes}"></td>
+            <td th:text="${post.comments}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pagination">
+        <ul class="pagination-list">
+            <li th:each="page, iterStat : ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${page == currentPage} ? ' active' : ''">
+                <a th:href="@{/myPage_myPost(page=${page})}"
+                   th:text="${page}"></a>
+            </li>
+        </ul>
+    </div>
+</main>
+</body>
+</html>

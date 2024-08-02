@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<!--<th:block th:fragment="headerLayout">-->
+<head>
+    <meta charset="UTF-8">
+    <title>StoryWave</title>
+    <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
+    <!--    <link rel="stylesheet" th:href="@{/indexCss.css}">-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #EDE7DF;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif; /* 기본 글꼴 설정 */
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 15px 0;
+            background-color: #EDE7DF;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #EDE7DF;
+            /*padding: 0 20px;*/
+            font-weight: bold;
+        }
+
+        .storywave-logo {
+            flex: 0;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .storywave-img {
+            height: 120px;
+        }
+
+        .menu-cont {
+            display: flex;
+            flex-direction: column;
+            flex: 2;
+        }
+
+        .menu-container {
+            display: flex;
+            align-items: center; /* 수직 가운데 정렬 */
+            width: 100%;
+        }
+
+        .menu-cont2 {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-right: 100px;
+            margin-top: 20px;
+            margin-left: 100px;
+            font-size: 20px;
+            gap: 80px; /* 메뉴 항목 간 간격 */
+            white-space: nowrap; /* 줄바꿈 없음 */
+        }
+
+        .sub-text {
+            font-size: 14px; /* 리뷰/서평 글씨 작게 */
+            margin-left: 10px;
+        }
+
+        .user-menu {
+            display: flex;
+            margin-top: 20px;
+            margin-left: auto; /* user_menu를 오른쪽 끝으로 밀어냄 */
+            font-size: 14px;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 9px;
+        }
+
+        #search-input {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        #search_btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search_img {
+            height: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .firstLine {
+            display: inline-flex;
+            border-style: solid;
+            width: 100%; /* 페이지 전체 너비 */
+            height: 0.5px; /* 두께 설정 */
+            background-color: #ddd;
+        }
+
+        .signup-container {
+            width: 400px;
+            height: 600px;
+            padding: 40px;
+            position: absolute;
+            margin-left: -200px;
+            margin-top: -200px;
+            left: 50%;
+            top: 50%;
+        }
+        #signupForm > div> input {
+            width:100%;
+            /*width: 320px;*/
+            height: 30px;
+            padding: 0 10px;
+            margin-top: 5px;
+            /*margin-bottom: 20px;*/
+            border-radius: 6px;
+            border: none;
+        }
+        #signupForm > div {
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: white;
+            border-width: medium;
+            border-radius: 10px;
+            cursor: pointer
+
+        }
+        #signupBtn {
+            width: 100px;
+            height: 40px;
+            font-weight: bold;
+            margin-left: 110px;
+            margin-bottom: 30px;
+            box-shadow: 1px 1px 1px 1px gray;
+
+        }
+        .check-btn {
+            height: 30px;
+            width: 75px;
+            margin-left: 5px;
+        }
+        .check-ok {
+            padding: 3px;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
+    <div class="nav-bar">
+        <a th:href="@{/home}" class="storywave-logo">
+            <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+        </a>
+        <nav class="menu-cont">
+            <form class="search-form">
+                <label for="search-input" style="display:none;">검색</label>
+                <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
+                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
+            </form>
+            <div class="menu-container">
+                <div class="menu-cont2">
+                    <a href="#">공지사항</a>
+                    <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
+                </div>
+                <div class="user-menu">
+                    <a th:href="@{/user/join}">회원가입</a>
+                    <span>|</span>
+                    <a th:href="@{/user/login}">로그인</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <hr class="firstLine">
+</header>
+<main>
+    <div class="signup-container">
+        <form th:action="@{/user/join}" method="post" id="signupForm">
+            <div>
+                <label for="id">아이디</label><br>
+                <input type="text" id="id" name="userId" required>
+<!--                <button type="button" class="check-btn">중복확인</button>-->
+                <span id="confirmId" class="check-ok"></span>
+            </div>
+
+            <div>
+                <label for="password">비밀번호</label><br>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div>
+                <label for="passwordConfirm">비밀번호 확인</label><br>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" required>
+                <span id="confirmPassword" class="check-ok"></span>
+            </div>
+
+            <div>
+                <label for="email">이메일</label><br>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div>
+                <label for="nickname">닉네임</label><br>
+                <input type="text" id="nickname" name="nickname" required>
+                <span id="confirmNickname" class="check-ok"></span>
+            </div>
+            <button type="submit" id="signupBtn">회원가입</button>
+        </form>
+    </div>
+</main>
+<script>
+    // 아이디 중복확인
+    // $(document).ready(function() {
+        $("#id").on("focusout", function () {
+            let id = $("#id").val();
+
+            // 아이디 조건 추가하기
+
+            if (id === '' || id.length === 0) {
+                $("#confirmId").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
+                return false;
+            } else if (id.includes(''))
+
+            $.ajax({
+                url : '/api/user/confirmId',
+                data: {
+                    userId: id
+                },
+                type : 'POST',
+                dataType : 'json',
+                success : function(result) {
+                    if (result === true) {
+                        $("#confirmId").css("color", "blue").text("사용 가능한 ID입니다.");
+                    } else {
+                        $("#confirmId").css("color", "red").text("중복된 ID가 존재합니다.");
+                        $("#id").val('');
+                    }
+                },
+                error : function() {
+                    alert("서버 요청 실패");
+                }
+            });
+        });
+    // })
+
+    // 닉네임 중복 확인
+    // $(document).ready(function() {
+        $("#nickname").on("focusout", function () {
+            let nickname = $("#nickname").val();
+
+            if (nickname === '' || nickname.length === 0) {
+                $("#confirmNickname").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
+                return false;
+            } else if (nickname.includes(''))
+
+                $.ajax({
+                    url : '/api/user/confirmNickname',
+                    data: {
+                        nickname : nickname
+                    },
+                    type : 'POST',
+                    dataType : 'json',
+                    success : function(result) {
+                        if (result === true) {
+                            $("#confirmNickname").css("color", "blue").text("사용 가능한 닉네임입니다.");
+                        } else {
+                            $("#confirmNickname").css("color", "red").text("중복된 닉네임이 존재합니다.");
+                            $("#nickname").val('');
+                        }
+                    },
+                    error : function() {
+                        alert("서버 요청 실패");
+                    }
+                });
+        });
+    // })
+
+    // 비밀번호 확인
+    $("#passwordConfirm").on("focusout", function () {
+        let password = $("#password").val();
+        let passwordConfirm = $("#passwordConfirm").val();
+
+        if(password.length === 0 && passwordConfirm.length === 0) {
+            $("#confirmPassword").css("color", "blue").text("");
+        } else if (passwordConfirm === $("#password").val()) {
+            $("#confirmPassword").css("color", "blue").text("비밀번호가 일치합니다.");
+        } else {
+            $("#confirmPassword").css("color", "red").text("비밀번호가 일치하지 않습니다.");
+        }
+    });
+
+
+</script>
+</body>
+<!--</th:block>-->
+</html>
