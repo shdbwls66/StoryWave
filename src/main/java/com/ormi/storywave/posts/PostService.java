@@ -37,7 +37,6 @@ public class PostService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-
     public List<PostListDto> getPostSummaries(Long post_type_id) {
         List<Post> posts = postRepository.findAll(); // 모든 게시글을 가져옵니다.
 
