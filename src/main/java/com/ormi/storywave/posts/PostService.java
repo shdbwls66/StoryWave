@@ -1,15 +1,22 @@
 package com.ormi.storywave.posts;
 
 import com.ormi.storywave.board.*;
+import com.ormi.storywave.users.User;
+import com.ormi.storywave.users.UserDto;
+import com.ormi.storywave.users.UserRepository;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +30,13 @@ public class PostService {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
 
     public List<PostListDto> getPostSummaries(Long post_type_id) {
         List<Post> posts = postRepository.findAll(); // 모든 게시글을 가져옵니다.
@@ -83,48 +97,71 @@ public class PostService {
         }
         post.setCategories(categories);
 
-        // 이미지 파일 처리 로직 추가 (null 체크 포함)
-        if (imageFiles != null) {
-            saveImages(imageFiles, post);
-        }
+        if (post.getContent() != null) {
+            String originalContent = post.getContent();
+            System.out.println("Original content length: " + originalContent.length());
 
+            String updatedContent = extractAndSaveImages(originalContent, post);
+            post.setContent(updatedContent);
+
+            System.out.println("Updated content length: " + updatedContent.length());
+        }
+        Post savedPost = postRepository.save(post);
+        System.out.println("Saved post content length: " + savedPost.getContent().length());
         return postRepository.save(post);
     }
 
-    private void saveImages(MultipartFile[] imageFiles, Post post) {
-        if (imageFiles == null || imageFiles.length == 0) {
-            // 이미지 파일이 없는 경우, 로그를 남기거나 필요한 처리를 수행
-            System.out.println("No image files uploaded for post: " + post.getId());
-            return;
-        }
+    private String extractAndSaveImages(String content, Post post) {
+        String imagePattern = "<img[^>]+src\\s*=\\s*['\"]data:image/[^;]+;base64,([^'\"]+)['\"][^>]*>";
+        Pattern pattern = Pattern.compile(imagePattern);
+        Matcher matcher = pattern.matcher(content);
+        StringBuilder updatedContent = new StringBuilder();
 
-        // 업로드 디렉터리 절대 경로 설정
-        File uploadDir = new File("C:/path/to/uploads/");
-        if (!uploadDir.exists()) {
-            if (uploadDir.mkdirs()) {
-                System.out.println("Created directory: " + uploadDir.getAbsolutePath());
-            } else {
-                System.out.println("Failed to create directory: " + uploadDir.getAbsolutePath());
-                throw new RuntimeException("Failed to create directory for image upload");
-            }
-        }
+        int lastMatchEnd = 0;
+        int imageCount = 0;
+        while (matcher.find()) {
+            imageCount++;
+            String base64Image = matcher.group(1);
 
-        for (MultipartFile file : imageFiles) {
-            if (file != null && !file.isEmpty()) {
-                try {
-                    // 파일 경로 설정
-                    String filePath = uploadDir.getAbsolutePath() + "/" + file.getOriginalFilename();
-                    System.out.println("Saving file to: " + filePath);
-                    file.transferTo(new File(filePath));
-                    Image image = new Image();
-                    image.setUrl(filePath);
-                    image.setPost(post);
-                    post.getImages().add(image);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException("Image saving failed: " + e.getMessage(), e);
-                }
+            String imagePath = saveImage(base64Image, post);
+
+            // 로컬 파일 시스템 경로 대신 웹 서버에서 접근 가능한 URL 경로로 설정
+            String fileName = new File(imagePath).getName(); // 이미지 파일명 추출
+            updatedContent.append(content, lastMatchEnd, matcher.start());
+            updatedContent.append("<img src=\"").append("/images/" + fileName).append("\" />");
+            lastMatchEnd = matcher.end();
+        }
+        updatedContent.append(content.substring(lastMatchEnd));
+
+        return updatedContent.toString();
+    }
+
+    private String saveImage(String base64Image, Post post) {
+        byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+        System.out.println("Decoded image size: " + imageBytes.length + " bytes");
+
+        String fileName = UUID.randomUUID().toString() + ".jpg";
+        File file = new File(uploadDir + fileName);
+
+        try {
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
             }
+
+            FileUtils.writeByteArrayToFile(file, imageBytes);
+            System.out.println("Image saved to file: " + file.getAbsolutePath());
+
+            Image image = new Image();
+            image.setUrl(file.getAbsolutePath());
+            image.setPost(post);
+            post.getImages().add(image);
+
+            return file.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to save image: " + e.getMessage());
+            throw new RuntimeException("Failed to save image", e);
         }
     }
 
@@ -134,5 +171,67 @@ public class PostService {
                 .findByBoard_PostTypeIdAndId(post_type_id, postId)
                 .map(PostDto::fromPost)
                 .orElseThrow(() -> new IllegalArgumentException("포스트를 찾을 수 없습니다."));
+    }
+
+    // userId가 있어야지 포스트 생성 가능
+    public PostDto createPosts(PostDto postDto, String userId) {
+        Post posts = postDto.toPost();
+        User users = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("user not found"));
+        posts.setThumbs(0);
+        posts.setCreatedAt(LocalDateTime.now());
+        Post savedPosts = postRepository.save(posts);
+        users.addPost(savedPosts);
+        return PostDto.fromPost(savedPosts);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<PostDto> getPostById(Long id) {
+        return postRepository.findById(id)
+                .map(PostDto::fromPost);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostDto> getAllPosts() {
+        return postRepository.findAll().stream()
+                .map(PostDto::fromPost)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostDto> getPostsByTitleContaining(String keyword) {
+        return postRepository.findByTitleContaining(keyword).stream()
+                .map(PostDto::fromPost)
+                .collect(Collectors.toList());
+    }
+
+    // 글쓴이만 포스트 수정 가능
+    public Optional<PostDto> updatePost(Long postId, PostDto updatePostDto, String userId) {
+        return postRepository
+                .findById(postId)
+                .filter(posts -> posts.getUser().getUserId().equals(userId))
+                .map(
+                        post -> {
+                            post.setTitle(updatePostDto.getTitle());
+                            post.setContent(updatePostDto.getContent());
+                            post.setUpdatedAt(LocalDateTime.now());
+                            return PostDto.fromPost(postRepository.save(post));
+                        });
+    }
+
+    // 글쓴이나, role이 admin인 사람만 포스트 삭제 가능
+    public boolean deletePosts(Long postId, String userId) {
+        UserDto users =
+                userRepository.findByUserId(userId)
+                        .map(UserDto::fromUsers)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
+        return postRepository
+                .findById(postId)
+                .filter(posts -> posts.getUser().getUserId().equals(userId) || users.getRole().equals("admin"))
+                .map(
+                        posts -> {
+                            postRepository.delete(posts);
+                            return true;
+                        })
+                .orElse(false);
     }
 }

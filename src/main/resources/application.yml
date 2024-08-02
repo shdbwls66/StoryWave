@@ -39,3 +39,6 @@ logging:
     suffix: .html # ??? ?? ???
     mode: HTML # HTML5 ??
     encoding: UTF-8 # ??? ??
+
+file:
+  upload-dir: /path/to/upload/directory

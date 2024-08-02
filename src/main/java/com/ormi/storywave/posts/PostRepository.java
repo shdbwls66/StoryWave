@@ -12,4 +12,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Long countCommentsByPostId(@Param("postId") Long postId);
 
     Optional<Post> findByBoard_PostTypeIdAndId(Long postTypeId, Long id);
+
+    List<Post> findByTitleContaining(String keyword);
+
 }
