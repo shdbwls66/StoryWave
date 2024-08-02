@@ -1,5 +1,6 @@
 package com.ormi.storywave.posts;
 
+import com.ormi.storywave.board.CategoryDto;
 import com.ormi.storywave.comment.Comment;
 import com.ormi.storywave.comment.CommentDto;
 import lombok.*;
@@ -8,75 +9,88 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-@NoArgsConstructor
+
+/**
+ * DTO for {@link Post}
+ */
+//@Value
+@NoArgsConstructor(force = true)
 @AllArgsConstructor
-@Builder
 @Getter
 @Setter
+@Builder
 public class PostDto implements Serializable {
-  private Integer postId;
-  private Integer postTypeId;
-  private String userId;
+  private Long postId;
+  private Long postTypeId;
   private String title;
   private String content;
+  private String userId;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
   private Integer thumbs;
-  private Integer commentsCount;
-  private List<CommentDto> commentsList=new ArrayList<>();
+  private List<ImageDto> images;
+  private Set<CategoryDto> categories;
+  private List<CommentDto> comments = new ArrayList<>();
 
-  public static PostDto fromPost(Posts posts) {
-    PostDto postDto =
-            PostDto.builder()
-                    .postId(posts.getPostId())
-                    .postTypeId(posts.getPostTypeId())
-                    .title(posts.getTitle())
-                    .content(posts.getContent())
-                    .createdAt(posts.getCreatedAt())
-                    .updatedAt(posts.getUpdatedAt())
-                    .thumbs(posts.getThumbs())
-                    .build();
+  public static PostDto fromPost(Post post){
+    PostDto postDto = PostDto.builder()
+            .postId(post.getId())
+            .postTypeId(post.getBoard().getPostTypeId())
+            .title(post.getTitle())
+            .content(post.getContent())
+            .userId(post.getUser().getUserId())
+            .createdAt(post.getCreatedAt())
+            .updatedAt(post.getUpdatedAt())
+            .thumbs(post.getThumbs())
+            .build();
 
-    if (posts.getComments() != null) {
-      postDto.setCommentsList(
-              posts.getComments().stream()
+    if (post.getComments() != null) {
+      postDto.setComments(
+              post.getComments()
+                      .stream()
                       .map(CommentDto::fromComment)
                       .collect(Collectors.toList()));
     }
 
-    if (posts.getUsers() != null) {
-      postDto.setUserId(posts.getUsers().getUserId());
-    } else {
-      postDto.setUserId(null);
+    if (post.getImages() != null) {
+      postDto.setImages(
+              post.getImages()
+                      .stream().map(ImageDto::fromImage)
+                      .collect(Collectors.toList()));
     }
+
     return postDto;
   }
 
-  public Posts toPost() {
-    Posts posts = new Posts();
-    posts.setPostId(this.postId);
-    posts.setPostTypeId(this.postTypeId);
-    posts.setTitle(this.title);
-    posts.setContent(this.content);
-    posts.setCreatedAt(this.createdAt);
-    posts.setUpdatedAt(this.updatedAt);
-    posts.setThumbs(this.thumbs);
+  public Post toPost(){
+    Post post = new Post();
+    post.setId(this.postId);
+    post.setTitle(this.title);
+    post.setContent(this.content);
+    post.setCreatedAt(this.createdAt);
+    post.setUpdatedAt(this.updatedAt);
+    post.setThumbs(this.thumbs);
 
-    if (this.commentsList != null) {
-      this.commentsList.forEach(
+    if (this.comments != null) {
+      this.comments.forEach(
               commentDto -> {
-                Comment comment = new Comment();
-                posts.addComment(comment);
+                Comment comment = commentDto.toComment();
+                post.getComments().add(comment);
               });
     }
-//    if (this.user_id != null) {
-//      setUser_id(posts.getUsers().getId());
-//    } else {
-//      setUser_id(null);
-//    }
 
-    return posts;
+    if (this.images != null) {
+      this.images.forEach(
+              imageDto -> {
+                Image image = imageDto.toImage();
+                post.getImages().add(image);
+              }
+      );
+    }
+
+    return post;
   }
 }

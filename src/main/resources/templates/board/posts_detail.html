@@ -5,29 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 상세 보기</title>
     <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
-    <link rel="stylesheet" th:href="@{/posts_detailCss.css}">
+    <link rel="stylesheet" href="../../static/posts_detailCss.css">
 </head>
 <body>
 <header>
     <!-- 헤더 -->
     <h1 class="post_num" style="display: none" th:text="${posts.id}">게시물 상세 보기</h1>
     <div class="nav_bar">
-        <a class="storywave_logo">
-            <img class="storywave_img" th:src="@{/photo/StoryWaveLogo.png}" alt="홈 화면 이동">
+        <a class="storywave_logo" href="../home.html">
+            <img class="storywave_img" src="../../static/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu_cont">
             <form class="search_form">
                 <label for="search-input"></label>
                 <input id="search-input" class="search_box" type="search" name="search_input">
-                <button id="search_btn"><img class="search_img" th:src="@{/photo/search.png}" alt="검색 버튼"></button>
+                <button id="search_btn"><img class="search_img" src="../../static/photo/search.png" alt="검색 버튼"></button>
             </form>
             <div class="menu_cont2">
-                <a>공지사항</a>
-                <a>영화 <span class="menu_detail">리뷰/서평</span></a>
-                <a>도서 <span class="menu_detail">리뷰/서평</span></a>
+                <a href="Noticepostlist.html">공지사항</a>
+                <a href="Moviepostlist.html">영화 <span class="menu_detail">리뷰/서평</span></a>
+                <a href="Bookpostlist.html">도서 <span class="menu_detail">리뷰/서평</span></a>
                 <div class="user_menu">
                     <!--                    <a th:href="@{/mypage.html}" th:text="">마이페이지</a>-->
-                    <a href="../mypage/mypage.html">마이페이지</a>
+                    <a href="../mypage.html">마이페이지</a>
                     <span>|</span>
                     <!--                    <a th:href="@{/home.html}" th:text="">로그아웃</a>-->
                     <a href="../home.html">로그아웃</a>
@@ -119,7 +119,7 @@
     </section>
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="/script.js"></script>
+<script src="../../static/script.js"></script>
 <script th:inline="javascript">
     window.onload = () => {
         getAllComment();
@@ -129,7 +129,7 @@
     function getAllComment() {
         console.log("getAllComment 함수 실행")
 
-        const postId = [[${posts.id}]];
+        const postId = "${posts.id}";
         console.log(postId);
 
         $.ajax({
@@ -183,10 +183,10 @@
             return;
         }
 
-        const postId = [[${posts.id}]];
+        const postId = "${posts.id}";
         console.log(postId);
 
-        const userId = [[${users.id}]];
+        const userId = "${users.id}";
         console.log(userId);
 
         const params = {
@@ -215,8 +215,8 @@
 
     // 댓글 수정
     function openCommentUpdateModal(commentId) {
-        const postId = [[${posts.id}]];
-        const userId = [[${users.id}]];
+        const postId = "${posts.id}";
+        const userId = "${users.id}";
         $.ajax({
                 url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
                 type: 'GET',
@@ -238,10 +238,10 @@
         console.log("updateComment 함수 실행")
         const comment = document.getElementById('modifyContent').value;
 
-        const postId = [[${posts.id}]];
+        const postId = "${posts.id}";
         console.log(postId);
 
-        const userId = [[${users.id}]];
+        const userId = "${users.id}";
         console.log(userId);
 
         const params = {
@@ -271,8 +271,8 @@
 
     // 댓글 삭제
     function openCommentDeleteModal(commentId) {
-        const postId = [[${posts.id}]];
-        const userId = [[${users.id}]];
+        const postId = "${posts.id}";
+        const userId = "${users.id}";
 
         $.ajax({
                 url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
@@ -289,15 +289,14 @@
                 }
             }
         )
-
     }
 
     function deleteComment(commentId) {
         console.log("deleteComment 함수 실행")
-        const postId = [[${posts.id}]];
+        const postId = "${posts.id}";
         console.log(postId);
 
-        const userId = [[${users.id}]];
+        const userId = "${users.id}";
         console.log(userId);
 
         $.ajax({

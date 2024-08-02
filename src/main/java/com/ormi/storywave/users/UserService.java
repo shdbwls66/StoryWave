@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,31 +19,31 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UsersDto> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(UsersDto::fromUsers)
+                .map(UserDto::fromUsers)
                 .collect(Collectors.toList());
     }
 
-    public UsersDto createUser(UsersDto usersDto) {
-        Users users = usersDto.toUsers();
+    public UserDto createUser(UserDto usersDto) {
+        User users = usersDto.toUsers();
         users.setCreatedAt(LocalDateTime.now());
-        Users savedUsers = userRepository.save(users);
-        return UsersDto.fromUsers(savedUsers);
+        User savedUsers = userRepository.save(users);
+        return UserDto.fromUsers(savedUsers);
     }
 
-    public Optional<UsersDto> getUserById(String userId) {
+    public Optional<UserDto> getUserById(String userId) {
         return userRepository.findById(userId)
-                .map(UsersDto::fromUsers);
+                .map(UserDto::fromUsers);
     }
 
-    public Optional<UsersDto> updateUser(String userId, UsersDto updatedUsers) {
+    public Optional<UserDto> updateUser(String userId, UserDto updatedUsers) {
         return userRepository.findById(userId)
                 .map(users -> {
                     users.setPassword(updatedUsers.getPassword());
                     users.setNickname(updatedUsers.getNickname());
                     users.setUpdatedAt(LocalDateTime.now());
-                    return UsersDto.fromUsers(userRepository.save(users));
+                    return UserDto.fromUsers(userRepository.save(users));
                 });
     }
 
@@ -67,14 +66,14 @@ public class UserService {
     }
 
     @Transactional
-    public UsersDto addUser(UserRequest.JoinDto joinDto) {
+    public UserDto addUser(UserRequest.JoinDto joinDto) {
         //default 값 부여
         String defaultRole = "user";
         boolean defaultStatus = true;
 
         // 유저 객체 저장
-        Users savedUser = userRepository.save(
-                Users.builder()
+        User savedUser = userRepository.save(
+                User.builder()
                         .userId(joinDto.getUserId())
                         .password(joinDto.getPassword())
                         .email(joinDto.getEmail())
@@ -83,14 +82,14 @@ public class UserService {
                         .activeStatus(defaultStatus)
                         .createdAt(LocalDateTime.now())
                         .build());
-        return UsersDto.fromUsers(savedUser);
+        return UserDto.fromUsers(savedUser);
     }
 
     public String loginUser(UserRequest.LoginDto loginDto) {
 
         // 로그인 정보와 일치하는 객체 불러오기
-        Optional<UsersDto> foundUser = userRepository.findById(loginDto.getUserId())
-                .map(UsersDto::fromUsers);
+        Optional<UserDto> foundUser = userRepository.findById(loginDto.getUserId())
+                .map(UserDto::fromUsers);
 
         // 일치하는 사용자가 없는 경우
         if (foundUser.isEmpty()) {

@@ -1,7 +1,7 @@
 package com.ormi.storywave.mypage;
 
 import com.ormi.storywave.comment.CommentService;
-import com.ormi.storywave.posts.PostsService;
+import com.ormi.storywave.posts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MyPageController {
 
     private final CommentService commentService;
-    private final PostsService postsService;
+    private final PostService postsService;
 
     @Autowired
-    public MyPageController(CommentService commentService, PostsService postsService) {
+    public MyPageController(CommentService commentService, PostService postsService) {
         this.commentService = commentService;
         this.postsService = postsService;
     }

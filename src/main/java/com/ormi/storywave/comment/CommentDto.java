@@ -1,20 +1,18 @@
 package com.ormi.storywave.comment;
 
 import java.time.LocalDateTime;
-
-import com.ormi.storywave.posts.Posts;
-import com.ormi.storywave.users.Users;
-import com.ormi.storywave.users.UsersDto;
 import lombok.*;
 
+
+//@Value
 @AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
 @Builder
 public class CommentDto {
-    private Integer commentId;
-    private Integer postId;
+    private Long commentId;
+    private Long postId;
     private String userId;
     private String nickname;
     private String content;
@@ -24,9 +22,9 @@ public class CommentDto {
     public static CommentDto fromComment(Comment comment) {
         return CommentDto.builder()
                 .commentId(comment.getCommentId())
-                .postId(comment.getPosts().getPostId())
-                .userId(comment.getUsers().getUserId())
-                .nickname(comment.getUsers().getNickname())
+                .postId(comment.getPost().getId())
+                .userId(comment.getUser().getUserId())
+                .nickname(comment.getUser().getNickname())
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())

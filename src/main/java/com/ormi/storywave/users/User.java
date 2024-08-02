@@ -1,11 +1,10 @@
 package com.ormi.storywave.users;
 
 import com.ormi.storywave.comment.Comment;
-import com.ormi.storywave.posts.Posts;
+import com.ormi.storywave.posts.Post;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
 @Setter
 @Builder
 //@EntityListeners(AuditingEntityListener.class)
-public class Users {
+public class User {
 
     @Id
     @Column(name ="user_id", nullable = false)
@@ -46,31 +45,47 @@ public class Users {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
     @Column
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
 
     @Column
-    @OneToMany(mappedBy = "users")
-    private List<Posts> posts = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
 
+    // 유저 댓글 목록 관리
     public void addComment(Comment comment) {
         comments.add(comment);
-        comment.setUsers(this);
+        comment.setUser(this);
     }
+
+    // 유저 댓글 목록 관리
     public void removeComment(Comment comment){
         comments.remove(comment);
-        comment.setUsers(null);
+        comment.setUser(null);
     }
 
-    public void addPost(Posts post) {
+    // 유저 포스트 목록 관리
+    public void addPost(Post post){
         posts.add(post);
-        post.setUsers(this);
+        post.setUser(this);
     }
 
-    public void removePost(Posts post){
+    // 유저 포스트 목록 관리
+    public void removePost(Post post){
         posts.remove(post);
-        post.setUsers(null);
+        post.setUser(null);
     }
 
 }
