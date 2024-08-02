@@ -1,10 +1,10 @@
 package com.ormi.storywave.comment;
 
-import com.ormi.storywave.posts.Posts;
+import com.ormi.storywave.posts.Post;
 import com.ormi.storywave.posts.PostRepository;
+import com.ormi.storywave.users.User;
+import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserRepository;
-import com.ormi.storywave.users.Users;
-import com.ormi.storywave.users.UsersDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 @Transactional
 public class CommentService {
@@ -26,34 +27,40 @@ public class CommentService {
 
   @Autowired
   public CommentService(
-          CommentRepository commentRepository, PostRepository postRepository, UserRepository userRepository) {
+          CommentRepository commentRepository,
+          PostRepository postRepository,
+          UserRepository userRepository) {
     this.commentRepository = commentRepository;
     this.postRepository = postRepository;
     this.userRepository = userRepository;
   }
 
   public CommentDto createComment(CommentDto commentDto, Long postId, String userId) {
-    Posts posts =
+    Post posts =
             postRepository
                     .findById(postId)
                     .orElseThrow(() -> new IllegalArgumentException("Post not found"));
-    Users users =
+
+    User users =
             userRepository
-                    .findById(userId)
-                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                    .findByUserId(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+
     Comment comment = commentDto.toComment();
     comment.setCreatedAt(LocalDateTime.now());
-    comment.setPosts(posts);
+    comment.setPost(posts);
+
     Comment savedComment = commentRepository.save(comment);
     posts.addComment(savedComment);
     users.addComment(savedComment);
+
     return CommentDto.fromComment(savedComment);
   }
 
   // 모든 댓글 조회
   @Transactional(readOnly = true)
   public List<CommentDto> getAllComments(Long postId) {
-    return commentRepository.findByPosts_PostId(postId).stream()
+    return commentRepository.findByPost_Id(postId).stream()
             .map(CommentDto::fromComment)
             .collect(Collectors.toList());
   }
@@ -69,8 +76,8 @@ public class CommentService {
   public Optional<CommentDto> updateComment(
           Long postId, Long commentId, CommentDto commentDto, String userId) {
     return commentRepository
-            .findByPosts_PostIdAndCommentId(postId, commentId)
-            .filter(comment -> comment.getUsers().getUserId().equals(userId))
+            .findByPost_IdAndCommentId(postId, commentId)
+            .filter(comment -> comment.getUser().getUserId().equals(userId))
             .map(
                     comment -> {
                       comment.setContent(commentDto.getContent());
@@ -81,14 +88,15 @@ public class CommentService {
 
   // 댓글 작성자나, 운영자만 댓글 삭제 가능
   public boolean deleteComment(Long postId, Long commentId, String userId) {
-    UsersDto users =
+    UserDto users =
             userRepository
-                    .findById(userId)
-                    .map(UsersDto::fromUsers)
+                    .findByUserId(userId)
+                    .map(UserDto::fromUsers)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
     return commentRepository
-            .findByPosts_PostIdAndCommentId(postId, commentId)
-            .filter(comment -> comment.getUsers().getUserId().equals(userId) || users.getRole().equals("admin"))
+            .findByPost_IdAndCommentId(postId, commentId)
+            .filter(
+                    posts -> posts.getUser().getUserId().equals(userId) || users.getRole().equals("admin"))
             .map(
                     comment -> {
                       commentRepository.delete(comment);

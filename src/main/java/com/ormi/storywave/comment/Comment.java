@@ -1,7 +1,7 @@
 package com.ormi.storywave.comment;
 
-import com.ormi.storywave.posts.Posts;
-import com.ormi.storywave.users.Users;
+import com.ormi.storywave.posts.Post;
+import com.ormi.storywave.users.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+//@Value
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Column(name = "id")
     private Long commentId;
 
     @Column
@@ -33,10 +34,11 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Posts posts;
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users users;
+    private User user;
+
 }
 

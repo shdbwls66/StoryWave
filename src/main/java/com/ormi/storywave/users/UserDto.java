@@ -2,8 +2,8 @@ package com.ormi.storywave.users;
 
 import com.ormi.storywave.comment.Comment;
 import com.ormi.storywave.comment.CommentDto;
+import com.ormi.storywave.posts.Post;
 import com.ormi.storywave.posts.PostDto;
-import com.ormi.storywave.posts.Posts;
 import lombok.*;
 
 import java.io.Serializable;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Builder
 @Getter
 @Setter
-public class UsersDto implements Serializable {
+public class UserDto implements Serializable {
   private String userId;
   private String password;
   private String nickname;
@@ -30,9 +30,9 @@ public class UsersDto implements Serializable {
   private List<PostDto> posts = new ArrayList<>();
 
   // Entity -> DTO
-  public static UsersDto fromUsers(Users users) {
-    UsersDto usersDto =
-            UsersDto.builder()
+  public static UserDto fromUsers(User users) {
+    UserDto usersDto =
+            UserDto.builder()
                     .userId(users.getUserId())
                     .password(users.getPassword())
                     .nickname(users.getNickname())
@@ -54,8 +54,8 @@ public class UsersDto implements Serializable {
   }
 
   // DTO -> Entity
-  public Users toUsers() {
-    Users users = new Users();
+  public User toUsers() {
+    User users = new User();
     users.setUserId(this.userId);
     users.setPassword(this.password);
     users.setNickname(this.nickname);
@@ -75,7 +75,7 @@ public class UsersDto implements Serializable {
     if (this.posts != null) {
       this.posts.forEach(
               postDto -> {
-                Posts post = postDto.toPost();
+                Post post = postDto.toPost();
                 users.getPosts().add(post);
               });
     }

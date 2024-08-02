@@ -1,10 +1,9 @@
 package com.ormi.storywave.posts;
 
 import com.ormi.storywave.board.Board;
-import com.ormi.storywave.category.Category;
+import com.ormi.storywave.board.Category;
 import com.ormi.storywave.comment.Comment;
-import com.ormi.storywave.image.Image;
-import com.ormi.storywave.users.Users;
+import com.ormi.storywave.users.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,50 +16,42 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "posts")
-@Entity
-public class Posts {
+public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
-    private Long postId;
+    @Column(name = "id")
+    private Long id;
 
-    @Column(name = "post_type_id")
-    private Long postTypeId;
+    @ManyToOne
+    @JoinColumn(name = "post_type_id")
+    private Board board;
 
-    @Column
     private String title;
 
     @Lob
-    @Column
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @Column
     private Integer thumbs;
 
-    @ManyToOne
-    @JoinColumn(name = "post_type_id")
-    private Board board;
-
-    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
-
-    @OneToMany(mappedBy = "posts")
-    private List<Comment> comments = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users users;
 
     @ManyToMany
     @JoinTable(
@@ -69,6 +60,7 @@ public class Posts {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>(); // Set도 초기화
+
 
     @PrePersist
     protected void onCreate() {
@@ -81,14 +73,16 @@ public class Posts {
         updatedAt = LocalDateTime.now();
     }
 
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
     public void addComment(Comment comment) {
         comments.add(comment);
-        comment.setPosts(this);
+        comment.setPost(this);
     }
 
     public void removeComment(Comment comment){
         comments.remove(comment);
-        comment.setPosts(null);
+        comment.setPost(null);
     }
-
 }

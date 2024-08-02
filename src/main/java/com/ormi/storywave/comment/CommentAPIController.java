@@ -34,7 +34,7 @@ public class CommentAPIController {
 
   @GetMapping("/{postId}/comments/{commentId}")
   public CommentDto getCommentById(
-          @PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @RequestParam("userId") String userId) {
+          @PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId) {
     return commentService.getCommentById(commentId);
   }
 
@@ -51,7 +51,7 @@ public class CommentAPIController {
   }
 
   @DeleteMapping("/{postId}/comments/{commentId}")
-  public ResponseEntity<Void> deleteComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @RequestParam("userId") String userId) {
+  public ResponseEntity<Integer> deleteComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @RequestParam("userId") String userId) {
     commentService.deleteComment(postId, commentId, userId);
     return ResponseEntity.noContent().build();
   }

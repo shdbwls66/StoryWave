@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping("/join")
     public String addUser(@ModelAttribute UserRequest.JoinDto joinDto) {
-        UsersDto addedUser = userService.addUser(joinDto);
+        UserDto addedUser = userService.addUser(joinDto);
 //        model.addAttribute("user", addedUser);
         return "join/welcome";
     }
