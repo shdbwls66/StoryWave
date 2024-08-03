@@ -10,25 +10,25 @@
 <body>
 <header>
     <!-- 헤더 -->
-    <h1 class="post_num" style="display: none" th:text="${posts.postId}">게시물 상세 보기</h1>
-    <div class="nav_bar">
-        <a class="storywave_logo" href="../home.html">
-            <img class="storywave_img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+    <h1 style="display: none" th:text="${posts.postId}">게시물 상세 보기</h1>
+    <div class="nav-bar">
+        <a class="storywave-logo" th:href="@{/home}">
+            <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
-        <nav class="menu_cont">
-            <form class="search_form">
-                <label for="search-input"></label>
-                <input id="search-input" class="search_box" type="search" name="search_input">
-                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼">
-                </button>
+        <nav class="menu-cont">
+            <form class="search-form">
+                <label for="search-input" style="display:none;">검색</label>
+                <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
+                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
             </form>
-            <div class="menu_cont2">
-                <a th:href="@{/board/0/post}">공지사항</a>
-                <a th:href="@{/board/1/post}">영화 <span class="menu_detail">리뷰/서평</span></a>
-                <a th:href="@{/board/2/post}">도서 <span class="menu_detail">리뷰/서평</span></a>
-                <div class="user_menu">
-                    <!--                    <a th:href="@{/mypage.html}" th:text="">마이페이지</a>-->
-                    <a href="/mypage.html">마이페이지</a>
+            <div class="menu-container">
+                <div class="menu-cont2">
+                    <a th:href="@{/board/0/post}">공지사항</a>
+                    <a th:href="@{/board/1/post}">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a th:href="@{/board/2/post}">도서 <span class="sub-text">리뷰/서평</span></a>
+                </div>
+                <div class="user-menu">
+                    <a th:href="@{/mypage}">마이페이지</a>
                     <span>|</span>
                     <a th:href="@{/home}">로그아웃</a>
                 </div>
@@ -182,15 +182,15 @@
                             <p class="created_comment">${comment.createdAt}</p>
                             <p>
                             ${ // 현재 접속한 유저와 댓글 작성 유저가 같을 때 수정 버튼이 보이도록 설정
-                            comment.userId === currentUser ? `
+                        comment.userId === currentUser ? `
                                 <button type="button" class="modify_comment" onClick="openCommentUpdateModal(${comment.commentId}, '${comment.userId}')">수정</button>
                                 ` : ''
-                            }
+                    }
                             ${ // 현재 접속한 유저와 댓글 작성 유저가 같거나, role이 admin인 경우 삭제 버튼 보이도록 설정
-                            comment.userId === currentUser || isAdmin ? `
+                        comment.userId === currentUser || isAdmin ? `
                                 <button type="button" class="remove_comment" onclick="openCommentDeleteModal(${comment.commentId}, '${comment.userId}')">삭제</button>
                                 ` : ' '
-                            }
+                    }
                             </p>
                         </div>
 
