@@ -5,32 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 상세 보기</title>
     <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
-    <link rel="stylesheet" href="../../static/posts_detailCss.css">
+    <link rel="stylesheet" href="/posts_detailCss.css">
 </head>
 <body>
 <header>
     <!-- 헤더 -->
-    <h1 class="post_num" style="display: none" th:text="${posts.id}">게시물 상세 보기</h1>
+    <h1 class="post_num" style="display: none" th:text="${posts.postId}">게시물 상세 보기</h1>
     <div class="nav_bar">
         <a class="storywave_logo" href="../home.html">
-            <img class="storywave_img" src="../../static/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+            <img class="storywave_img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu_cont">
             <form class="search_form">
                 <label for="search-input"></label>
                 <input id="search-input" class="search_box" type="search" name="search_input">
-                <button id="search_btn"><img class="search_img" src="../../static/photo/search.png" alt="검색 버튼"></button>
+                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼">
+                </button>
             </form>
             <div class="menu_cont2">
-                <a href="Noticepostlist.html">공지사항</a>
-                <a href="Moviepostlist.html">영화 <span class="menu_detail">리뷰/서평</span></a>
-                <a href="Bookpostlist.html">도서 <span class="menu_detail">리뷰/서평</span></a>
+                <a th:href="@{/board/0/post}">공지사항</a>
+                <a th:href="@{/board/1/post}">영화 <span class="menu_detail">리뷰/서평</span></a>
+                <a th:href="@{/board/2/post}">도서 <span class="menu_detail">리뷰/서평</span></a>
                 <div class="user_menu">
                     <!--                    <a th:href="@{/mypage.html}" th:text="">마이페이지</a>-->
-                    <a href="../mypage.html">마이페이지</a>
+                    <a href="/mypage.html">마이페이지</a>
                     <span>|</span>
                     <!--                    <a th:href="@{/home.html}" th:text="">로그아웃</a>-->
-                    <a href="../home.html">로그아웃</a>
+                    <a th:href="@{/home}">로그아웃</a>
                 </div>
             </div>
         </nav>
@@ -64,7 +65,7 @@
         <p class="post_info">
             <span class="post_user">
                 글쓴이<span th:text="${writer}"></span>
-                날짜<span class="post_create" th:text="${posts.created_at}"></span>
+                날짜<span class="post_create" th:text="${posts.createdAt}"></span>
             </span>
             <span class="post_count">
                 공감<span class="thumbs" th:text="${posts.thumbs}">0</span>
@@ -77,7 +78,7 @@
             </p>
         </div>
         <span class="post_thumbs">공감
-                <button id="thumbs_btn" onclick="countThumbs()">
+                <button id="thumbs_btn">
                     <img class="thumbs_img" th:src="@{/photo/Thumb up.png}" alt="">
                 </button>
             <span id="thumbs_num" th:text="${posts.thumbs}" class="thumbs_num">0</span>
@@ -92,7 +93,6 @@
         </div>
         <!-- 삭제 모달-->
         <div id="commentDeleteModal" class="modal">
-            <span id="id_num" style="display: none">모달 번호 : ${comment.comment_id}</span>
             <div class="modalContent">
                 <h3 class="modalTitle">댓글을 삭제하시겠습니까?</h3>
                 <p class="modalP">삭제한 댓글은 다시 복구할 수 없습니다.</p>
@@ -109,6 +109,7 @@
                 <label for="modifyContent" style="display: none"></label>
                 <textarea id="modifyContent" name="modifyComment" placeholder="수정할 내용을 입력해주세요"></textarea>
                 <button id="update_btn" type="button" onclick="closeModal()">저장</button>
+                <button id="cancel_Btn" type="button" onclick="closeModal()">취소</button>
             </div>
         </div>
         <div class="comment_write">
@@ -119,17 +120,42 @@
     </section>
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="../../static/script.js"></script>
+<script src="/postsDetailScript.js"></script>
 <script th:inline="javascript">
     window.onload = () => {
         getAllComment();
     }
 
+    const thumbBtn = document.getElementById('thumbs_btn');
+
+    thumbBtn.addEventListener('click', (event) => {
+        const postId = [[${posts.postId}]];
+        const userId = [[${users.userId}]];
+        const likeCheck = [[${like}]];
+
+        if (likeCheck === true) {
+            alert('이미 공감한 게시물 입니다.');
+        } else {
+            $.ajax({
+                url: `/post/${postId}/like?userId=${userId}`,
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    location.reload();
+                    console.log(response);
+                },
+                error: function (request, status, error) {
+                    console.log(error);
+                }
+            })
+        }
+    })
+
     // Get
     function getAllComment() {
         console.log("getAllComment 함수 실행")
 
-        const postId = "${posts.id}";
+        const postId = [[${posts.postId}]];
         console.log(postId);
 
         $.ajax({
@@ -145,16 +171,22 @@
                 }
 
                 response.forEach((comment) => {
+                    const currentUser = [[${users.userId}]];
+                    const commentUser = comment.userId;
+
                     commentHtml += `
                         <div class="comment">
-                            <span style="display: none">댓글 번호 : ${comment.comment_id}</span>
-                            <span style="display: none">유저 번호 : ${comment.user_id}</span>
+                            <span style="display: none">댓글 번호 : ${comment.commentId}</span>
                             <span class="nickname_user">${comment.nickname}</span>
                             <p class="content_comment">${comment.content}</p>
-                            <p class="created_comment">${comment.created_at}</p>
+                            <p class="created_comment">${comment.createdAt}</p>
                             <p>
-                                <button type="button" class="modify_comment" onclick="openCommentUpdateModal(${comment.comment_id})">수정</button>
-                                <button type="button" class="remove_comment" onclick="openCommentDeleteModal(${comment.comment_id})">삭제</button>
+                            ${
+                        comment.userId === currentUser ? `
+                                <button type="button" class="modify_comment" onClick="openCommentUpdateModal(${comment.commentId}, '${comment.userId}')">수정</button>
+                                <button type="button" class="remove_comment" onclick="openCommentDeleteModal(${comment.commentId}, '${comment.userId}')">삭제</button>
+                                ` : ' '
+                    }
                             </p>
                         </div>
 
@@ -183,10 +215,10 @@
             return;
         }
 
-        const postId = "${posts.id}";
+        const postId = [[${posts.postId}]];
         console.log(postId);
 
-        const userId = "${users.id}";
+        const userId = [[${users.userId}]];
         console.log(userId);
 
         const params = {
@@ -215,8 +247,8 @@
 
     // 댓글 수정
     function openCommentUpdateModal(commentId) {
-        const postId = "${posts.id}";
-        const userId = "${users.id}";
+        const postId = [[${posts.postId}]];
+        const userId = [[${users.userId}]];
         $.ajax({
                 url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
                 type: 'GET',
@@ -238,10 +270,10 @@
         console.log("updateComment 함수 실행")
         const comment = document.getElementById('modifyContent').value;
 
-        const postId = "${posts.id}";
+        const postId = [[${posts.postId}]];
         console.log(postId);
 
-        const userId = "${users.id}";
+        const userId = [[${users.userId}]];
         console.log(userId);
 
         const params = {
@@ -271,8 +303,8 @@
 
     // 댓글 삭제
     function openCommentDeleteModal(commentId) {
-        const postId = "${posts.id}";
-        const userId = "${users.id}";
+        const postId = [[${posts.postId}]];
+        const userId = [[${users.userId}]];
 
         $.ajax({
                 url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
@@ -293,10 +325,10 @@
 
     function deleteComment(commentId) {
         console.log("deleteComment 함수 실행")
-        const postId = "${posts.id}";
+        const postId = [[${posts.postId}]];
         console.log(postId);
 
-        const userId = "${users.id}";
+        const userId = [[${users.userId}]];
         console.log(userId);
 
         $.ajax({

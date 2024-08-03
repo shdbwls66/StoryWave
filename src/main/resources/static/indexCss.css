@@ -174,5 +174,5 @@ section {
     background-color: #828282;
 }
 #article_contents_first{
-    background-image: url("../templates/theater_photo.jpg");
+    background-image: url("/templates/theater_photo.jpg");
 }
