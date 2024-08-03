@@ -48,6 +48,7 @@ public class Post {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
     private Integer thumbs;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -59,8 +60,16 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
+
     private Set<Category> categories = new HashSet<>(); // Set도 초기화
 
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post")
+    private List<UserPostLike> likes =new ArrayList<>();
+
+    private Integer commentCount;
 
     @PrePersist
     protected void onCreate() {
@@ -72,9 +81,6 @@ public class Post {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-    @OneToMany(mappedBy = "post")
-    private List<Comment> comments = new ArrayList<>();
 
     public void addComment(Comment comment) {
         comments.add(comment);

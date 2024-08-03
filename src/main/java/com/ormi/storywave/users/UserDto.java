@@ -26,8 +26,8 @@ public class UserDto implements Serializable {
   private boolean activeStatus;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
-  private List<CommentDto> comments = new ArrayList<>();
-  private List<PostDto> posts = new ArrayList<>();
+//  private List<CommentDto> comments = new ArrayList<>();
+//  private List<PostDto> posts = new ArrayList<>();
 
   // Entity -> DTO
   public static UserDto fromUsers(User users) {
@@ -42,14 +42,14 @@ public class UserDto implements Serializable {
                     .createdAt(users.getCreatedAt())
                     .updatedAt(users.getUpdatedAt())
                     .build();
-    if (users.getComments() != null) {
-      usersDto.setComments(
-              users.getComments().stream().map(CommentDto::fromComment).collect(Collectors.toList()));
-    }
-    if (users.getPosts() != null) {
-      usersDto.setPosts(
-              users.getPosts().stream().map(PostDto::fromPost).collect(Collectors.toList()));
-    }
+//    if (users.getComments() != null) {
+//      usersDto.setComments(
+//              users.getComments().stream().map(CommentDto::fromComment).collect(Collectors.toList()));
+//    }
+//    if (users.getPosts() != null) {
+//      usersDto.setPosts(
+//              users.getPosts().stream().map(PostDto::fromPost).collect(Collectors.toList()));
+//    }
     return usersDto;
   }
 
@@ -65,20 +65,20 @@ public class UserDto implements Serializable {
     users.setCreatedAt(this.createdAt);
     users.setUpdatedAt(this.updatedAt);
 
-    if (this.comments != null) {
-      this.comments.forEach(
-              commentDto -> {
-                Comment comment = commentDto.toComment();
-                users.getComments().add(comment);
-              });
-    }
-    if (this.posts != null) {
-      this.posts.forEach(
-              postDto -> {
-                Post post = postDto.toPost();
-                users.getPosts().add(post);
-              });
-    }
+//    if (this.comments != null) {
+//      this.comments.forEach(
+//              commentDto -> {
+//                Comment comment = commentDto.toComment();
+//                users.getComments().add(comment);
+//              });
+//    }
+//    if (this.posts != null) {
+//      this.posts.forEach(
+//              postDto -> {
+//                Post post = postDto.toPost();
+//                users.getPosts().add(post);
+//              });
+//    }
     return users;
   }
 }

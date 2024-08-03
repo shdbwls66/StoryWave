@@ -34,14 +34,6 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute UserRequest.LoginDto loginDto, Model model) {
-<<<<<<< HEAD
-        System.out.println(loginDto.getUserId());
-        System.out.println(loginDto.getPassword());
-        String userId = userService.loginUser(loginDto);
-//        return "home/{postId}";
-//        return "index_afterLogin"; // 해당 html에 맵핑이 안 된 게 많아서 에러 발생. 해결하면 이걸로 변경
-        return "home";
-=======
 
         try { // userId를 받는 게 나을까 객체를 받는 게 나을까
             String userId = userService.loginUser(loginDto);
@@ -51,6 +43,5 @@ public class UserController {
         }
 
         return "home"; // index_afterLogin에 맵핑이 안 된 게 많아서 오류 발생. 추후 변경
->>>>>>> 9b21ba978f585fe6066f7b625d058dd18c18ef5b
     }
 }

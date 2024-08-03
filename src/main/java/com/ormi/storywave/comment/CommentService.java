@@ -53,6 +53,7 @@ public class CommentService {
     Comment savedComment = commentRepository.save(comment);
     posts.addComment(savedComment);
     users.addComment(savedComment);
+    posts.setCommentCount(commentCount(postId));
 
     return CommentDto.fromComment(savedComment);
   }
@@ -88,6 +89,7 @@ public class CommentService {
 
   // 댓글 작성자나, 운영자만 댓글 삭제 가능
   public boolean deleteComment(Long postId, Long commentId, String userId) {
+    Post posts = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Post not found"));
     UserDto users =
             userRepository
                     .findByUserId(userId)
@@ -96,10 +98,11 @@ public class CommentService {
     return commentRepository
             .findByPost_IdAndCommentId(postId, commentId)
             .filter(
-                    posts -> posts.getUser().getUserId().equals(userId) || users.getRole().equals("admin"))
+                    post -> post.getUser().getUserId().equals(userId) || users.getRole().equals("admin"))
             .map(
                     comment -> {
                       commentRepository.delete(comment);
+                      posts.setCommentCount(commentCount(postId));
                       return true;
                     })
             .orElse(false);
@@ -108,5 +111,9 @@ public class CommentService {
   public Page<Comment> findPaginated(int page, int pageSize) {
     Pageable pageable = PageRequest.of(page - 1, pageSize);
     return commentRepository.findAll(pageable);
+  }
+
+  public Integer commentCount(Long postId){
+    return commentRepository.countCommentsByPost_Id(postId);
   }
 }
