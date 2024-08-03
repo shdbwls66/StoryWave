@@ -62,7 +62,7 @@ public class PostController {
     model.addAttribute("like", like);
 
     // 권한 테스트를 위해 임시로 작성
-    String role = users.getRole();
+    boolean isAdmin = users.getRole().equals("admin");
 
     model.addAttribute("writer", writer); // 글쓴이
 
@@ -70,9 +70,10 @@ public class PostController {
 
     model.addAttribute("users", users); // 유저
 
-    model.addAttribute("role", role); // 권한
+    model.addAttribute("isAdmin", isAdmin); // 권한
 
     model.addAttribute("comments", posts.getComments().size()); // 댓글 개수
+
 
     return "board/posts_detail";
   }

@@ -30,7 +30,6 @@
                     <!--                    <a th:href="@{/mypage.html}" th:text="">마이페이지</a>-->
                     <a href="/mypage.html">마이페이지</a>
                     <span>|</span>
-                    <!--                    <a th:href="@{/home.html}" th:text="">로그아웃</a>-->
                     <a th:href="@{/home}">로그아웃</a>
                 </div>
             </div>
@@ -65,7 +64,7 @@
         <p class="post_info">
             <span class="post_user">
                 글쓴이<span th:text="${writer}"></span>
-                날짜<span class="post_create" th:text="${posts.createdAt}"></span>
+                날짜<span class="post_create" th:text="${#temporals.format(posts.createdAt, 'yyyy-MM-dd')}"></span>
             </span>
             <span class="post_count">
                 공감<span class="thumbs" th:text="${posts.thumbs}">0</span>
@@ -131,7 +130,7 @@
     thumbBtn.addEventListener('click', (event) => {
         const postId = [[${posts.postId}]];
         const userId = [[${users.userId}]];
-        const likeCheck = [[${like}]];
+        const likeCheck = [[${like}]]; // 게시물 공감 여부 확인
 
         if (likeCheck === true) {
             alert('이미 공감한 게시물 입니다.');
@@ -171,8 +170,9 @@
                 }
 
                 response.forEach((comment) => {
-                    const currentUser = [[${users.userId}]];
-                    const commentUser = comment.userId;
+                    const currentUser = [[${users.userId}]]; // 현재 접속한 유저 아이디
+                    const isAdmin = [[${isAdmin}]]; // role이 admin인지 여부
+                    const commentUser = comment.userId; // 댓글을 작성한 유저 아이디
 
                     commentHtml += `
                         <div class="comment">
@@ -181,12 +181,16 @@
                             <p class="content_comment">${comment.content}</p>
                             <p class="created_comment">${comment.createdAt}</p>
                             <p>
-                            ${
-                        comment.userId === currentUser ? `
+                            ${ // 현재 접속한 유저와 댓글 작성 유저가 같을 때 수정 버튼이 보이도록 설정
+                            comment.userId === currentUser ? `
                                 <button type="button" class="modify_comment" onClick="openCommentUpdateModal(${comment.commentId}, '${comment.userId}')">수정</button>
+                                ` : ''
+                            }
+                            ${ // 현재 접속한 유저와 댓글 작성 유저가 같거나, role이 admin인 경우 삭제 버튼 보이도록 설정
+                            comment.userId === currentUser || isAdmin ? `
                                 <button type="button" class="remove_comment" onclick="openCommentDeleteModal(${comment.commentId}, '${comment.userId}')">삭제</button>
                                 ` : ' '
-                    }
+                            }
                             </p>
                         </div>
 
