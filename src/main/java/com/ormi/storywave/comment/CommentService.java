@@ -53,7 +53,6 @@ public class CommentService {
     Comment savedComment = commentRepository.save(comment);
     posts.addComment(savedComment);
     users.addComment(savedComment);
-    posts.setCommentCount(commentCount(postId));
 
     return CommentDto.fromComment(savedComment);
   }
@@ -102,7 +101,6 @@ public class CommentService {
             .map(
                     comment -> {
                       commentRepository.delete(comment);
-                      posts.setCommentCount(commentCount(postId));
                       return true;
                     })
             .orElse(false);

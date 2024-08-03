@@ -4,7 +4,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-02T19:14:02+0900",
+    date = "2024-08-03T19:19:16+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.12 (Amazon.com Inc.)"
 )
 public class PostMapperImpl implements PostMapper {

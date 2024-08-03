@@ -72,7 +72,7 @@ public class PostController {
 
     model.addAttribute("role", role); // 권한
 
-    model.addAttribute("comments", posts.getCommentCount()); // 댓글 개수
+    model.addAttribute("comments", posts.getComments().size()); // 댓글 개수
 
     return "board/posts_detail";
   }

@@ -1,10 +1,14 @@
 package com.ormi.storywave.posts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ormi.storywave.comment.Comment;
+import com.ormi.storywave.comment.CommentDto;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /** DTO for {@link Post} */
 // @Value
@@ -25,21 +29,30 @@ public class PostDto implements Serializable {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDateTime updatedAt;
 
-  private Integer commentCount;
+  private List<CommentDto> comments;
+
   private Integer thumbs;
 
   public static PostDto fromPost(Post post) {
 
-    return PostDto.builder()
+    PostDto postDto = PostDto.builder()
         .postId(post.getId())
         .postTypeId(post.getBoard().getPostTypeId())
         .title(post.getTitle())
         .content(post.getContent())
         .createdAt(post.getCreatedAt())
         .updatedAt(post.getUpdatedAt())
-        .commentCount((post.getCommentCount()))
         .thumbs(post.getThumbs())
         .build();
+
+    if (post.getComments() != null) {
+      postDto.setComments(
+              post.getComments()
+                      .stream()
+                      .map(CommentDto::fromComment)
+                      .collect(Collectors.toList()));
+    }
+    return postDto;
   }
 
   public Post toPost() {
@@ -49,8 +62,15 @@ public class PostDto implements Serializable {
     post.setContent(this.content);
     post.setCreatedAt(this.createdAt);
     post.setUpdatedAt(this.updatedAt);
-    post.setCommentCount(this.commentCount);
     post.setThumbs(this.thumbs);
+
+    if (this.comments != null) {
+      this.comments.forEach(
+              commentDto -> {
+                Comment comment = commentDto.toComment();
+                post.getComments().add(comment);
+              });
+    }
 
     return post;
   }

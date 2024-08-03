@@ -69,8 +69,6 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<UserPostLike> likes =new ArrayList<>();
 
-    private Integer commentCount;
-
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
