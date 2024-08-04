@@ -367,8 +367,8 @@
           return `
         <tr>
           <td>공지</td>
-          <td><a href="/posts/${post.id}">${post.title}</a></td>
-          <td>${post.author}</td>
+          <td><a href="./posts_detail.html?id=${post.id}">${post.title}</a></td>
+          <td>${post.nickname}</td>
           <td>${new Date(post.updated_at).toLocaleString()}</td>
           <td>${post.thumbs}</td>
           <td>${post.comments}</td>
@@ -379,8 +379,8 @@
           return `
         <tr>
           <td>${(page - 1) * postsPerPage -(page !==1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
-          <td><a href="/posts/${post.id}">${post.title}</a></td>
-          <td>${post.author}</td>
+          <td><a href="./posts_detail.html?id=${post.id}">${post.title}</a></td>
+          <td>${post.nickname}</td>
           <td>${new Date(post.updated_at).toLocaleString()}</td>
           <td>${post.thumbs}</td>
           <td>${post.comments}</td>
