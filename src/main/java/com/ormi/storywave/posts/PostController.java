@@ -29,13 +29,13 @@ public class PostController {
     return "/board/Noticepostlist";
   }
 
-  @GetMapping("/1/post") // 카테고리 설정을 따로 하지 않아서 그런지 공지사항 게시판만 들어가짐
+  @GetMapping("/1/post")
   public String movieBoard(Model model) {
     List<PostListDto> postList = postService.getPostSummaries(1L);
     return "/board/Moviepostlist";
   }
 
-  @GetMapping("/2/post") // 카테고리 설정을 따로 하지 않아서 그런지 공지사항 게시판만 들어가짐
+  @GetMapping("/2/post")
   public String bookBoard(Model model) {
     return "/board/Bookpostlist";
   }
