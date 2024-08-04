@@ -7,6 +7,9 @@ import com.ormi.storywave.users.UserRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +37,12 @@ public class PostService {
 
   @Value("${file.upload-dir}")
   private String uploadDir;
+
+  // 페이지 번호, 크기를 기반으로 페이지네이션된 게시물 반환 메서드
+  public Page<Post> findPaginated(int page, int pageSize) {
+    Pageable pageable = PageRequest.of(page - 1, pageSize);
+    return postRepository.findAll(pageable);
+  }
 
   public List<PostListDto> getPostSummaries(Long post_type_id) {
     List<Post> posts = postRepository.findAll(); // 모든 게시글을 가져옵니다.
