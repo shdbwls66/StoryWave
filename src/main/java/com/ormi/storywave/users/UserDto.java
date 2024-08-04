@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @Setter
 public class UserDto implements Serializable {
   private String userId;
+  private String username;
   private String password;
   private String nickname;
   private String email;
@@ -34,6 +35,7 @@ public class UserDto implements Serializable {
     UserDto usersDto =
             UserDto.builder()
                     .userId(users.getUserId())
+                    .username(users.getUsername())
                     .password(users.getPassword())
                     .nickname(users.getNickname())
                     .email(users.getEmail())
@@ -57,6 +59,7 @@ public class UserDto implements Serializable {
   public User toUsers() {
     User users = new User();
     users.setUserId(this.userId);
+    users.setUsername(this.username);
     users.setPassword(this.password);
     users.setNickname(this.nickname);
     users.setEmail(this.email);
@@ -81,4 +84,6 @@ public class UserDto implements Serializable {
     }
     return users;
   }
+
+
 }

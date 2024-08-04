@@ -17,11 +17,11 @@ public class UserAPIController {
         this.userService = userService;
     }
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<List<UserDto>> getAllUser() {
         List<UserDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
-    }
+    }*/
 
 
     @PostMapping

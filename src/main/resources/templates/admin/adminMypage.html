@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="icon" href="photo/StoryWaveLogo.png" type="image/x-icon">
+    <!--    <link rel="stylesheet" th:href="@{/indexCss.css}">-->
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #EDE7DF;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif; /* 기본 글꼴 설정 */
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 15px 0;
+            background-color: #EDE7DF;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #EDE7DF;
+            /*padding: 0 20px;*/
+            font-weight: bold;
+        }
+
+        .storywave-logo {
+            flex: 0;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .storywave-img {
+            height: 120px;
+        }
+
+        .menu-cont {
+            display: flex;
+            flex-direction: column;
+            flex: 2;
+        }
+
+        .menu-container {
+            display: flex;
+            align-items: center; /* 수직 가운데 정렬 */
+            width: 100%;
+        }
+
+        .menu-cont2 {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-right: 100px;
+            margin-top: 20px;
+            margin-left: 100px;
+            font-size: 20px;
+            gap: 80px; /* 메뉴 항목 간 간격 */
+            white-space: nowrap; /* 줄바꿈 없음 */
+        }
+
+        .sub-text {
+            font-size: 14px; /* 리뷰/서평 글씨 작게 */
+            margin-left: 10px;
+        }
+
+        .user-menu {
+            display: flex;
+            margin-top: 20px;
+            margin-left: auto; /* user_menu를 오른쪽 끝으로 밀어냄 */
+            font-size: 14px;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 9px;
+        }
+
+        #search-input {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        #search_btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search_img {
+            height: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .firstLine {
+            display: inline-flex;
+            border-style: solid;
+            width: 100%; /* 페이지 전체 너비 */
+            height: 0.5px; /* 두께 설정 */
+            background-color: #ddd;
+        }
+
+        .mainCont {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .button_cont {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .myPageMenu {
+            width: 125px;
+            height: 33px;
+            color: black;
+            background-color: white;
+            border-radius: 4px;
+            font-size: 12pt;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
+    <div class="nav-bar">
+        <a class="storywave-logo" th:href="@{/home}">
+            <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+        </a>
+        <nav class="menu-cont">
+            <form class="search-form">
+                <label for="search-input" style="display:none;">검색</label>
+                <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
+                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
+            </form>
+            <div class="menu-container">
+                <div class="menu-cont2">
+                    <a href="#">공지사항</a>
+                    <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
+                </div>
+                <div class="user-menu">
+                    <a th:href="@{/mypage}">마이페이지</a>
+                    <span>|</span>
+                    <a href="#">로그아웃</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <hr class="firstLine">
+</header>
+<main class="mainCont">
+    <h2 style="display: none">메인 컨텐츠</h2>
+    <div class="myPage_btn">
+        <a href="#"> 내 게시물 </a>
+        <a href="#"> 내 댓글 </a>
+        <a href="#">  회원정보 수정 </a>
+        <a href="userList.html">회원 관리</a>
+        <a href="mypage/quit">  회원 탈퇴 </a>
+    </div>
+</main>
+</body>
+</html>

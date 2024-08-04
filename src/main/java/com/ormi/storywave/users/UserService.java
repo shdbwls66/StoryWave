@@ -37,6 +37,7 @@ public class UserService {
                 .map(UserDto::fromUsers);
     }
 
+
     public Optional<UserDto> updateUser(String userId, UserDto updatedUsers) {
         return userRepository.findById(userId)
                 .map(users -> {
@@ -102,12 +103,31 @@ public class UserService {
         }
 
         // 정지 회원인 경우 추가 필요
-        if (!foundUser.get().isActiveStatus()) {
+       /* if (!foundUser.get().isActiveStatus()) {
             // 영구 정지, 일시 정지를 위한 테이블 필요
 
         }
-
+*/
         return foundUser.get().getUserId();
         // 객체를 반환하는 게 나은가..?(보완필요)
+    }
+
+
+
+   /* public void updateUserStatus(String userid, String activeStatus, String reason) {
+        User user = userRepository.findById(userid).orElse(null);
+        if (user != null) {
+            user.setActiveStatus(activeStatus);
+            userRepository.save(user);
+        }
+
+    }*/
+
+    public Optional<UserDto> updateUserStatus(String userId, boolean activeStatus) {
+        return userRepository.findById(userId)
+                .map(users -> {
+                    users.setActiveStatus(activeStatus);
+                    return UserDto.fromUsers(userRepository.save(users));
+                });
     }
 }
