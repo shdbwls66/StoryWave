@@ -46,30 +46,28 @@
             <th>글쓴이</th>
             <th>날짜</th>
         </tr>
+        </thead>
         <tbody id="comment-list">
         <tr th:each="comment : ${comments}">
-            <td th:text="${comment.id}"></td>
+            <td th:text="${comment.commentId}"></td>
             <td>
-                <div class="title" th:text="${comment.comment}"></div>
+                <div class="title" th:text="${comment.content}"></div>
                 <span th:text="${comment.post.title}"></span>
             </td>
-            <td th:text="${comment.post.author}"></td>
-            <td th:text="${comment.post.date}"></td>
+            <td th:text="${comment.user != null ? comment.user.username : 'Unknown'}"></td>
+            <td th:text="${comment.createdAt}"></td>
         </tr>
         </tbody>
-
-
     </table>
     <div class="pagination">
         <ul class="pagination-list">
             <li th:each="page, iterStat : ${#numbers.sequence(1, totalPages)}"
                 th:classappend="${page == currentPage} ? ' active' : ''">
-                <a th:href="@{/myPage_myComment(page=${page})}"
+                <a th:href="@{/myPage/myComment(page=${page})}"
                    th:text="${page}"></a>
             </li>
         </ul>
     </div>
-
 </main>
 </body>
 </html>

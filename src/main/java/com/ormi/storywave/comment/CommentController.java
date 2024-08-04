@@ -8,30 +8,31 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class CommentController {
-    private final CommentService commentService;
+  private final CommentService commentService;
 
-    @Autowired
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
+  @Autowired
+  public CommentController(CommentService commentService) {
+    this.commentService = commentService;
+  }
 
-    @GetMapping("/myPage/myComment")
-    public String getAllComments(
-            Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-        int pageSize = 10;
-        Page<Comment> commentPage = commentService.findPaginated(page, pageSize);
+  @GetMapping("/myPage/myComment")
+  public String getAllComments(
+      Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+    int pageSize = 10;
+    Page<Comment> commentPage = commentService.findPaginated(page, pageSize);
 
-        model.addAttribute("comments", commentPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", commentPage.getTotalPages());
-        return "myPage/mycomment";
-    }
+    model.addAttribute("comments", commentPage.getContent());
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", commentPage.getTotalPages());
+    return "mypage/mycomment";
+  }
 
-//    @PostMapping("/comments")
-//    @ResponseBody
-//    public CommentDto createComment(@RequestBody CommentDto commentDto, @PathVariable("postId") Integer postId, @PathVariable("userId") String userId) {
-//
-//        return commentService.createComment(comment);
-//    }
+  //    @PostMapping("/comments")
+  //    @ResponseBody
+  //    public CommentDto createComment(@RequestBody CommentDto commentDto, @PathVariable("postId")
+  // Integer postId, @PathVariable("userId") String userId) {
+  //
+  //        return commentService.createComment(comment);
+  //    }
 
 }

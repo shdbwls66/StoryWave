@@ -5,6 +5,7 @@ import com.ormi.storywave.comment.CommentRepository;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class PostController {
     this.postService = postService;
     this.userRepository = userRepository;
   }
+
 
   // 테스트 용도로 생성했으니, url 바꿀려면 편하게 바꾸어주시면 됩니다.
   @GetMapping("/0/post") // 카테고리 설정을 따로 하지 않아서 그런지 공지사항 게시판만 들어가짐
@@ -76,5 +78,6 @@ public class PostController {
 
     return "board/posts_detail";
   }
+
 
 }
