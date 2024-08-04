@@ -1,7 +1,6 @@
 package com.ormi.storywave.posts;
 
 import com.ormi.storywave.board.PostListDto;
-import com.ormi.storywave.comment.CommentRepository;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,17 @@ public class PostController {
   @GetMapping("/0/post") // 카테고리 설정을 따로 하지 않아서 그런지 공지사항 게시판만 들어가짐
   public String noticeBoard(Model model) {
     return "/board/Noticepostlist";
+  }
+
+  @GetMapping("/1/post") // 카테고리 설정을 따로 하지 않아서 그런지 공지사항 게시판만 들어가짐
+  public String movieBoard(Model model) {
+    List<PostListDto> postList = postService.getPostSummaries(1L);
+    return "/board/Moviepostlist";
+  }
+
+  @GetMapping("/2/post") // 카테고리 설정을 따로 하지 않아서 그런지 공지사항 게시판만 들어가짐
+  public String bookBoard(Model model) {
+    return "/board/Bookpostlist";
   }
 
   // 게시물 상세화면 조회

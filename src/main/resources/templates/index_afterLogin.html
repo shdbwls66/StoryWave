@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>StoryWave</title>
-    <link rel="icon" href="photo/StoryWaveLogo.png" type="image/x-icon">
+    <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
     <!--    <link rel="stylesheet" th:href="@{/indexCss.css}">-->
     <style>
         * {
@@ -24,7 +24,7 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            padding: 15px 0;
+            padding-top: 15px;
             background-color: #EDE7DF;
             position: fixed;
             top: 0;
@@ -36,7 +36,6 @@
             justify-content: space-between;
             align-items: center;
             background-color: #EDE7DF;
-            /*padding: 0 20px;*/
             font-weight: bold;
         }
 
@@ -121,18 +120,18 @@
         }
 
         .firstLine {
-            display: inline-flex;
+            display: flex;
             border-style: solid;
             width: 100%; /* 페이지 전체 너비 */
             height: 0.5px; /* 두께 설정 */
-            background-color: #ddd;
         }
 
         .mainCont {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            height: calc(100vh - 60px);
+            height: 100vh;
+            width: 100%;
+            padding: 135px 15% 0 15%;
         }
 
         section {
@@ -140,42 +139,30 @@
         }
 
         .mainSection_first {
-            gap: 10%;
-            justify-content: center;
+            padding: 30px 0;
+            gap: 15px;
         }
         .mainSection_second{
-            justify-content: center;
+            background-color: #F9F7F4;
+            padding: 12px 14px;
+            border-radius: 5px;
+            gap: 20px;
         }
 
         .mainSection_first, .mainSection_second {
             display: flex;
-            justify-content: center;
-            padding-top: 15px;
-            font-size: 10pt;
+            font-size: 11pt;
             flex-wrap: wrap;
         }
 
         .notice_cont, .bestPost_cont {
-            flex-basis: 252px;
+            flex: 1 0 30vh;
             padding: 7px 14px;
             border-radius: 5px;
         }
 
         .moviePost_cont, .bookPost_cont {
-            /*flex-basis: 261px;*/
-            flex-basis: 30%;
-            padding: 7px 14px;
-            border-radius: 5px;
-        }
-
-        .bookPost_cont {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-
-        .moviePost_cont {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+            flex: 1 0 30vh;
         }
 
         .secondLine {
@@ -183,6 +170,26 @@
             border-style: solid;
             border-color: #aeaeae;
             align-self: center;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        thead {
+            display: none;
+        }
+
+        th:nth-child(1), td:nth-child(1) {
+            width: 10%;
+        }
+
+        th:nth-child(2), td:nth-child(2) {
+            width: 50%;
+        }
+
+        th:nth-child(3), td:nth-child(3) {
+            width: 40%;
         }
 
         .post_title {
@@ -196,63 +203,47 @@
             color: #808080;
         }
 
-        table {
-            width: 100%;
-        }
-
-        /* Adjust column widths */
-        th:nth-child(1), td:nth-child(1) {
-            width: 10%;
-        }
-
-        th:nth-child(2), td:nth-child(2) {
-            width: 50%;
-        }
-
-        th:nth-child(3), td:nth-child(3) {
-            width: 40%;
-        }
-
         .article_cont {
             display: flex;
-            /*padding-top: 15px;*/
-            padding: 15px 45px 0 45px;
+            padding-top: 30px;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 5%;
+            gap: 15px;
         }
 
         .article_cont_back {
-            position: relative;
-            height: 91px;
-            flex-basis: 163px;
-            /*flex-basis: 20%;*/
-            background-size: cover;
+            height: 23vh;
+            flex: 1 0 30vh;
             border-radius: 5px;
-            background-color: white;
+            background-color: #F9F7F4;
             overflow: hidden;
-        }
-
-        /*배경 이미지 투명도 조정용*/
-        #articleCont_firstImg:before {
-            content: "";
-            position: absolute;
-            background-size: cover;
-            background-image: url("../templates/theater_photo.jpg");
-            opacity: 0.3;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+            background-repeat: no-repeat;
+            background-position-x: 85%;
         }
 
         .articleContText {
-            position: absolute;
-            padding: 7px;
+            padding: 10px;
             text-align: start;
             color: black;
-            font-size: 11pt;
+            font-size: 12pt;
             font-weight: bold;
-            z-index:5;
+        }
+
+        #articleCont_firstImg{
+            background-image: url(/photo/new_img.png);
+            background-size: 25vh;
+            background-position-y: 8vh;
+        }
+
+        #articleCont_secondImg{
+            background-image: url(/photo/popcorn_img.png);
+            background-size: 13vh;
+            background-position-y: 5vh;
+        }
+
+        #articleCont_thirdImg{
+            background-image: url(/photo/book_img.png);
+            background-size: 15vh;
+            background-position-y: 6vh;
         }
     </style>
 </head>
@@ -260,7 +251,7 @@
 <header>
     <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
     <div class="nav-bar">
-        <a th:href="@{/home}" class="storywave-logo">
+        <a th:href="@{/home/login}" class="storywave-logo">
             <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu-cont">
@@ -271,14 +262,14 @@
             </form>
             <div class="menu-container">
                 <div class="menu-cont2">
-                    <a href="#">공지사항</a>
+                    <a th:href="@{/board/0/post}">공지사항</a>
                     <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
                     <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
                 </div>
                 <div class="user-menu">
                     <a th:href="@{/mypage}">마이페이지</a>
                     <span>|</span>
-                    <a href="#">로그아웃</a>
+                    <a th:href="@{/home}">로그아웃</a>
                 </div>
             </div>
         </nav>
@@ -291,23 +282,14 @@
         <section class="notice_cont">
             <div class="post_title">
                 <h3>공지사항</h3>
-                <a class="showMore" th:href="">Show More</a>
+                <a class="showMore" th:href="@{/board/0/post}">Show More</a>
             </div>
             <table>
-                <!--                <thead>-->
-                <!--                    <tr>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                    </tr>-->
-                <!--                </thead>-->
                 <tbody>
-                <tr th:each="">
-                    <td th:text="">id</td>
-                    <td>
-                        <a th:href="" th:text="">공지사항 제목</a>
-                    </td>
-                    <td th:text="">게시물 날짜</td>
+                <tr>
+                    <td>id</td>
+                    <td><a>공지사항 제목</a></td>
+                    <td>게시물 날짜</td>
                 </tr>
                 </tbody>
             </table>
@@ -315,23 +297,16 @@
         <section class="bestPost_cont">
             <div class="post_title">
                 <h3>Best</h3>
-                <a class="showMore" th:href="">Show More</a>
+                <a class="showMore" href="#">Show More</a>
             </div>
             <table>
-                <!--                <thead>-->
-                <!--                    <tr>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                    </tr>-->
-                <!--                </thead>-->
                 <tbody>
-                <tr th:each="">
-                    <td th:text="">id</td>
+                <tr>
+                    <td>id</td>
                     <td>
-                        <a th:href="" th:text="">베스트 게시물 제목</a>
+                        <a>베스트 게시물 제목</a>
                     </td>
-                    <td th:text="">게시물 날짜</td>
+                    <td>게시물 날짜</td>
                 </tr>
                 </tbody>
             </table>
@@ -341,24 +316,15 @@
         <section class="moviePost_cont">
             <div class="post_title">
                 <h3>영화<span> 리뷰 / 서평</span></h3>
-                <a class="showMore" th:href="">Show More</a>
+                <a class="showMore">Show More</a>
             </div>
             <table>
-                <!--                <thead>-->
-                <!--                    <tr>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                    </tr>-->
-                <!--                </thead>-->
                 <tbody>
-                <tr th:each="">
-                    <td th:text="">id</td>
-                    <td>
-                        <a th:href="" th:text="">영화 게시물 제목</a>
-                    </td>
-                    <td th:text="">게시물 날짜</td>
-                </tr>
+                    <tr>
+                        <td>id</td>
+                        <td><a>영화 게시물 제목</a></td>
+                        <td>게시물 날짜</td>
+                    </tr>
                 </tbody>
             </table>
         </section>
@@ -366,38 +332,29 @@
         <section class="bookPost_cont">
             <div class="post_title">
                 <h3>도서<span> 리뷰 / 서평</span></h3>
-                <span><a class="showMore" th:href="">Show More</a></span>
+                <span><a class="showMore">Show More</a></span>
             </div>
             <table>
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th></th>-->
-<!--                    <th></th>-->
-<!--                    <th></th>-->
-<!--                </tr>-->
-<!--                </thead>-->
                 <tbody>
-                <tr th:each="">
-                    <td th:text="">id</td>
-                    <td>
-                        <a th:href="" th:text="">도서 게시물 제목</a>
-                    </td>
-                    <td th:text="">게시물 날짜</td>
+                <tr>
+                    <td>id</td>
+                    <td><a>도서 게시물 제목</a></td>
+                    <td>게시물 날짜</td>
                 </tr>
                 </tbody>
             </table>
         </section>
     </div>
     <article class="article_cont">
-        <h3 style="display: none">운영자가 올리는 포스트 입니다</h3>
-        <a id="articleCont_firstImg" class="article_cont_back" th:href="">
-            <div class="articleContText" th:text="">2024년 상반기<br>신작 영화 정보</div>
+        <h3 style="display: none">이벤트 포스트</h3>
+        <a id="articleCont_firstImg" class="article_cont_back">
+            <div class="articleContText">2024년 상반기<br>신작 정보</div>
         </a>
-        <a class="article_cont_back" th:href="">
-            <div class="articleContText" th:text="">컨텐츠 제목</div>
+        <a id="articleCont_secondImg" class="article_cont_back">
+            <div class="articleContText">컨텐츠 제목</div>
         </a>
-        <a class="article_cont_back" th:href="">
-            <div class="articleContText" th:text="">컨텐츠 제목</div>
+        <a id="articleCont_thirdImg" class="article_cont_back">
+            <div class="articleContText">컨텐츠 제목</div>
         </a>
     </article>
 </main>

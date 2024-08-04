@@ -24,7 +24,7 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            padding: 15px 0;
+            padding-top: 15px;
             background-color: #EDE7DF;
             position: fixed;
             top: 0;
@@ -120,18 +120,18 @@
         }
 
         .firstLine {
-            display: inline-flex;
+            display: flex;
             border-style: solid;
             width: 100%; /* 페이지 전체 너비 */
             height: 0.5px; /* 두께 설정 */
-            background-color: #ddd;
         }
 
         .mainCont {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            height: calc(100vh - 60px);
+            height: 100vh;
+            width: 100%;
+            padding: 135px 15% 0 15%;
         }
 
         section {
@@ -139,43 +139,30 @@
         }
 
         .mainSection_first {
-            /*gap: 17px;*/
-            gap: 2.5%;
-            justify-content: center;
+            padding: 30px 0;
+            gap: 15px;
         }
-
-        .mainSection_second {
-
+        .mainSection_second{
+            background-color: #F9F7F4;
+            padding: 12px 14px;
+            border-radius: 5px;
+            gap: 20px;
         }
 
         .mainSection_first, .mainSection_second {
             display: flex;
-            padding: 15px 0;
-            font-size: 10pt;
+            font-size: 11pt;
             flex-wrap: wrap;
-            justify-content: center;
         }
 
         .notice_cont, .bestPost_cont {
-            flex-basis: 252px;
-            padding: 7px 14px;
+            flex: 1 0 30vh;
+            padding: 12px 14px;
             border-radius: 5px;
         }
 
         .moviePost_cont, .bookPost_cont {
-            flex-basis: 261px;
-            padding: 7px 14px;
-            border-radius: 5px;
-        }
-
-        .bookPost_cont {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-
-        .moviePost_cont {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+            flex: 1 0 30vh;
         }
 
         .secondLine {
@@ -218,62 +205,45 @@
 
         .article_cont {
             display: flex;
-            padding-top: 15px;
+            padding-top: 30px;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 5%;
+            gap: 15px;
         }
 
         .article_cont_back {
-            position: relative;
-            height: 91px;
-            flex-basis: 163px;
-            /*flex-basis: 20%;*/
-            background-size: cover;
+            height: 23vh;
+            flex: 1 0 30vh;
             border-radius: 5px;
-            background-color: white;
+            background-color: #F9F7F4;
             overflow: hidden;
-        }
-
-        /*배경 이미지 투명도 조정용*/
-        #articleCont_firstImg:before, #articleCont_secondImg:before, #articleCont_thirdImg:before {
-            content: "";
-            position: absolute;
             background-repeat: no-repeat;
-            width: 100vh;
-            height: 100vh;
-            z-index: 1;
-        }
-
-        #articleCont_firstImg:before {
-            background-image: url("/photo/new_img.png");
-            background-size: 106px;
-            top: 27px;
-            left: 46px;
-        }
-
-        #articleCont_secondImg:before {
-            background-image: url("/photo/popcorn_img.png");
-            background-size: 55px;
-            top: 16px;
-            left: 94px;
-        }
-
-        #articleCont_thirdImg:before {
-            background-image: url("/photo/book_img.png");
-            background-size: 63px;
-            top: 21px;
-            left: 92px;
+            background-position-x: 85%;
         }
 
         .articleContText {
-            position: absolute;
-            padding: 7px;
+            padding: 10px;
             text-align: start;
             color: black;
-            font-size: 11pt;
+            font-size: 12pt;
             font-weight: bold;
-            z-index: 5;
+        }
+
+        #articleCont_firstImg{
+            background-image: url(/photo/new_img.png);
+            background-size: 25vh;
+            background-position-y: 8vh;
+        }
+
+        #articleCont_secondImg{
+            background-image: url(/photo/popcorn_img.png);
+            background-size: 13vh;
+            background-position-y: 5vh;
+        }
+
+        #articleCont_thirdImg{
+            background-image: url(/photo/book_img.png);
+            background-size: 15vh;
+            background-position-y: 6vh;
         }
     </style>
 </head>
@@ -298,9 +268,9 @@
                     <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
                 </div>
                 <div class="user-menu">
-                    <a th:href="@{/mypage}">마이페이지</a>
+                    <a th:href="@{/user/join/}">회원가입</a>
                     <span>|</span>
-                    <a th:href="@{/home}">로그아웃</a>
+                    <a th:href="@{/user/login}">로그인</a>
                 </div>
             </div>
         </nav>
@@ -314,7 +284,7 @@
         <section class="notice_cont">
             <div class="post_title">
                 <h3>공지사항</h3>
-                <a class="showMore">Show More</a>
+                <a class="showMore" th:href="@{/board/0/post}">Show More</a>
             </div>
             <table> <!--공지사항 게시판 번호 -->
                 <thead>
@@ -325,12 +295,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>id</td>
-                    <td>
-                        <a>공지사항 제목</a>
-                    </td>
-                    <td>게시물 날짜</td>
+                <tr th:each="noticePost : ${noticePosts}">
+                    <td th:text="${noticePost.id}">id</td>
+                    <td th:text="${noticePost.title}"><a>공지사항 제목</a></td>
+                    <td th:text="${#dates.format(noticePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
             </table>
@@ -351,9 +319,7 @@
                 <tbody>
                 <tr>
                     <td>id</td>
-                    <td>
-                        <a>베스트 게시물 제목</a>
-                    </td>
+                    <td><a>베스트 게시물 제목</a></td>
                     <td>게시물 날짜</td>
                 </tr>
                 </tbody>
@@ -375,12 +341,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>id</td>
-                    <td>
-                        <a>영화 게시물 제목</a>
-                    </td>
-                    <td>게시물 날짜</td>
+                <tr th:each="moviePost : ${moviePosts}">
+                    <td th:text="${moviePost.id}">id</td>
+                    <td th:text="${moviePost.title}"><a>공지사항 제목</a></td>
+                    <td th:text="${#dates.format(moviePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
             </table>
@@ -400,12 +364,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>id</td>
-                    <td>
-                        <a>도서 게시물 제목</a>
-                    </td>
-                    <td>게시물 날짜</td>
+                <tr th:each="bookPost : ${bookPosts}">
+                    <td th:text="${bookPost.id}">id</td>
+                    <td th:text="${bookPost.title}"><a>공지사항 제목</a></td>
+                    <td th:text="${#dates.format(bookPost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
             </table>
@@ -414,7 +376,7 @@
     <article class="article_cont">
         <h3 style="display: none">이벤트 포스트</h3>
         <a id="articleCont_firstImg" class="article_cont_back">
-            <div class="articleContText">2024년 상반기<br>신작 영화 정보</div>
+            <div class="articleContText">2024년 상반기<br>신작 정보</div>
         </a>
         <a id="articleCont_secondImg" class="article_cont_back">
             <div class="articleContText">컨텐츠 제목</div>

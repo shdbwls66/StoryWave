@@ -39,8 +39,11 @@
 </header>
 <main class="mainCont">
     <h2 style="display: none">메인 컨텐츠</h2>
-    <div class="post_menu">
-        <a>◀ 목록</a>
+    <div class="post_menu" th:switch="${posts.postTypeId}">
+        <span th:case="0"><a th:href="@{/board/0/post}">◀ 목록</a></span>
+        <span th:case="1"><a th:href="@{/board/1/post}">◀ 목록</a></span>
+        <span th:case="2"><a th:href="@{/board/2/post}">◀ 목록</a></span>
+        <span th:case="*"><a th:href="@{/index_afterLogin}">◀ 목록</a></span>
         <nav class="post_menu2">
             <a>수정</a>
             <a style="cursor: pointer" id="delete_btn" onclick="postModal()">삭제</a>
