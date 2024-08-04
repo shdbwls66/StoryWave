@@ -10,6 +10,7 @@ public class UserRequest {
         private String userId;
         private String password;
         private String passwordConfirm;
+        private String username;
         private String email;
         private String nickname;
 
