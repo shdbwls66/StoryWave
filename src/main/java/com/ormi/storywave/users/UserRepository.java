@@ -17,4 +17,7 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByComments_CommentId(Long commentId);
 
     Optional<User> findByUserId(String userId);
+
+
+    Optional<User> findByRole (String role);
 }

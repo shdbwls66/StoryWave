@@ -130,4 +130,26 @@ public class UserService {
                     return UserDto.fromUsers(userRepository.save(users));
                 });
     }
+
+
+    //adminuser login
+    public String adminUserLogin(UserRequest.AdminDto adminDto) {
+
+        // 로그인 정보와 일치하는 객체 불러오기
+        Optional<UserDto> foundUser = userRepository.findByRole(adminDto.getRole())
+                .map(UserDto::fromUsers);
+        // admin이 아닌경우
+        if (foundUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        UserDto user = foundUser.get();
+        if (!"admin".equals(user.getRole())) {
+            throw new RuntimeException("User is not an admin");
+        }
+        return foundUser.get().getUserId();
+    }
+
+
+
 }

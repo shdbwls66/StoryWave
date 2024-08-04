@@ -1,6 +1,8 @@
 package com.ormi.storywave.comment;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 
@@ -16,7 +18,9 @@ public class CommentDto {
     private String userId;
     private String nickname;
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime updatedAt;
 
     public static CommentDto fromComment(Comment comment) {

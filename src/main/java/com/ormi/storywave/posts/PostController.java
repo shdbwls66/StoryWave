@@ -1,12 +1,16 @@
 package com.ormi.storywave.posts;
 
+import com.ormi.storywave.board.PostListDto;
 import com.ormi.storywave.comment.CommentRepository;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Controller
@@ -14,13 +18,18 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
   private final PostService postService;
   private final UserRepository userRepository;
-  private final CommentRepository commentRepository;
 
   @Autowired
-  public PostController(PostService postService, UserRepository userRepository, CommentRepository commentRepository) {
+  public PostController(PostService postService, UserRepository userRepository) {
     this.postService = postService;
     this.userRepository = userRepository;
-    this.commentRepository = commentRepository;
+  }
+
+
+  // 테스트 용도로 생성했으니, url 바꿀려면 편하게 바꾸어주시면 됩니다.
+  @GetMapping("/0/post") // 카테고리 설정을 따로 하지 않아서 그런지 공지사항 게시판만 들어가짐
+  public String noticeBoard(Model model) {
+    return "/board/Noticepostlist";
   }
 
   // 게시물 상세화면 조회
@@ -44,6 +53,16 @@ public class PostController {
             .map(UserDto::getNickname)
             .orElseThrow(() -> new IllegalArgumentException("해당 포스트의 작성자를 찾을 수 없습니다."));
 
+    // 좋아요 기능 구현
+    // user 정보가 있을 때만 작동 -> 로그인 기능 구현하면 로그인 여부에 따라 기능 작동하도록 수정하면 될 듯
+    boolean like = false;
+    if (users != null) {
+      String user_id = users.getUserId();
+      like = postService.findPostLike(postId, user_id);
+    }
+
+    model.addAttribute("like", like);
+
     // 권한 테스트를 위해 임시로 작성
     String role = users.getRole();
 
@@ -55,10 +74,12 @@ public class PostController {
 
     model.addAttribute("role", role); // 권한
 
-    // 댓글을 ArrayList로 구현하여 ArrayList 메서드를 사용하였습니다.
     model.addAttribute("comments", posts.getComments().size()); // 댓글 개수
 
     return "board/posts_detail";
   }
+
+
+
 
 }

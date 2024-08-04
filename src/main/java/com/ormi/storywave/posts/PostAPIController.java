@@ -46,4 +46,16 @@ public class PostAPIController {
     List<PostListDto> postSummaries = postService.getPostSummaries(post_type_id);
     return ResponseEntity.ok(postSummaries);
   }
+
+  @GetMapping("/{post_type_id}/post/{postId}")
+  public ResponseEntity<PostDto> getPost(@PathVariable("post_type_id") Long post_type_id, @PathVariable("postId") Long postId) {
+    PostDto postDto = postService.getPostByPostTypeIdAndPostId(post_type_id, postId);
+    return ResponseEntity.ok(postDto);
+  }
+
+  // 공감 저장하는 곳
+  @PostMapping("/{postId}/like")
+  public boolean likePost(@PathVariable("postId") Long postId, @RequestParam("userId") String userId){
+    return postService.saveLike(postId, userId);
+  }
 }
