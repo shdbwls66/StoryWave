@@ -27,10 +27,10 @@ public class PostController {
 
 
   // 게시판 링크는 테스트 용도로 생성했으니, 수정 하려면 편하게 수정 하시면 됩니다.
-  @GetMapping("/0/post")
-  public String noticeBoard(Model model) {
-    return "/board/Noticepostlist";
-  }
+//  @GetMapping("/0/post")
+//  public String noticeBoard(Model model) {
+//    return "/board/Noticepostlist";
+//  }
 
   @GetMapping("/1/post")
   public String movieBoard(Model model) {
@@ -46,12 +46,12 @@ public class PostController {
     return "/board/Moviepostlist";
   }
 
-  @GetMapping("/2/post")
-  public String bookBoard(Model model) {
-    List<PostListDto> test = postService.getPostSummaries(2L);
-    model.addAttribute("categoryFilter", test); // 임시 작성
-    return "/board/Bookpostlist";
-  }
+//  @GetMapping("/2/post")
+//  public String bookBoard(Model model) {
+//    List<PostListDto> test = postService.getPostSummaries(2L);
+//    model.addAttribute("categoryFilter", test); // 임시 작성
+//    return "/board/Bookpostlist";
+//  }
 
   // 게시물 상세화면 조회
   @GetMapping("/{post_type_id}/post/{postId}")
@@ -82,8 +82,6 @@ public class PostController {
       String user_id = users.getUserId();
       like = postService.findPostLike(postId, user_id);
     }
-
-
 
     model.addAttribute("like", like);
 
