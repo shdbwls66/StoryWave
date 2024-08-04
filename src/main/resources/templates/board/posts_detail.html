@@ -122,6 +122,23 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="/postsDetailScript.js"></script>
 <script th:inline="javascript">
+
+    //postid를 불러오는 부분 추가 (이렇게 불러오면 됨)
+    // function getQueryParam(param) {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     return urlParams.get(param);
+    // }
+    //
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     const postId = getQueryParam('id');
+    //     if (postId) {
+    //         console.log('Post ID:', postId);
+    //         // postId를 사용하여 서버에서 게시글을 가져오거나, 페이지 내용을 로드합니다.
+    //     } else {
+    //         console.log('No Post ID provided.');
+    //     }
+    // });
+
     window.onload = () => {
         getAllComment();
     }

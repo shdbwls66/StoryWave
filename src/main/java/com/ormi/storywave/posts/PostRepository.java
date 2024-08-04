@@ -27,5 +27,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("update Post p set p.thumbs = p.thumbs-1 where p.id = ?1")
     int minusThumbs(Long id);
 
+    @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.board.postTypeId = :postTypeId")
+    List<Post> findByPostTypeIdWithUser(@Param("postTypeId") Long postTypeId);
 
 }

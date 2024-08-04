@@ -19,4 +19,6 @@ public class PostListDto {
     Integer thumbs;
     Set<CategoryDto> categories;
     Long comments;
+    private String userId;     // UserId 추가
+    private String nickname;   // Nickname 추가
 }
