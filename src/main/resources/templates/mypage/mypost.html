@@ -28,7 +28,7 @@
                 <div class="user-menu">
                     <a th:href="@{/mypage}">마이페이지</a>
                     <span>|</span>
-                    <a href="#">로그아웃</a>
+                    <a th:href="@{/user/logout}">로그아웃</a>
                 </div>
             </div>
         </nav>
@@ -64,7 +64,7 @@
         <ul class="pagination-list">
             <li th:each="page, iterStat : ${#numbers.sequence(1, totalPages)}"
                 th:classappend="${page == currentPage} ? ' active' : ''">
-                <a th:href="@{/myPage_myPost(page=${page})}"
+                <a th:href="@{/mypage/mypost(page=${page})}"
                    th:text="${page}"></a>
             </li>
         </ul>
