@@ -264,7 +264,7 @@
             <div class="menu-container">
                 <div class="menu-cont2">
                     <a th:href="@{/board/0/post}">공지사항</a>
-                    <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a th:href="@{/board/1/post}">영화 <span class="sub-text">리뷰/서평</span></a>
                     <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
                 </div>
                 <div class="user-menu">
@@ -298,7 +298,7 @@
                 <tr th:each="noticePost : ${noticePosts}">
                     <td th:text="${noticePost.id}">id</td>
                     <td th:text="${noticePost.title}"><a>공지사항 제목</a></td>
-                    <td th:text="${#dates.format(noticePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
+                    <td th:text="${#temporals.format(noticePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
             </table>
@@ -343,8 +343,8 @@
                 <tbody>
                 <tr th:each="moviePost : ${moviePosts}">
                     <td th:text="${moviePost.id}">id</td>
-                    <td th:text="${moviePost.title}"><a>공지사항 제목</a></td>
-                    <td th:text="${#dates.format(moviePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
+                    <td><a th:text="${moviePost.title}" th:href="@{|/board/1/post/${moviePost.id}|}">제목</a></td>
+                    <td th:text="${#temporals.format(moviePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
             </table>
@@ -366,8 +366,8 @@
                 <tbody>
                 <tr th:each="bookPost : ${bookPosts}">
                     <td th:text="${bookPost.id}">id</td>
-                    <td th:text="${bookPost.title}"><a>공지사항 제목</a></td>
-                    <td th:text="${#dates.format(bookPost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
+                    <td th:text="${bookPost.title}"><a>제목</a></td>
+                    <td th:text="${#temporals.format(bookPost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
             </table>

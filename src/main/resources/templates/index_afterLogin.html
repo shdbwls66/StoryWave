@@ -320,10 +320,10 @@
             </div>
             <table>
                 <tbody>
-                    <tr>
-                        <td>id</td>
-                        <td><a>영화 게시물 제목</a></td>
-                        <td>게시물 날짜</td>
+                    <tr th:each="moviePost : ${moviePosts}">
+                        <td th:text="${moviePost.id}">id</td>
+                        <td><a th:text="${moviePost.title}" th:href="@{|/board/1/post/${moviePost.id}?userId=${users.userId}|}">제목</a></td>
+                        <td th:text="${#temporals.format(moviePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                     </tr>
                 </tbody>
             </table>

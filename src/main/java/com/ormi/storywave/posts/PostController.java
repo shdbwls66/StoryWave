@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,8 +26,8 @@ public class PostController {
   }
 
 
-  // 테스트 용도로 생성했으니, url 바꿀려면 편하게 바꾸어주시면 됩니다.
-  @GetMapping("/0/post") // 카테고리 설정을 따로 하지 않아서 그런지 공지사항 게시판만 들어가짐
+  // 게시판 링크는 테스트 용도로 생성했으니, 수정 하려면 편하게 수정 하시면 됩니다.
+  @GetMapping("/0/post")
   public String noticeBoard(Model model) {
     return "/board/Noticepostlist";
   }
@@ -34,11 +35,21 @@ public class PostController {
   @GetMapping("/1/post")
   public String movieBoard(Model model) {
     List<PostListDto> postList = postService.getPostSummaries(1L);
+//    arr.add("comedy");
+//    arr.add("crime");
+//    arr.add("horror");
+//    arr.add("romance");
+//    arr.add("animation");
+//    arr.add("documentary");
+//    arr.add("sci-fi-fantasy");
+    model.addAttribute("categoryFilter", postList); // 임시 작성
     return "/board/Moviepostlist";
   }
 
   @GetMapping("/2/post")
   public String bookBoard(Model model) {
+    List<PostListDto> test = postService.getPostSummaries(2L);
+    model.addAttribute("categoryFilter", test); // 임시 작성
     return "/board/Bookpostlist";
   }
 
@@ -47,6 +58,7 @@ public class PostController {
   public String postsDetail( @PathVariable("post_type_id") Long postTypeId,
                              @PathVariable("postId") Long postId, @RequestParam("userId") String userId, Model model) {
     System.out.println("postsDetail 실행");
+
     // 게시물
     PostDto posts =
             postService
@@ -70,6 +82,8 @@ public class PostController {
       String user_id = users.getUserId();
       like = postService.findPostLike(postId, user_id);
     }
+
+
 
     model.addAttribute("like", like);
 

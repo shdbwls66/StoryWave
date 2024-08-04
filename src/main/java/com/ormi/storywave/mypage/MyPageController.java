@@ -28,12 +28,12 @@ public class MyPageController {
 
   @GetMapping
   public String showMyPage(Model model) {
-    return "mypage/mypage";
+    return "/mypage/mypage";
   }
 
   @GetMapping("/quit")
   public String showQuitPage(Model model) {
-    return "mypage/quit";
+    return "/mypage/quit";
   }
 
   @GetMapping("/myPost")
@@ -46,6 +46,6 @@ public class MyPageController {
     model.addAttribute("posts", postPage.getContent()); // 현재 페이지 게시물 리스트
     model.addAttribute("currentPage", page); // 현재 페이지 번호
     model.addAttribute("totalPages", postPage.getTotalPages()); // 총 페이지 수
-    return "mypage/mypost"; // myPage/myPost.html 템플릿을 반환
+    return "/mypage/mypost"; // myPage/myPost.html 템플릿을 반환
   }
 }

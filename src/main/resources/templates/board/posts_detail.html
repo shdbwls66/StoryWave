@@ -12,7 +12,7 @@
     <!-- 헤더 -->
     <h1 style="display: none" th:text="${posts.postId}">게시물 상세 보기</h1>
     <div class="nav-bar">
-        <a class="storywave-logo" th:href="@{/home}">
+        <a class="storywave-logo" th:href="@{|/home/login?userId=${users.userId}|}">
             <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu-cont">
@@ -23,6 +23,8 @@
             </form>
             <div class="menu-container">
                 <div class="menu-cont2">
+                    <!-- 게시판 연결 url을 어떻게 할건지 정해야 할 것 같음 -->
+                    <!-- 큰 단위에서 작은 단위로 url을 설정해야 할 듯 -->
                     <a th:href="@{/board/0/post}">공지사항</a>
                     <a th:href="@{/board/1/post}">영화 <span class="sub-text">리뷰/서평</span></a>
                     <a th:href="@{/board/2/post}">도서 <span class="sub-text">리뷰/서평</span></a>
@@ -39,14 +41,23 @@
 </header>
 <main class="mainCont">
     <h2 style="display: none">메인 컨텐츠</h2>
+    <!--   조건문을 사용하여, 포스트 타입에 따라 다른 url로 이어지도록 함 -->
     <div class="post_menu" th:switch="${posts.postTypeId}">
         <span th:case="0"><a th:href="@{/board/0/post}">◀ 목록</a></span>
         <span th:case="1"><a th:href="@{/board/1/post}">◀ 목록</a></span>
         <span th:case="2"><a th:href="@{/board/2/post}">◀ 목록</a></span>
         <span th:case="*"><a th:href="@{/index_afterLogin}">◀ 목록</a></span>
-        <nav class="post_menu2">
+
+        <nav class="post_menu2" th:if="(${users.nickname} == ${writer})">
             <a>수정</a>
-            <a style="cursor: pointer" id="delete_btn" onclick="postModal()">삭제</a>
+            <a style="cursor: pointer" onclick="postModal()">삭제</a>
+            <a>글쓰기</a>
+        </nav>
+        <nav class="post_menu2" th:if="${isAdmin}">
+            <a style="cursor: pointer" onclick="postModal()">삭제</a>
+            <a>글쓰기</a>
+        </nav>
+        <nav class="post_menu2" th:if="${users.nickname} != ${writer} and !${isAdmin}">
             <a>글쓰기</a>
         </nav>
     </div>
