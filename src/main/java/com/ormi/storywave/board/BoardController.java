@@ -35,6 +35,8 @@ public class BoardController {
             Optional<UserDto> user = userService.getUserById(userId);
             if (user.isPresent()) {
                 model.addAttribute("isLoggedIn", true);
+                model.addAttribute("userId", userId); // userId를 모델에 추가
+
             } else {
                 // UserDto가 null인 경우, 로그인 상태가 아님
                 model.addAttribute("isLoggedIn", false);
@@ -56,6 +58,8 @@ public class BoardController {
             Optional<UserDto> user = userService.getUserById(userId);
             if (user.isPresent()) {
                 model.addAttribute("isLoggedIn", true);
+                model.addAttribute("userId", userId); // userId를 모델에 추가
+
             } else {
                 // UserDto가 null인 경우, 로그인 상태가 아님
                 model.addAttribute("isLoggedIn", false);
@@ -77,6 +81,8 @@ public class BoardController {
             Optional<UserDto> user = userService.getUserById(userId);
             if (user.isPresent()) {
                 model.addAttribute("isLoggedIn", true);
+                model.addAttribute("userId", userId); // userId를 모델에 추가
+
             } else {
                 // UserDto가 null인 경우, 로그인 상태가 아님
                 model.addAttribute("isLoggedIn", false);
