@@ -1,5 +1,6 @@
 package com.ormi.storywave.users;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,15 +34,28 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserRequest.LoginDto loginDto, Model model) {
+    public String login(@ModelAttribute UserRequest.LoginDto loginDto, HttpSession session, Model model) {
 
-        try { // userId를 받는 게 나을까 객체를 받는 게 나을까
-            String userId = userService.loginUser(loginDto);
-        } catch (IllegalArgumentException e){
-            model.addAttribute("message", e.getMessage());
+        UserDto loginResult = userService.loginUser(loginDto);
+
+        if (loginResult == null) { // 로그인 실패
+            model.addAttribute("error", "아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
             return "login/login";
+        } else if (!loginResult.isActiveStatus()) { // 정지회원의 경우
+            return "login/ban";
+        } else { // 로그인 성공
+            session.setAttribute("userId", loginResult.getUserId());
+//            return "redirect:/home";
+            return "index_afterLogin";
+//            return "test";
         }
+    }
 
-        return "home"; // index_afterLogin에 맵핑이 안 된 게 많아서 오류 발생. 추후 변경
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        if (session.getAttribute("userId") != null) {
+            session.invalidate();
+        }
+        return "redirect:/home";
     }
 }

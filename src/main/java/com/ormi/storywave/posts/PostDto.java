@@ -36,14 +36,14 @@ public class PostDto implements Serializable {
   public static PostDto fromPost(Post post) {
 
     PostDto postDto = PostDto.builder()
-        .postId(post.getId())
-        .postTypeId(post.getBoard().getPostTypeId())
-        .title(post.getTitle())
-        .content(post.getContent())
-        .createdAt(post.getCreatedAt())
-        .updatedAt(post.getUpdatedAt())
-        .thumbs(post.getThumbs())
-        .build();
+            .postId(post.getId())
+            .postTypeId(post.getBoard().getPostTypeId())
+            .title(post.getTitle())
+            .content(post.getContent())
+            .createdAt(post.getCreatedAt())
+            .updatedAt(post.getUpdatedAt())
+            .thumbs(post.getThumbs())
+            .build();
 
     if (post.getComments() != null) {
       postDto.setComments(

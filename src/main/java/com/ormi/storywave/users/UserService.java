@@ -78,6 +78,7 @@ public class UserService {
                         .userId(joinDto.getUserId())
                         .password(joinDto.getPassword())
                         .email(joinDto.getEmail())
+                        .username(joinDto.getUsername())
                         .nickname(joinDto.getNickname())
                         .role(defaultRole)
                         .activeStatus(defaultStatus)
@@ -86,7 +87,7 @@ public class UserService {
         return UserDto.fromUsers(savedUser);
     }
 
-    public String loginUser(UserRequest.LoginDto loginDto) {
+    public UserDto loginUser(UserRequest.LoginDto loginDto) {
 
         // 로그인 정보와 일치하는 객체 불러오기
         Optional<UserDto> foundUser = userRepository.findById(loginDto.getUserId())
@@ -94,21 +95,14 @@ public class UserService {
 
         // 일치하는 사용자가 없는 경우
         if (foundUser.isEmpty()) {
-            throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
+            return null;
         }
 
         // 해당 아이디에 비밀번호가 일치하지 않는 경우
         if(!foundUser.get().getPassword().equals(loginDto.getPassword())) {
-            throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
+            return null;
         }
 
-        // 정지 회원인 경우 추가 필요
-        if (!foundUser.get().isActiveStatus()) {
-            // 영구 정지, 일시 정지를 위한 테이블 필요
-
-        }
-
-        return foundUser.get().getUserId();
-        // 객체를 반환하는 게 나은가..?(보완필요)
+        return foundUser.orElse(null);
     }
 }

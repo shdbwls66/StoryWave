@@ -129,7 +129,7 @@
                 background-color: #ddd;
             }
 
-            .welcome-container {
+            .ban-container {
                 width: 400px;
                 height: 400px;
                 padding: 40px;
@@ -141,19 +141,19 @@
                 text-align: center;
             }
 
-            .welcome-container p:nth-of-type(1) {
+            .ban-container p:nth-of-type(1) {
                 margin-bottom: 30px;
                 font-weight: bold;
                 font-size: 40px;
             }
 
-            .welcome-container p:nth-of-type(2) {
+            .ban-container p:nth-of-type(2) {
                 margin-bottom: 20px;
                 font-weight: bold;
                 font-size: 20px;
             }
 
-            #startBtn {
+            #goHomeBtn {
                 padding: 8px 20px;
                 margin: 20px 0;
                 font-weight: bold;
@@ -195,10 +195,10 @@
         <hr class="firstLine">
     </header>
     <main>
-        <div class="welcome-container">
+        <div class="ban-container">
             <p>환영합니다!</p>
             <p>회원가입을 축하합니다.</p>
-            <a th:href="@{/user/login}" id="startBtn">시작하기</a>
+            <a th:href="@{/user/login}" id="goHomeBtn">시작하기</a>
         </div>
     </main>
     </body>
