@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Table(name = "ban")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Ban {
 
     @Id
@@ -35,4 +35,5 @@ public class Ban {
     @JoinColumn(name = "user_id")
     private User users;
 
-}*/
+}
+*/

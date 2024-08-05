@@ -258,7 +258,7 @@
             z-index :999;
             position : relative;
         }
-        .dropdown-content{
+        .dropdownContent{
             display : none;
             font-weight: 400;
             background-color: #fcfcfc;
@@ -268,27 +268,27 @@
             overflow : scroll;
             box-shadow: 0px 0px 10px 3px rgba(190, 190, 190, 0.6);
         }
-        .dropdown-content::-webkit-scrollbar{
+        .dropdownContent::-webkit-scrollbar{
             width : 5px;
             height : 10px;
         }
-        .dropdown-content::-webkit-scrollbar-thumb{
+        .dropdownContent::-webkit-scrollbar-thumb{
             border-radius : 2px;
             background-color :rgb(194, 194, 194)
         }
 
-        .dropdown-content div{
+        .dropdownContent div{
             display : block;
             text-decoration : none;
             color : rgb(37, 37, 37);
             font-size: 13px;
             padding : 12px 20px;
         }
-        .dropdown-content div:hover{
+        .dropdownContent div:hover{
             background-color: rgb(226, 226, 226);
         }
 
-        .dropdown-content.show{
+        .dropdownContent.show{
             display : block;
         }
 
@@ -360,13 +360,12 @@
         </thead>
         <tbody id="post-list">
         <tr th:each="user : ${users}">
-            <td th:text="${user.username}" > </td>
-            <td th:text="${user.nickname}" > </td>
-            <td th:text="${user.email}" > </td>
-            <td th:text="${user.createdAt}" > </td>
+            <td th:text="${user.username}"> </td>
+            <td th:text="${user.nickname}"> </td>
+            <td th:text="${user.email}"> </td>
+            <td th:text="${user.createdAt}"> </td>
             <td th:text="${user.activeStatus}"> </td>
-            <td><button class="btn-open-modal" th:onclick="'openUserUpdateModal(' + ${user.index} + ')'">회원 관리</button></td>
-
+            <td><button class="btn-open-modal" data-user-id="${user.userId}">회원 관리</button></td>
         </tr>
         </tbody>
     </table>
@@ -374,15 +373,15 @@
         <!-- 페이지네이션 버튼이 여기 표시 -->
     </div>
 
-    <!-- modal 여기있다 -->
-    <div class="modal" id="userModal" onclick="openModal()">
+    <!-- 모달 -->
+    <div class="modal" id="userModal">
         <div class='modal-content'>
-            <span class="close">&times;</span>
+            <span class="close" onclick="closeModal()">&times;</span>
             <div class="change-status">
                 <label id="rejectduring" class="dropdown-label">정지 기간</label>
                 <div class="dropdown">
                     <button class="dropbtn">
-                        <span class="dropbtn-click">"</span>
+                        <span class="dropbtn-click">회원</span>
                     </button>
                     <div class="dropdownContent">
                         <div class="userControl" onclick="setStatus('회원')">회원</div>
@@ -395,20 +394,36 @@
             </div>
             <div class="status-reason">
                 <span>정지 사유</span>
-                <input class="user-status-reason" id="statusReason" type="text" value="${response.reason}">
+                <input class="user-status-reason" id="statusReason" type="text">
             </div>
-            <input type="hidden" id="userId" value="${userId}">
+            <input type="hidden" id="userId">
             <button class="close" type="button" onclick="applyChanges()">적용하기</button>
         </div>
     </div>
+</main>
 
 
     <script th:inline="javascript">
 
-        //get
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('.btn-open-modal').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const userId = event.target.getAttribute('data-user-id');
+                    openUserUpdateModal(userId);
+                    openModal();
+                });
+            });
+
+            // 드롭다운 버튼 클릭 시 드롭다운 토글
+            document.querySelector('.dropbtn').addEventListener('click', toggleDropdown);
+
+            // 드롭다운 클릭 시 상태 설정
+            document.querySelector('.dropdownContent').addEventListener('click', selectMenuItem);
+        });
+
+        // 사용자 데이터 가져와서 모달에 채우기
         function openUserUpdateModal(userId) {
-            // 서버에서 사용자 정보를 가져오기
-            fetch(`http://localhost:8080/admin/mypage/${userId}`, {
+            fetch(`http://localhost:8081/admin/mypage/${userId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -416,89 +431,87 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    document.querySelector('.dropbtn-click').textContent = data.activeStatus;
+                    document.querySelector('.dropbtn-click').textContent = data.isActive;
                     document.getElementById('statusReason').value = data.reason;
                     document.getElementById('userId').value = data.userId;
-
-                    openModal();
+                    console.log(data);
                 })
+                .catch(error => console.error('사용자 데이터 가져오기 오류:', error));
         }
 
-        // 상태 설정 함수
+        // 상태 표시 업데이트
         function setStatus(newStatus) {
             document.querySelector('.dropbtn-click').textContent = newStatus;
+            closeDropdown(); // 드롭다운 닫기
         }
 
-
-
-        // 적용하기 버튼 클릭 시 호출
+        // 변경사항 적용 및 서버로 전송
         function applyChanges() {
             const userId = document.getElementById('userId').value;
             const status = document.querySelector('.dropbtn-click').textContent;
             const reason = document.getElementById('statusReason').value;
+            const period = document.querySelector('.dropbtn-click').textContent; // 예를 들어 "7일 정지"와 같은 문자열
 
-            const params = {
-                status: status,
-                reason: reason,
-                userId: userId
+            // 상태에 따라 isActiveStatus를 설정
+            const isActiveStatus = status === '회원';
+
+            const userParams = {
+                isActiveStatus: isActiveStatus,
+                banReason: reason,
+                banPeriod: period // 문자열을 그대로 전송
             };
 
-            // 서버로 변경 사항 전송하기
-            fetch(`http://localhost:8080/api/admin/${status}/reject`, {
+            fetch(`http://localhost:8081/admin/mypage/${userId}/reject`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8"
                 },
-                body: JSON.stringify(params)
+                body: JSON.stringify(userParams)
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Changes applied:", data);
+                    console.log("변경사항 적용됨:", data);
                     closeModal();
-
                 })
+                .catch(error => console.error('변경사항 적용 오류:', error));
         }
 
-
-
-        // 모달을 열기 위한 함수
+        // 모달 열기
         function openModal() {
-            const modal = document.querySelector('.modal');
-            modal.style.display = 'flex';
+            document.getElementById('userModal').style.display = 'flex';
         }
 
-        // 모달을 닫기 위한 함수
+        // 모달 닫기
         function closeModal() {
-            const modal = document.querySelector('.modal');
-            modal.style.display = 'none';
+            document.getElementById('userModal').style.display = 'none';
         }
 
-
-        const dropbtn = document.querySelector('.dropbtn');
-        const dropdownContent = document.querySelector('.dropdown-content');
-
-        function dropdown() {
-            document.querySelector('.dropwdon-content').toggleAttribute('show')
+        // 드롭다운 토글
+        function toggleDropdown() {
+            const dropdownContent = document.querySelector('.dropdownContent');
+            dropdownContent.classList.toggle('show');
         }
 
-        /* function toggleDropdown() {
-             dropdownContent.classList.toggle('show');
-         }
- */
+        // 드롭다운 메뉴 항목 선택
         function selectMenuItem(event) {
             if (event.target.classList.contains('userControl')) {
-                dropbtn.innerText = event.target.innerText;
-                dropdownContent.classList.remove('show');
+                setStatus(event.target.textContent);
             }
         }
 
-        dropbtn.addEventListener('click', toggleDropdown);
-        dropdownContent.addEventListener('click', selectMenuItem);
-
-        function setStatus(status) {
-            document.querySelector('.dropbtn_click').innerText = status;
-            document.querySelector('.user-status-reason').value = status;
+        // 드롭다운 닫기
+        function closeDropdown() {
+            document.querySelector('.dropdownContent').classList.remove('show');
         }
+
+        // 드롭다운 내용이 닫히지 않도록 클릭 이벤트를 추가합니다.
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdownContent');
+            if (!event.target.matches('.dropbtn') && !dropdown.contains(event.target)) {
+                closeDropdown();
+            }
+        });
+
         /*function toggleDropdown() {
             dropdownContent.classList.toggle('show');
         }
@@ -593,6 +606,6 @@
 */
 
     </script>
-</main>
+
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.ormi.storywave.users;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.ormi.storywave.users.UserDto.fromUsers;
 
 @Transactional
 @Service
@@ -30,7 +33,7 @@ public class UserService {
         User users = usersDto.toUsers();
         users.setCreatedAt(LocalDateTime.now());
         User savedUsers = userRepository.save(users);
-        return UserDto.fromUsers(savedUsers);
+        return fromUsers(savedUsers);
     }
 
     public final Optional<UserDto> getUserById(String userId) {
@@ -44,7 +47,7 @@ public class UserService {
                     users.setPassword(updatedUsers.getPassword());
                     users.setNickname(updatedUsers.getNickname());
                     users.setUpdatedAt(LocalDateTime.now());
-                    return UserDto.fromUsers(userRepository.save(users));
+                    return fromUsers(userRepository.save(users));
                 });
     }
 
@@ -84,7 +87,7 @@ public class UserService {
                         .activeStatus(defaultStatus)
                         .createdAt(LocalDateTime.now())
                         .build());
-        return UserDto.fromUsers(savedUser);
+        return fromUsers(savedUser);
     }
 
     public UserDto loginUser(UserRequest.LoginDto loginDto) {
@@ -108,9 +111,31 @@ public class UserService {
 
 
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public User findByUserId(String userId) {
+        return userRepository.findByUserId(userId).orElse(null);
     }
+
+    public UserDto changeUserStatus(String userId, UserDto userDto) {
+        User user = findByUserId(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+
+        // User 상태 업데이트
+        user.setActiveStatus(userDto.isActiveStatus());
+        user.setBanReason(userDto.getBanReason()); // UserDto에 추가된 banReason 설정
+        user.setBanPeriod(userDto.getBanPeriod()); // UserDto에 추가된 banPeriod 설정
+
+        // 변경 사항 저장
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user); // 사용자 정보 저장
+
+        // UserDto로 변환하여 반환
+        return fromUsers(user); // User 객체를 UserDto로 변환
+    }
+
+
 
 
     /*private User iaAdmin(String userId) {

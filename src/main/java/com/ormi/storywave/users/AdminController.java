@@ -1,6 +1,7 @@
 package com.ormi.storywave.users;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/admin/mypage")
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -61,14 +62,21 @@ public class AdminController {
 
     @GetMapping("/mypage/{userId}")
     @ResponseBody
-    public UserDto getUserInfo(@PathVariable Long id) {
-        User user = userService.findById(id);
+    public UserDto getUserInfo(@PathVariable String userId) {
+        User user = userService.findByUserId(userId);
         if (user != null) {
             return UserDto.fromUsers(user);
         } else {
-            // 적절한 오류 처리 또는 기본값 반환
             return new UserDto();
         }
 
     }
+
+    @PostMapping("/mypage/{userId}/reject")
+    public UserDto updateUserStatus(@PathVariable String userId,
+                                    @RequestBody UserDto userDto) {
+        // User 상태와 관련된 데이터 변경
+        return userService.changeUserStatus(userId, userDto);
+    }
+
 }
