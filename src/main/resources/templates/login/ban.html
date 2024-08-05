@@ -157,7 +157,7 @@
                 font-size: 20px;
             }
 
-            #goHomeBtn {
+            .goHomeBtn {
                 padding: 8px 20px;
                 margin: 20px 0;
                 font-weight: bold;
@@ -200,10 +200,13 @@
     </header>
     <main>
         <div class="ban-container">
-            <p>정지회원입니다.</p>
-            <p>2024년 5월 30일까지 일부 기능이 제한됩니다.</p>
-            <p>(정지사유: 운영 규칙 위반)</p>
-            <a th:href="@{/home}" id="goHomeBtn">홈으로 이동</a>
+            <p th:text="${message}"></p>
+<!--            <p>2024년 5월 30일까지 일부 기능이 제한됩니다.</p>-->
+<!--            <p th:text="${endDate}까지 일부 기능이 제한됩니다."></p>-->
+            <p th:unless="${ban.getBanPeriod()==100}"><span th:text="${endDate}"></span>까지 일부 기능이 제한됩니다.</p>
+            <p>정지사유: <span th:text="${ban.getBanReason()}"></span></p>
+            <a th:if="${ban.getBanPeriod()==100}" th:href="@{/home}" class="goHomeBtn">홈으로 이동</a>
+            <a th:unless="${ban.getBanPeriod()==100}" th:href="@{/index_afterLogin}" class="goHomeBtn">홈으로 이동</a>
         </div>
     </main>
     </body>
