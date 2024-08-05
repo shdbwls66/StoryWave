@@ -36,6 +36,7 @@ spring:
     suffix: .html
     mode: HTML
     encoding: UTF-8
+    enabled: true
 
 logging:
   level:

@@ -9,29 +9,110 @@
     * {
       padding: 0;
       margin: 0;
+      box-sizing: border-box;
     }
+
     body {
       background-color: #EDE7DF;
       display: flex;
       flex-direction: column;
+      font-family: Arial, sans-serif; /* 기본 글꼴 설정 */
     }
+
     header {
       display: flex;
-      position: fixed;
       flex-direction: column;
+      align-items: center;
       width: 100%;
-      height: 69px;
       padding: 15px 0;
       background-color: #EDE7DF;
+      position: fixed;
+      top: 0;
       z-index: 10;
     }
 
-    .nav_bar {
+    .nav-bar {
       display: flex;
-      flex-direction: row;
-      justify-content: space-around;
+      justify-content: space-between;
+      align-items: center;
       background-color: #EDE7DF;
-      z-index: 10;
+      /*padding: 0 20px;*/
+      font-weight: bold;
+    }
+
+    .storywave-logo {
+      flex: 0;
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    .storywave-img {
+      height: 120px;
+    }
+
+    .menu-cont {
+      display: flex;
+      flex-direction: column;
+      flex: 2;
+    }
+
+    .menu-container {
+      display: flex;
+      align-items: center; /* 수직 가운데 정렬 */
+      width: 100%;
+    }
+
+    .menu-cont2 {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-right: 100px;
+      margin-top: 20px;
+      margin-left: 100px;
+      font-size: 20px;
+      gap: 80px; /* 메뉴 항목 간 간격 */
+      white-space: nowrap; /* 줄바꿈 없음 */
+    }
+
+    .sub-text {
+      font-size: 14px; /* 리뷰/서평 글씨 작게 */
+      margin-left: 10px;
+    }
+
+    .user-menu {
+      display: flex;
+      margin-top: 20px;
+      margin-left: auto; /* user_menu를 오른쪽 끝으로 밀어냄 */
+      font-size: 14px;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+
+    .search-form {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      gap: 9px;
+    }
+
+    #search-input {
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      font-size: 12px;
+    }
+
+    #search_btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .search_img {
+      height: 20px;
     }
 
     a {
@@ -39,64 +120,13 @@
       color: black;
       cursor: pointer;
     }
-    h3 {
-      font-size: 10pt;
-    }
-
-    span {
-      font-size: 8pt;
-    }
-    #categroy{
-      font-size: 14pt;
-    }
-
-    .menu_cont {
-      display: flex;
-      flex-direction: column;
-      align-items: end;
-      font-size: 10pt;
-    }
-
-    .storywave_img {
-      height: 85px;
-    }
-
-    .menu_cont2 {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-self: flex-end;
-      padding-top: 28px;
-      gap: 28px;
-    }
-
-    #search-input {
-      padding: 3px 10px;
-      border: none;
-      border-radius: 8px;
-      outline: none;
-      vertical-align: bottom;
-    }
-
-    #search_btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      height: 14px;
-    }
-
-    .search_img {
-      height: 14px;
-    }
-
-    .user_menu {
-      display: flex;
-      align-self: flex-end;
-    }
 
     .firstLine {
       display: inline-flex;
-      border-style:solid;
+      border-style: solid;
+      width: 100%; /* 페이지 전체 너비 */
+      height: 0.5px; /* 두께 설정 */
+      background-color: #ddd;
     }
 
     .filter-section {
@@ -207,7 +237,7 @@
     }
 
     main {
-      padding-top: 120px;
+      padding-top: 150px;
       padding-left: 30px;
       padding-right: 30px;
       font-weight: bold;
@@ -216,30 +246,42 @@
     button {
       font-weight: bold;
     }
+    .mini-sub-text{
+      font-size: 10px;
+    }
   </style>
 </head>
 <body>
 <header>
   <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
-  <div class="nav_bar">
-    <a class="storywave_logo" href="../home.html">
-      <img class="storywave_img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+  <div class="nav-bar">
+    <a th:href="@{/home}" class="storywave-logo">
+      <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
     </a>
-    <nav class="menu_cont">
-      <form class="search_form">
-        <label for="search-input"></label>
-        <input id="search-input" class="search_box" type="search" name="search_input">
+    <nav class="menu-cont">
+      <form class="search-form">
+        <label for="search-input" style="display:none;">검색</label>
+        <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
         <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
       </form>
-      <div class="menu_cont2">
-        <a href="Noticepostlist.html">공지사항</a>
-        <a href="Moviepostlist.html">영화 <span>리뷰/서평</span></a>
-        <a href='Bookpostlist.html'>도서 <span>리뷰/서평</span></a>
-        <div class="user_menu">
-          <a th:href="@{/register}">회원가입</a>
-          <span>|</span>
-          <a th:href="@{/login}">로그인</a>
+      <div class="menu-container">
+        <div class="menu-cont2">
+          <a th:href="@{/board/Noticepostlist}">공지사항</a>
+          <a th:href="@{/board/Moviepostlist}">영화 <span class="sub-text">리뷰/서평</span></a>
+          <a th:href="@{/board/Bookpostlist}">도서 <span class="sub-text">리뷰/서평</span></a>
         </div>
+        <div class="user-menu">
+          <div th:if="${!isLoggedIn}">
+            <a th:href="@{/user/join}">회원가입</a>
+            <span>|</span>
+            <a th:href="@{/user/login}">로그인</a>
+          </div>
+          <div th:if="${isLoggedIn}">
+            <a th:href="@{/mypage}">마이페이지</a>
+            <span>|</span>
+            <a th:href="@{/user/logout}">로그아웃</a>
+        </div>
+      </div>
       </div>
     </nav>
   </div>
@@ -248,17 +290,19 @@
 
 <main>
   <span id="categroy">도서</span>
-  <span>리뷰/서평</span>
+  <span class="mini-sub-text">리뷰/서평</span>
   <div class="filter-section">
     <ul class="category-list">
-      <li><input type="checkbox" id="all" value="all" th:checked="${categoryFilter == null}"><label for="all">전체</label></li>
-      <li><input type="checkbox" id="novel" value="novel"th:checked="${categoryFilter.contains('novel')}"><label for="novel">소설/시</label></li>
-      <li><input type="checkbox" id="essay" value="essay" th:checked="${categoryFilter.contains('essay')}"><label for="essay">에세이</label></li>
-      <li><input type="checkbox" id="humanity" value="humanity" th:checked="${categoryFilter.contains('humanity')}"><label for="humanity">인문</label></li>
-      <li><input type="checkbox" id="economy" value="economy" th:checked="${categoryFilter.contains('economy')}"><label for="economy">경제/경영</label></li>
-      <li><input type="checkbox" id="etc" value="etc" th:checked="${categoryFilter.contains('etc')}"><label for="etc">기타</label></li>
+      <li><input type="checkbox" id="all" value="all" ><label for="all">전체</label></li>
+      <li><input type="checkbox" id="novel" value="novel"><label for="novel">소설/시</label></li>
+      <li><input type="checkbox" id="essay" value="essay"><label for="essay">에세이</label></li>
+      <li><input type="checkbox" id="humanity" value="humanity"><label for="humanity">인문</label></li>
+      <li><input type="checkbox" id="economy" value="economy"><label for="economy">경제/경영</label></li>
+      <li><input type="checkbox" id="etc" value="etc"><label for="etc">기타</label></li>
     </ul>
-    <button class="write-button" onclick="location.href='Bookpostwrite.html'">글쓰기</button>
+    <a class="write-button" th:href="@{/board/Bookpostwrite}" onclick="checkLoginStatusAndRedirect(event)">
+      글쓰기
+    </a>
   </div>
   <table class="post-table">
     <thead>
@@ -289,44 +333,71 @@
 </main>
 </body>
 <script>
+  function checkLoginStatusAndRedirect(event) {
+    event.preventDefault(); // 링크 클릭을 방지합니다.
+
+    fetch('/check-login')
+            .then(response => response.json())
+            .then(isLoggedIn => {
+              if (isLoggedIn) {
+                // 로그인된 상태이면 글쓰기 페이지로 이동
+                window.location.href = event.target.href;
+              } else {
+                // 로그인되지 않은 상태이면 로그인하라는 팝업을 띄움
+                alert('로그인 후 글쓰기 가능합니다. 로그인 해주세요!');
+                // 선택적으로 로그인 페이지로 리디렉션
+                // window.location.href = '/user/login';
+              }
+            })
+            .catch(error => console.error('로그인 상태 확인 중 오류 발생:', error));
+  }
 
   document.addEventListener('DOMContentLoaded', function() {
-    const checkboxes = document.querySelectorAll('.category-list input[type="checkbox"]');
-    const allCheckbox = document.getElementById('all');
     const postList = document.getElementById('post-list');
     const pagination = document.getElementById('pagination');
+    const allCheckbox = document.getElementById('all');
+    const categoryCheckboxes = document.querySelectorAll('.category-list input[type="checkbox"]:not(#all)');
     const postsPerPage = 10; // 페이지당 게시글 수
     let currentPage = 1;
     let totalPosts = [];
     let latestPosts = [];
     let paginatedPosts = [];
-
-    // 체크박스 '전체' 클릭 핸들러
+// 초기화 함수
+    function initializeCheckboxes() {
+      allCheckbox.checked = false;
+      categoryCheckboxes.forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      filterPosts();
+    }
+    // 전체 체크박스 이벤트 리스너
     allCheckbox.addEventListener('change', function() {
-      const isChecked = allCheckbox.checked;
-      checkboxes.forEach(checkbox => {
-        checkbox.checked = isChecked;
+      categoryCheckboxes.forEach(checkbox => {
+        checkbox.checked = this.checked;
       });
       filterPosts();
     });
 
-    // 체크박스 클릭 이벤트 핸들러
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', filterPosts);
+    // 카테고리 체크박스 이벤트 리스너
+    categoryCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        if (!this.checked) {
+          allCheckbox.checked = false;
+        } else {
+          allCheckbox.checked = Array.from(categoryCheckboxes).every(cb => cb.checked);
+        }
+        filterPosts();
+      });
     });
-
     // 게시글 데이터 가져오기
     function fetchPosts() {
-      const url = 'http://localhost:8081/post/2';
-      const cacheBuster = `?_=${new Date().getTime()}`;
-
-      fetch(url + cacheBuster)  // 캐시 비활성화
+      fetch('http://localhost:8081/post/2') // 상대경로를 사용하여 요청
               .then(response => response.json())
               .then(data => {
                 totalPosts = data;
 
                 // 최신 게시글 5개를 따로 저장
-                latestPosts = totalPosts.filter(post =>
+                let latestPosts = totalPosts.filter(post =>
                         post.categories.some(category => category.board.postTypeId === 0)
                 ).sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
                         .slice(0, 5);
@@ -339,25 +410,26 @@
                 // 최신 게시글과 나머지 게시글을 결합
                 totalPosts = [...latestPosts, ...otherPosts];
 
+                initializeCheckboxes(); // 초기화 함수 호출
+
                 filterPosts(); // 필터링 후 게시글 표시
               })
               .catch(error => console.error('Error fetching posts:', error));
     }
 
+
+
     // 게시글 필터링 및 표시
     function filterPosts() {
-      const checkedCategories = Array.from(checkboxes)
-              .filter(checkbox => checkbox.checked && checkbox.value !== 'all')
+      const checkedCategories = Array.from(categoryCheckboxes)
+              .filter(checkbox => checkbox.checked)
               .map(checkbox => checkbox.value);
 
-      if (checkedCategories.length === 0) {
-        checkedCategories.push('all');
-      }
-
-      // 필터링된 게시물
-      const filteredPosts = totalPosts.filter(post =>
-              checkedCategories.includes('all') || post.categories.some(category => checkedCategories.includes(category.name))
-      );
+      const filteredPosts = allCheckbox.checked || checkedCategories.length === 0
+              ? totalPosts
+              : totalPosts.filter(post =>
+                      post.categories.some(category => checkedCategories.includes(category.name))
+              );
 
       paginatedPosts = paginate(filteredPosts, currentPage, postsPerPage);
       displayPosts(paginatedPosts, currentPage, filteredPosts.length);
@@ -375,27 +447,27 @@
       postList.innerHTML = posts.map((post, index) => {
         if (post.categories.some(category => category.board.postTypeId === 0)) {
           return `
-        <tr>
-          <td>공지</td>
-          <td><a href="./posts_detail.html?id=${post.id}">${post.title}</a></td>
-          <td>${post.nickname}</td>
-          <td>${new Date(post.updated_at).toLocaleString()}</td>
-          <td>${post.thumbs}</td>
-          <td>${post.comments}</td>
-        </tr>
-      `;
+                    <tr>
+                        <td>공지</td>
+                        <td><a href="./posts_detail.html?id=${post.id}">${post.title}</a></td>
+                        <td>${post.nickname}</td>
+                        <td>${new Date(post.updated_at).toLocaleString()}</td>
+                        <td>${post.thumbs}</td>
+                        <td>${post.comments}</td>
+                    </tr>
+                `;
         } else {
           nonNoticeCount++;
           return `
-        <tr>
-          <td>${(page - 1) * postsPerPage -(page !==1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
-          <td><a href="./posts_detail.html?id=${post.id}">${post.title}</a></td>
-          <td>${post.nickname}</td>
-          <td>${new Date(post.updated_at).toLocaleString()}</td>
-          <td>${post.thumbs}</td>
-          <td>${post.comments}</td>
-        </tr>
-      `;
+                    <tr>
+                        <td>${(page - 1) * postsPerPage - (page !== 1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
+                        <td><a href="./posts_detail.html?id=${post.id}">${post.title}</a></td>
+                        <td>${post.nickname}</td>
+                        <td>${new Date(post.updated_at).toLocaleString()}</td>
+                        <td>${post.thumbs}</td>
+                        <td>${post.comments}</td>
+                    </tr>
+                `;
         }
       }).join('');
     }
@@ -404,8 +476,8 @@
     function updatePagination(totalItems) {
       const totalPages = Math.ceil(totalItems / postsPerPage);
       pagination.innerHTML = Array.from({ length: totalPages }, (_, i) => `
-        <button class="${i + 1 === currentPage ? 'active' : ''}" data-page="${i + 1}">${i + 1}</button>
-      `).join('');
+            <button class="${i + 1 === currentPage ? 'active' : ''}" data-page="${i + 1}">${i + 1}</button>
+        `).join('');
 
       // 페이지네이션 버튼 클릭 이벤트
       pagination.querySelectorAll('button').forEach(button => {

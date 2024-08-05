@@ -21,15 +21,12 @@
                 <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
                 <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
             </form>
-            <div class="menu-container">
-                <div class="menu-cont2">
-                    <!-- 게시판 연결 url을 어떻게 할건지 정해야 할 것 같음 -->
-                    <!-- 큰 단위에서 작은 단위로 url을 설정해야 할 듯 -->
-                    <a th:href="@{/board/0/post}">공지사항</a>
-                    <a th:href="@{/board/1/post}">영화 <span class="sub-text">리뷰/서평</span></a>
-                    <a th:href="@{/board/2/post}">도서 <span class="sub-text">리뷰/서평</span></a>
-                </div>
-                <div class="user-menu">
+            <div class="menu_cont2">
+                <a th:href="@{/board/Noticepostlist}">공지사항</a>
+                <a th:href="@{/board/Moviepostlist}">영화 <span class="sub-text">리뷰/서평</span></a>
+                <a th:href="@{/board/Bookpostlist}">도서 <span class="sub-text">리뷰/서평</span></a>
+                <div class="user_menu">
+                    <!--                    <a th:href="@{/mypage.html}" th:text="">마이페이지</a>-->
                     <a th:href="@{/mypage}">마이페이지</a>
                     <span>|</span>
                     <a th:href="@{/home}">로그아웃</a>
