@@ -56,6 +56,12 @@ public class UserController {
         return "redirect:/home";
     }
 
+    @GetMapping("/update-user")
+    public String updateUser(Model model, HttpSession session)
+        String findUserId = (String)session.getAttribute("userId");
+    UserDto userDto = userService.getUserById(findUserId);
+
+
 
 
 }

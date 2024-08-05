@@ -24,6 +24,7 @@ public class MyPageController {
   private List<User> users = new ArrayList<>();
   private final CommentService commentService;
   private final PostService postService;
+  private UserService userService;
 
   @Autowired
   public MyPageController(CommentService commentService, PostService postsService) {
@@ -34,8 +35,19 @@ public class MyPageController {
   // 마이페이지 컨트롤러 안에 내 댓글, 내 게시물 기능 넣을지? 아님 각 컨트롤러에 넣을지?
 
   @GetMapping
-  public String showMyPage(Model model) {
-    return "mypage/mypage";
+  public String showMypage (UserDto userDto) {
+    String userId = userDto.getUserId();
+
+
+    String role = userService.getUserRole(userId);
+
+    if ("ADMIN".equals(role)) {
+      return "mypage/adminMypage"; // 관리자 페이지로 리디렉션
+    } else if ("USER".equals(role)) {
+      return "mypage/mypage"; // 일반 사용자 페이지로 리디렉션
+    } else {
+      return "error"; // 기본 오류 페이지 또는 다른 페이지
+    }
   }
 
   @GetMapping("/quit")

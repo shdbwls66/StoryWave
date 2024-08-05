@@ -111,6 +111,10 @@ public class UserService {
 
 
 
+    public String getUserRole(String userId) {
+        return findByUserId(userId).getRole();
+    }
+
     public User findByUserId(String userId) {
         return userRepository.findByUserId(userId).orElse(null);
     }
