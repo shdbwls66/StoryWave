@@ -1,5 +1,4 @@
-/*
-package com.ormi.storywave.Ban;
+package com.ormi.storywave.admin;
 
 import com.ormi.storywave.users.User;
 import jakarta.persistence.*;
@@ -33,6 +32,6 @@ public class Ban {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    private User users;
+    private User user;
 
-}*/
+}

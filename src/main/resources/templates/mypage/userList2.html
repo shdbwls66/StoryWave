@@ -331,9 +331,9 @@
             </form>
             <div class="menu-container">
                 <div class="menu-cont2">
-                    <a href="#">공지사항</a>
-                    <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
-                    <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
+                    <a th:href="@{/board/Noticepostlist.html}">공지사항</a>
+                    <a th:href="@{/board/Moviepostlist.html}">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a th:href="@{/board/Bookpostlist.html}">도서 <span class="sub-text">리뷰/서평</span></a>
                 </div>
                 <div class="user-menu">
                     <a th:href="@{/adminMypage.html}">마이페이지</a>
@@ -365,7 +365,7 @@
             <td th:text="${user.email}" > </td>
             <td th:text="${user.createdAt}" > </td>
             <td th:text="${user.activeStatus}"> </td>
-            <td><button class="btn-open-modal" th:onclick="'openUserUpdateModal(' + ${user.id} + ')'">회원 관리</button></td>
+            <td><button class="btn-open-modal" th:onclick="'openUserUpdateModal(' + ${user.index} + ')'">회원 관리</button></td>
 
         </tr>
         </tbody>
@@ -375,16 +375,16 @@
     </div>
 
     <!-- modal 여기있다 -->
-    <div class="modal" id="userModal">
+    <div class="modal" id="userModal" onclick="openModal()">
         <div class='modal-content'>
             <span class="close">&times;</span>
             <div class="change-status">
                 <label id="rejectduring" class="dropdown-label">정지 기간</label>
                 <div class="dropdown">
                     <button class="dropbtn">
-                        <span class="dropbtn-click" th:text="${user.activeStatus}">"</span>
+                        <span class="dropbtn-click">"</span>
                     </button>
-                    <div class="dropdown-content">
+                    <div class="dropdownContent">
                         <div class="userControl" onclick="setStatus('회원')">회원</div>
                         <div class="userControl" onclick="setStatus('7일 정지')">7일 정지</div>
                         <div class="userControl" onclick="setStatus('15일 정지')">15일 정지</div>
@@ -407,20 +407,26 @@
 
         //get
         function openUserUpdateModal(userId) {
+            // 서버에서 사용자 정보를 가져오기
             fetch(`http://localhost:8080/admin/mypage/${userId}`, {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
             })
-                .then(id => id.json())
-                .then(id => {
-                    console.log(1, id)
-                    setStatus(id)
-                })
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('.dropbtn-click').textContent = data.activeStatus;
+                    document.getElementById('statusReason').value = data.reason;
+                    document.getElementById('userId').value = data.userId;
 
-                .then(id => id.json())
-                .then(id => {
-                    console.log(1, sttus)
-                    setStatus(id)
+                    openModal();
                 })
+        }
+
+        // 상태 설정 함수
+        function setStatus(newStatus) {
+            document.querySelector('.dropbtn-click').textContent = newStatus;
         }
 
 
@@ -428,7 +434,7 @@
         // 적용하기 버튼 클릭 시 호출
         function applyChanges() {
             const userId = document.getElementById('userId').value;
-            const status = document.querySelector('dropdown-content').textContent;
+            const status = document.querySelector('.dropbtn-click').textContent;
             const reason = document.getElementById('statusReason').value;
 
             const params = {
@@ -437,17 +443,20 @@
                 userId: userId
             };
 
+            // 서버로 변경 사항 전송하기
             fetch(`http://localhost:8080/api/admin/${status}/reject`, {
-                method: "POST", headers: {
+                method: "POST",
+                headers: {
                     "Content-Type": "application/json; charset=utf-8"
                 },
-                body: JSON.stringify(status)
-            }) .then(res => res.json())
-                .then(rss => {
-                    console.log(status);
+                body: JSON.stringify(params)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Changes applied:", data);
                     closeModal();
-                })
 
+                })
         }
 
 
@@ -455,24 +464,41 @@
         // 모달을 열기 위한 함수
         function openModal() {
             const modal = document.querySelector('.modal');
-            modal.style.display = 'flex'; // 모달을 보이게 설정
+            modal.style.display = 'flex';
         }
 
         // 모달을 닫기 위한 함수
         function closeModal() {
             const modal = document.querySelector('.modal');
-            modal.style.display = 'none'; // 모달을 숨김
+            modal.style.display = 'none';
         }
 
-        // 상태 설정 함수
-        function setStatus(newStatus) {
-            document.querySelector('.dropbtn-click').textContent = newStatus;
-        }
+
+        const dropbtn = document.querySelector('.dropbtn');
+        const dropdownContent = document.querySelector('.dropdown-content');
 
         function dropdown() {
             document.querySelector('.dropwdon-content').toggleAttribute('show')
         }
 
+        /* function toggleDropdown() {
+             dropdownContent.classList.toggle('show');
+         }
+ */
+        function selectMenuItem(event) {
+            if (event.target.classList.contains('userControl')) {
+                dropbtn.innerText = event.target.innerText;
+                dropdownContent.classList.remove('show');
+            }
+        }
+
+        dropbtn.addEventListener('click', toggleDropdown);
+        dropdownContent.addEventListener('click', selectMenuItem);
+
+        function setStatus(status) {
+            document.querySelector('.dropbtn_click').innerText = status;
+            document.querySelector('.user-status-reason').value = status;
+        }
         /*function toggleDropdown() {
             dropdownContent.classList.toggle('show');
         }

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<th:block th:fragment="headerLayout">
     <head>
         <meta charset="UTF-8">
         <title>StoryWave</title>
@@ -130,7 +129,7 @@
             }
 
             .ban-container {
-                width: 400px;
+                width: 600px;
                 height: 400px;
                 padding: 40px;
                 position: absolute;
@@ -148,8 +147,13 @@
             }
 
             .ban-container p:nth-of-type(2) {
-                margin-bottom: 20px;
+                margin-bottom: 30px;
                 font-weight: bold;
+                font-size: 20px;
+            }
+
+            .ban-container p:nth-of-type(3) {
+                margin-bottom: 30px;
                 font-size: 20px;
             }
 
@@ -196,11 +200,11 @@
     </header>
     <main>
         <div class="ban-container">
-            <p>환영합니다!</p>
-            <p>회원가입을 축하합니다.</p>
-            <a th:href="@{/user/login}" id="goHomeBtn">시작하기</a>
+            <p>정지회원입니다.</p>
+            <p>2024년 5월 30일까지 일부 기능이 제한됩니다.</p>
+            <p>(정지사유: 운영 규칙 위반)</p>
+            <a th:href="@{/home}" id="goHomeBtn">홈으로 이동</a>
         </div>
     </main>
     </body>
-</th:block>
 </html>

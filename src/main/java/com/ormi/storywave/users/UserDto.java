@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 @Setter
 public class UserDto implements Serializable {
   private String userId;
-  private String username;
   private String password;
   private String nickname;
+  private String username;
   private String email;
   private String role;
   private boolean activeStatus;
@@ -31,59 +31,57 @@ public class UserDto implements Serializable {
 //  private List<PostDto> posts = new ArrayList<>();
 
   // Entity -> DTO
-  public static UserDto fromUsers(User users) {
-    UserDto usersDto =
+  public static UserDto fromUsers(User user) {
+    UserDto userDto =
             UserDto.builder()
-                    .userId(users.getUserId())
-                    .username(users.getUsername())
-                    .password(users.getPassword())
-                    .nickname(users.getNickname())
-                    .email(users.getEmail())
-                    .role(users.getRole())
-                    .activeStatus(users.isActiveStatus())
-                    .createdAt(users.getCreatedAt())
-                    .updatedAt(users.getUpdatedAt())
+                    .userId(user.getUserId())
+                    .password(user.getPassword())
+                    .nickname(user.getNickname())
+                    .username(user.getUsername())
+                    .email(user.getEmail())
+                    .role(user.getRole())
+                    .activeStatus(user.isActiveStatus())
+                    .createdAt(user.getCreatedAt())
+                    .updatedAt(user.getUpdatedAt())
                     .build();
-//    if (users.getComments() != null) {
+//    if (user.getComments() != null) {
 //      usersDto.setComments(
-//              users.getComments().stream().map(CommentDto::fromComment).collect(Collectors.toList()));
+//              user.getComments().stream().map(CommentDto::fromComment).collect(Collectors.toList()));
 //    }
-//    if (users.getPosts() != null) {
+//    if (user.getPosts() != null) {
 //      usersDto.setPosts(
-//              users.getPosts().stream().map(PostDto::fromPost).collect(Collectors.toList()));
+//              user.getPosts().stream().map(PostDto::fromPost).collect(Collectors.toList()));
 //    }
-    return usersDto;
+    return userDto;
   }
 
   // DTO -> Entity
   public User toUsers() {
-    User users = new User();
-    users.setUserId(this.userId);
-    users.setUsername(this.username);
-    users.setPassword(this.password);
-    users.setNickname(this.nickname);
-    users.setEmail(this.email);
-    users.setRole(this.role);
-    users.setActiveStatus(this.activeStatus);
-    users.setCreatedAt(this.createdAt);
-    users.setUpdatedAt(this.updatedAt);
+    User user = new User();
+    user.setUserId(this.userId);
+    user.setPassword(this.password);
+    user.setNickname(this.nickname);
+    user.setUsername(this.username);
+    user.setEmail(this.email);
+    user.setRole(this.role);
+    user.setActiveStatus(this.activeStatus);
+    user.setCreatedAt(this.createdAt);
+    user.setUpdatedAt(this.updatedAt);
 
 //    if (this.comments != null) {
 //      this.comments.forEach(
 //              commentDto -> {
 //                Comment comment = commentDto.toComment();
-//                users.getComments().add(comment);
+//                user.getComments().add(comment);
 //              });
 //    }
 //    if (this.posts != null) {
 //      this.posts.forEach(
 //              postDto -> {
 //                Post post = postDto.toPost();
-//                users.getPosts().add(post);
+//                user.getPosts().add(post);
 //              });
 //    }
-    return users;
+    return user;
   }
-
-
 }

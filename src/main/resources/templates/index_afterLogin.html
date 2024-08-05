@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>StoryWave</title>
-    <link rel="icon" href="photo/StoryWaveLogo.png" type="image/x-icon">
+    <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
     <!--    <link rel="stylesheet" th:href="@{/indexCss.css}">-->
     <style>
         * {
@@ -278,128 +278,128 @@
                 <div class="user-menu">
                     <a th:href="@{/mypage}">마이페이지</a>
                     <span>|</span>
-                    <a href="#">로그아웃</a>
+                    <a th:href="@{/user/logout}">로그아웃</a>
                 </div>
             </div>
         </nav>
     </div>
     <hr class="firstLine">
 </header>
-<main class="mainCont">
-    <h2 style="display: none">메인 컨텐츠</h2>
-    <div class="mainSection_first">
-        <section class="notice_cont">
-            <div class="post_title">
-                <h3>공지사항</h3>
-                <a class="showMore" th:href="">Show More</a>
-            </div>
-            <table>
-                <!--                <thead>-->
-                <!--                    <tr>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                    </tr>-->
-                <!--                </thead>-->
-                <tbody>
-                <tr th:each="">
-                    <td th:text="">id</td>
-                    <td>
-                        <a th:href="" th:text="">공지사항 제목</a>
-                    </td>
-                    <td th:text="">게시물 날짜</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-        <section class="bestPost_cont">
-            <div class="post_title">
-                <h3>Best</h3>
-                <a class="showMore" th:href="">Show More</a>
-            </div>
-            <table>
-                <!--                <thead>-->
-                <!--                    <tr>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                    </tr>-->
-                <!--                </thead>-->
-                <tbody>
-                <tr th:each="">
-                    <td th:text="">id</td>
-                    <td>
-                        <a th:href="" th:text="">베스트 게시물 제목</a>
-                    </td>
-                    <td th:text="">게시물 날짜</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-    </div>
-    <div class="mainSection_second">
-        <section class="moviePost_cont">
-            <div class="post_title">
-                <h3>영화<span> 리뷰 / 서평</span></h3>
-                <a class="showMore" th:href="">Show More</a>
-            </div>
-            <table>
-                <!--                <thead>-->
-                <!--                    <tr>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                        <th></th>-->
-                <!--                    </tr>-->
-                <!--                </thead>-->
-                <tbody>
-                <tr th:each="">
-                    <td th:text="">id</td>
-                    <td>
-                        <a th:href="" th:text="">영화 게시물 제목</a>
-                    </td>
-                    <td th:text="">게시물 날짜</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-        <hr class="secondLine">
-        <section class="bookPost_cont">
-            <div class="post_title">
-                <h3>도서<span> 리뷰 / 서평</span></h3>
-                <span><a class="showMore" th:href="">Show More</a></span>
-            </div>
-            <table>
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th></th>-->
-<!--                    <th></th>-->
-<!--                    <th></th>-->
+<!--<main class="mainCont">-->
+<!--    <h2 style="display: none">메인 컨텐츠</h2>-->
+<!--    <div class="mainSection_first">-->
+<!--        <section class="notice_cont">-->
+<!--            <div class="post_title">-->
+<!--                <h3>공지사항</h3>-->
+<!--                <a class="showMore" th:href="">Show More</a>-->
+<!--            </div>-->
+<!--            <table>-->
+<!--                &lt;!&ndash;                <thead>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    <tr>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <th></th>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <th></th>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <th></th>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--                &lt;!&ndash;                </thead>&ndash;&gt;-->
+<!--                <tbody>-->
+<!--                <tr th:each="">-->
+<!--                    <td th:text="">id</td>-->
+<!--                    <td>-->
+<!--                        <a th:href="" th:text="">공지사항 제목</a>-->
+<!--                    </td>-->
+<!--                    <td th:text="">게시물 날짜</td>-->
 <!--                </tr>-->
-<!--                </thead>-->
-                <tbody>
-                <tr th:each="">
-                    <td th:text="">id</td>
-                    <td>
-                        <a th:href="" th:text="">도서 게시물 제목</a>
-                    </td>
-                    <td th:text="">게시물 날짜</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-    </div>
-    <article class="article_cont">
-        <h3 style="display: none">운영자가 올리는 포스트 입니다</h3>
-        <a id="articleCont_firstImg" class="article_cont_back" th:href="">
-            <div class="articleContText" th:text="">2024년 상반기<br>신작 영화 정보</div>
-        </a>
-        <a class="article_cont_back" th:href="">
-            <div class="articleContText" th:text="">컨텐츠 제목</div>
-        </a>
-        <a class="article_cont_back" th:href="">
-            <div class="articleContText" th:text="">컨텐츠 제목</div>
-        </a>
-    </article>
-</main>
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </section>-->
+<!--        <section class="bestPost_cont">-->
+<!--            <div class="post_title">-->
+<!--                <h3>Best</h3>-->
+<!--                <a class="showMore" th:href="">Show More</a>-->
+<!--            </div>-->
+<!--            <table>-->
+<!--                &lt;!&ndash;                <thead>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    <tr>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <th></th>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <th></th>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <th></th>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--                &lt;!&ndash;                </thead>&ndash;&gt;-->
+<!--                <tbody>-->
+<!--                <tr th:each="">-->
+<!--                    <td th:text="">id</td>-->
+<!--                    <td>-->
+<!--                        <a th:href="" th:text="">베스트 게시물 제목</a>-->
+<!--                    </td>-->
+<!--                    <td th:text="">게시물 날짜</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </section>-->
+<!--    </div>-->
+<!--    <div class="mainSection_second">-->
+<!--        <section class="moviePost_cont">-->
+<!--            <div class="post_title">-->
+<!--                <h3>영화<span> 리뷰 / 서평</span></h3>-->
+<!--                <a class="showMore" th:href="">Show More</a>-->
+<!--            </div>-->
+<!--            <table>-->
+<!--                &lt;!&ndash;                <thead>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    <tr>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <th></th>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <th></th>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <th></th>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--                &lt;!&ndash;                </thead>&ndash;&gt;-->
+<!--                <tbody>-->
+<!--                <tr th:each="">-->
+<!--                    <td th:text="">id</td>-->
+<!--                    <td>-->
+<!--                        <a th:href="" th:text="">영화 게시물 제목</a>-->
+<!--                    </td>-->
+<!--                    <td th:text="">게시물 날짜</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </section>-->
+<!--        <hr class="secondLine">-->
+<!--        <section class="bookPost_cont">-->
+<!--            <div class="post_title">-->
+<!--                <h3>도서<span> 리뷰 / 서평</span></h3>-->
+<!--                <span><a class="showMore" th:href="">Show More</a></span>-->
+<!--            </div>-->
+<!--            <table>-->
+<!--&lt;!&ndash;                <thead>&ndash;&gt;-->
+<!--&lt;!&ndash;                <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th></th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th></th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th></th>&ndash;&gt;-->
+<!--&lt;!&ndash;                </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                </thead>&ndash;&gt;-->
+<!--                <tbody>-->
+<!--                <tr th:each="">-->
+<!--                    <td th:text="">id</td>-->
+<!--                    <td>-->
+<!--                        <a th:href="" th:text="">도서 게시물 제목</a>-->
+<!--                    </td>-->
+<!--                    <td th:text="">게시물 날짜</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </section>-->
+<!--    </div>-->
+<!--    <article class="article_cont">-->
+<!--        <h3 style="display: none">운영자가 올리는 포스트 입니다</h3>-->
+<!--        <a id="articleCont_firstImg" class="article_cont_back" th:href="">-->
+<!--            <div class="articleContText" th:text="">2024년 상반기<br>신작 영화 정보</div>-->
+<!--        </a>-->
+<!--        <a class="article_cont_back" th:href="">-->
+<!--            <div class="articleContText" th:text="">컨텐츠 제목</div>-->
+<!--        </a>-->
+<!--        <a class="article_cont_back" th:href="">-->
+<!--            <div class="articleContText" th:text="">컨텐츠 제목</div>-->
+<!--        </a>-->
+<!--    </article>-->
+<!--</main>-->
 </body>
 </html>

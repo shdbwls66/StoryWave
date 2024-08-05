@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/myPage")
+@RequestMapping("/mypage")
 public class MyPageController {
 
   private List<User> users = new ArrayList<>();
@@ -43,7 +43,7 @@ public class MyPageController {
     return "mypage/quit";
   }
 
-  @GetMapping("/myPost")
+  @GetMapping("/mypost")
   public String getAllPosts(
       Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
     int pageSize = 10; // 한 페이지에 보여줄 게시글 수
@@ -53,7 +53,7 @@ public class MyPageController {
     model.addAttribute("posts", postPage.getContent()); // 현재 페이지 게시물 리스트
     model.addAttribute("currentPage", page); // 현재 페이지 번호
     model.addAttribute("totalPages", postPage.getTotalPages()); // 총 페이지 수
-    return "mypage/mypost"; // myPage/myPost.html 템플릿을 반환
+    return "mypage/mypost"; // mypage/mypost.html 템플릿을 반환
   }
 
 

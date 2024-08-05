@@ -15,7 +15,7 @@ public class CommentController {
     this.commentService = commentService;
   }
 
-  @GetMapping("/myPage/myComment")
+  @GetMapping("/mypage/mycomment")
   public String getAllComments(
       Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
     int pageSize = 10;

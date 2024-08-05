@@ -207,7 +207,7 @@
         <form th:action="@{/user/login}" method="post" id="loginForm">
             <input type="text" name="userId" placeholder="아이디" required>
             <input type="password" name="password" placeholder="패스워드" required>
-            <div id="errorMessage" th:text="${message}"></div>
+            <div id="errorMessage" th:text="${error}"></div>
 <!--            <span th:text="${message}"></span>-->
             <button id="loginBtn">로그인</button>
         </form>

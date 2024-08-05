@@ -1,5 +1,8 @@
 server:
   port: 8081
+  servlet:
+    session:
+      timeout: 3600
 spring:
   application:
     name: storywave
@@ -27,18 +30,17 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
 
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-
-
-  thymeleaf:
-    cache: false # ??? ???? ?? -> ?? ? ?? ???
-    prefix: classpath:/templates/ # ??? ?? ??
-    suffix: .html # ??? ?? ???
-    mode: HTML # HTML5 ??
-    encoding: UTF-8 # ??? ??
 
 file:
   upload-dir: /path/to/upload/directory

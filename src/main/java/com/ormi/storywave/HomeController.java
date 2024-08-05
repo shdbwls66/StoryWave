@@ -20,9 +20,9 @@ public class HomeController {
         return "home";
     }
 
-    //admin일경우 adminMypage로 감.. id수정 필요
+   /* //admin일경우 adminMypage로 감.. id수정 필요
     @GetMapping("/mypage")
-    public String mypage(@RequestParam("Id") String userId, Model model) {
+    public String mypage(@RequestParam("userId") String userId, Model model) {
         User foundUser = UserService.getUserById(userId);
 
         if (UserService.isAdmin(foundUser)) {
@@ -30,5 +30,5 @@ public class HomeController {
         } else {
             return "mypage/mypage";
         }
-    }
+    }*/
 }
