@@ -6,6 +6,8 @@ import com.ormi.storywave.posts.PostService;
 import com.ormi.storywave.users.User;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserService;
+import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -17,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller
-@RequestMapping("/mypage")
+@RequestMapping("/myPage")
 public class MyPageController {
 
   private List<User> users = new ArrayList<>();
@@ -34,20 +37,32 @@ public class MyPageController {
 
   // 마이페이지 컨트롤러 안에 내 댓글, 내 게시물 기능 넣을지? 아님 각 컨트롤러에 넣을지?
 
+
+
   @GetMapping
-  public String showMypage (UserDto userDto) {
-    String userId = userDto.getUserId();
+  public String showMypage(HttpSession session) {
+
+    //사용자 정보 확인 가능한지 해봐야함 redirection은 잘 됨
+    User user = (User) session.getAttribute("user");
+
+    // 사용자 정보가 없으면 로그인 페이지로 리디렉션
+    if (user == null) {
+      return "redirect:/login";
+    }
 
 
+    String userId = user.getUserId();
     String role = userService.getUserRole(userId);
 
+
     if ("ADMIN".equals(role)) {
-      return "mypage/adminMypage"; // 관리자 페이지로 리디렉션
+      return "redirect:/adminMypage";
     } else if ("USER".equals(role)) {
-      return "mypage/mypage"; // 일반 사용자 페이지로 리디렉션
+      return "redirect:/userMyPage";
     } else {
-      return "error"; // 기본 오류 페이지 또는 다른 페이지
+      return "redirect:/error";
     }
+
   }
 
   @GetMapping("/quit")
@@ -65,7 +80,7 @@ public class MyPageController {
     model.addAttribute("posts", postPage.getContent()); // 현재 페이지 게시물 리스트
     model.addAttribute("currentPage", page); // 현재 페이지 번호
     model.addAttribute("totalPages", postPage.getTotalPages()); // 총 페이지 수
-    return "mypage/mypost"; // mypage/mypost.html 템플릿을 반환
+    return "home"; // mypage/mypost.html 템플릿을 반환
   }
 
 

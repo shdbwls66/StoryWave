@@ -174,7 +174,7 @@
                     <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
                 </div>
                 <div class="user-menu">
-                    <a th:href="@{/mypage}">마이페이지</a>
+                    <a th:href="@{myPage}">마이페이지</a>
                     <span>|</span>
                     <a href="#">로그아웃</a>
                 </div>
@@ -185,13 +185,14 @@
 </header>
 <main class="mainCont">
     <h2 style="display: none">메인 컨텐츠</h2>
-    <div class="myPage_btn">
-        <a href="mypost.html"> 내 게시물 </a>
-        <a href="mycomment.html"> 내 댓글 </a>
-        <a href="#">  회원정보 수정 </a>
-        <a href="userList.html">회원 관리</a>
-        <a href="quit.html">  회원 탈퇴 </a>
+    <div class="button_cont">
+        <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/mypost}'|">내 게시물</button>
+        <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/mycomment}'|">내 댓글</button>
+        <button type="button" class="myPageMenu" >회원정보 수정</button>
+        <button type="button" class="myPageMenu" th:onclick="|location.href='@{/userList}'|">회원 관리</button>
+        <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/quit}'|">탈퇴하기</button>
     </div>
 </main>
 </body>
+
 </html>

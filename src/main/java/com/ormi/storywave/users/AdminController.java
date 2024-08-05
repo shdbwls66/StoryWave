@@ -1,20 +1,16 @@
 package com.ormi.storywave.users;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
-@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -22,11 +18,36 @@ public class AdminController {
 
     private List<User> users = new ArrayList<>();
 
-    @GetMapping
-    public String getAllUsers(Model model) {
-        List<UserDto> users = userService.getAllUsers();
-        model.addAttribute("users", users);
-        return "mypage/userList2";
+    @GetMapping("/userList")
+    public String getAllUsers(HttpSession session, Model model) {
+
+        //사용자 정보 확인 가능한지 해봐야함
+        User user = (User) session.getAttribute("user");
+
+        // 사용자 정보가 없으면 로그인 페이지로 리디렉션
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        String userId = user.getUserId();
+        String role = userService.getUserRole(userId);
+
+
+        if ("ADMIN".equals(role)){
+            List<UserDto> users = userService.getAllUsers();
+            model.addAttribute("users", users);
+            return "mypage/userList";
+        } else if ("USER".equals(role)) {
+            return "donotaccess";
+        } else {
+            return "redirect:/error";
+        }
+
+    }
+
+    @GetMapping("/adminMypage")
+    public String showAdminMyPage() {
+        return "mypage/adminMypage"; // 관리자 마이페이지 뷰
     }
 
  /*   @PutMapping("/updateUserStatus/{userId}")
@@ -75,7 +96,7 @@ public class AdminController {
     @PostMapping("/mypage/{userId}/reject")
     public UserDto updateUserStatus(@PathVariable String userId,
                                     @RequestBody UserDto userDto) {
-        // User 상태와 관련된 데이터 변경
+        // User 상태 변경
         return userService.changeUserStatus(userId, userDto);
     }
 
