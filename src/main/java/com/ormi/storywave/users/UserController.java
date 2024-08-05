@@ -24,7 +24,6 @@ public class UserController {
     @PostMapping("/join")
     public String addUser(@ModelAttribute UserRequest.JoinDto joinDto) {
         UserDto addedUser = userService.addUser(joinDto);
-//        model.addAttribute("user", addedUser);
         return "join/welcome";
     }
 
@@ -45,9 +44,7 @@ public class UserController {
             return "login/ban";
         } else { // 로그인 성공
             session.setAttribute("userId", loginResult.getUserId());
-//            return "redirect:/home";
             return "index_afterLogin";
-//            return "test";
         }
     }
 
