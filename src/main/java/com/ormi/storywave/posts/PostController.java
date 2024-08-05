@@ -5,12 +5,10 @@ import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,15 +32,20 @@ public class PostController {
   // 게시물 상세화면 조회
   @GetMapping("/{post_type_id}/post/{postId}")
   public String postsDetail(@PathVariable("post_type_id") Long postTypeId,
-                            @PathVariable("postId") Long postId, HttpSession session, Model model) {
+                            @PathVariable("postId") Long postId, HttpSession session, @RequestParam("userId") String userId, Model model) {
     System.out.println("postsDetail 실행");
 
     // 게시물
     PostDto posts =
             postService
                     .getPostByPostTypeIdAndPostId(postTypeId, postId);
-    UserDto users = (UserDto) session.getAttribute("users");
-    String userId = (String) session.getAttribute("userId");
+//    UserDto users = (UserDto) session.getAttribute("users");
+
+//    String userId = (String) session.getAttribute("qwer123");
+
+    UserDto users = userRepository.findByUserId(userId)
+            .map(UserDto::fromUsers)
+            .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
 
     String writer = userRepository.findByPosts_Id(postId)
             .map(UserDto::fromUsers)
@@ -81,7 +84,14 @@ public class PostController {
   public String deletePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId){
     List<PostListDto> posts = postService.getPostSummaries(postTypeId);
     posts.removeIf(post-> post.getId().equals(postId));
-    return "redirect:/board/" + postTypeId + "/post";
+    if (postTypeId == 0L) {
+      return "redirect:/board/Noticepostlist";
+    } else if(postTypeId ==1L){
+      return "redirect:/board/Moviepostlist";
+    } else if(postTypeId == 2L){
+      return "redirect:/board/Bookpostlist";
+    }
+    return "index_afterLogin";
   }
 
   // 게시물 수정

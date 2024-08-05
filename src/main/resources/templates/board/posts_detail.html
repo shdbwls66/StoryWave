@@ -7,12 +7,12 @@
     <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
     <link rel="stylesheet" href="/posts_detailCss.css">
 </head>
-<body th:if="${session.userId}">
+<body>
 <header>
     <!-- 헤더 -->
     <h1 style="display: none">게시물 상세 보기</h1>
     <div class="nav-bar">
-        <a class="storywave-logo" th:href="@{|/home/login?userId=${session.userId}|}">
+        <a class="storywave-logo" th:href="@{|/home/login?userId=${users.userId}|}">
             <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu-cont">
@@ -46,7 +46,7 @@
         <span th:case="2"><a th:href="@{/board/Bookpostlist}">◀ 목록</a></span>
         <span th:case="*"><a th:href="@{/index_afterLogin}">◀ 목록</a></span>
 
-        <nav class="post_menu2" th:if="(${session.userNickname} == ${writer})">
+        <nav class="post_menu2" th:if="(${users.nickname} == ${writer})">
             <a th:href="@{|/board/{post_type_id}/post/{postId}/edit|}">수정</a>
             <a style="cursor: pointer" class="postDelete">삭제</a>
             <a th:href="@{|/board/{post_type_id}/post/{postId}/edit|}">글쓰기</a>
@@ -55,7 +55,7 @@
             <a style="cursor: pointer" class="postDelete">삭제</a>
             <a th:href="@{|/board/{post_type_id}/new/post|}">글쓰기</a>
         </nav>
-        <nav class="post_menu2" th:if="${session.userNickname} != ${writer} and ${session.userRole}admin ">
+        <nav class="post_menu2" th:if="${users.nickname} != ${writer} and ${isAdmin}">
             <a th:href="@{|/board/{post_type_id}/new/post|}">글쓰기</a>
         </nav>
     </div>
@@ -65,10 +65,10 @@
         <div class="modalContent">
             <h3 class="modalTitle">게시글을 삭제하시겠습니까?</h3>
             <p class="modalP">삭제한 게시글은 다시 복구할 수 없습니다.</p>
-            <form class="modalBtnCont" th:action="@{/board/{postTypeId}/post/{postId}(postTypeId=${posts.postTypeId}, postId=${posts.postId})}" method="post">
-                <input type="hidden" name="userId" th:value="${session.userId}">
+            <form class="modalBtnCont" th:action="@{/board/{post_type_id}/post/{postId}(post_type_id=${posts.postTypeId}, postId=${posts.postId})}" method="post">
+                <input type="hidden" name="userId" th:value="${users.userId}">
                 <button id="modalCancelBtn" class="postModalBtn" type="button" onclick="closePostModal()">취소하기</button>
-                <button id="modalDeleteBtn" class="postModalBtn" type="submit" >삭제하기</button>
+                <button id="modalDeleteBtn" class="postModalBtn" type="submit" onclick="deletePost()">삭제하기</button>
             </form>
         </div>
     </div>
@@ -159,7 +159,7 @@
 
     thumbBtn.addEventListener('click', (event) => {
         const postId = [[${posts.postId}]];
-        const userId = [[${session.userId}]];
+        const userId = [[${users.userId}]];
         const likeCheck = [[${like}]]; // 게시물 공감 여부 확인
 
         if (likeCheck === true) {
@@ -200,7 +200,7 @@
                 }
 
                 response.forEach((comment) => {
-                    const currentUser = [[${session.userId}]]; // 현재 접속한 유저 아이디
+                    const currentUser = [[${users.userId}]]; // 현재 접속한 유저 아이디
                     const isAdmin = [[${isAdmin}]]; // role이 admin인지 여부
                     const commentUser = comment.userId; // 댓글을 작성한 유저 아이디
 
@@ -252,7 +252,7 @@
         const postId = [[${posts.postId}]];
         console.log(postId);
 
-        const userId = [[${session.userId}]];
+        const userId = [[${users.userId}]];
         console.log(userId);
 
         const params = {
@@ -282,7 +282,7 @@
     // 댓글 수정
     function openCommentUpdateModal(commentId) {
         const postId = [[${posts.postId}]];
-        const userId = [[${session.userId}]];
+        const userId = [[${users.userId}]];
         $.ajax({
                 url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
                 type: 'GET',
@@ -307,7 +307,7 @@
         const postId = [[${posts.postId}]];
         console.log(postId);
 
-        const userId = [[${session.userId}]];
+        const userId = [[${users.userId}]];
         console.log(userId);
 
         const params = {
@@ -338,7 +338,7 @@
     // 댓글 삭제
     function openCommentDeleteModal(commentId) {
         const postId = [[${posts.postId}]];
-        const userId = [[${session.userId}]];
+        const userId = [[${users.userId}]];
 
         $.ajax({
                 url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
@@ -362,7 +362,7 @@
         const postId = [[${posts.postId}]];
         console.log(postId);
 
-        const userId = [[${session.userId}]];
+        const userId = [[${users.userId}]];
         console.log(userId);
 
         $.ajax({
@@ -383,14 +383,14 @@
 
     function openPostModal(){
         const postId = [[${posts.postId}]];
-        const userId = [[${session.userId}]];
+        const userId = [[${users.userId}]];
         $.ajax({
                 url: `/post/${postId}?userId=${userId}`,
                 type: 'GET',
                 dataType: 'json',
                 success: function (response) {
                     document.getElementById('modalCancelBtn').setAttribute('onclick', `closePostModal()`);
-                    document.getElementById('modalDeleteBtn').setAttribute('onclick', `deletePost(${postId})`);
+                    document.getElementById('modalDeleteBtn').setAttribute('onclick', `deletePost()`);
                     openPostModal();
                 },
                 error: function (request, status, error) {
@@ -401,8 +401,9 @@
         )
     }
 
-    function deletePost(postId) {
-        const userId = [[${session.userId}]];
+    function deletePost() {
+        const postId = [[${posts.postId}]];
+        const userId = [[${users.userId}]];
         console.log(userId);
 
         $.ajax({
@@ -411,6 +412,7 @@
             dataType: 'json',
             success: function () {
                 console.log("댓글 삭제");
+                alert('게시글이 삭제되었습니다.');
                 closePostModal();
             },
             error: function (request, status, error) {
