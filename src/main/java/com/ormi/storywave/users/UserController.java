@@ -44,6 +44,8 @@ public class UserController {
             return "login/ban";
         } else { // 로그인 성공
             session.setAttribute("userId", loginResult.getUserId());
+            session.setAttribute("userRole", loginResult.getRole());
+            session.setAttribute("userNickname", loginResult.getNickname());
             return "index_afterLogin";
         }
     }
