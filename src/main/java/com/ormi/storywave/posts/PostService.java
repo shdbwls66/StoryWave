@@ -1,7 +1,9 @@
 package com.ormi.storywave.posts;
 
 import com.ormi.storywave.board.*;
-import com.ormi.storywave.users.*;
+import com.ormi.storywave.users.User;
+import com.ormi.storywave.users.UserDto;
+import com.ormi.storywave.users.UserRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,8 +37,6 @@ public class PostService {
 
   @Value("${file.upload-dir}")
   private String uploadDir;
-    @Autowired
-    private UserService userService;
 
   // 페이지 번호, 크기를 기반으로 페이지네이션된 게시물 반환 메서드
   public Page<Post> findPaginated(int page, int pageSize) {
@@ -45,73 +45,58 @@ public class PostService {
   }
 
   public List<PostListDto> getPostSummaries(Long post_type_id) {
-    List<Post> posts = postRepository.findAll(); // 모든 게시글을 가져옵니다.
+    // 사용자 정보가 포함된 게시글 리스트를 조회합니다.
+    List<Post> posts = postRepository.findByPostTypeIdWithUser(post_type_id);
 
     return posts.stream()
-        .filter(
-            post ->
-                post.getCategories().stream()
-                    .anyMatch(
-                        category ->
-                            category.getBoard().getPostTypeId().equals(0L)
-                                || category.getBoard().getPostTypeId().equals(post_type_id)))
-        .map(
-            post -> {
-              Long commentCount = postRepository.countCommentsByPostId(post.getId()); // 댓글 수 계산
-              Set<CategoryDto> categoryDtos =
-                  post.getCategories().stream()
-                      .map(
-                          category ->
-                              new CategoryDto(
-                                  category.getId(),
-                                  new BoardDto(
-                                      category.getBoard().getPostTypeId(),
-                                      category.getBoard().getViewPost()), // BoardDto 생성
-                                  category.getName()))
+            .map(post -> {
+              Long commentCount = postRepository.countCommentsByPostId(post.getId());
+              Set<CategoryDto> categoryDtos = post.getCategories().stream()
+                      .map(category -> new CategoryDto(
+                              category.getId(),
+                              new BoardDto(category.getBoard().getPostTypeId(), category.getBoard().getViewPost()),
+                              category.getName()
+                      ))
                       .collect(Collectors.toSet());
+
+              User user = post.getUser();
+              String userId = (user != null) ? user.getUserId() : "Unknown";
+              String nickname = (user != null) ? user.getNickname() : "Unknown";
+
               return new PostListDto(
-                  post.getId(),
-                  post.getTitle(),
-                  post.getUpdatedAt(),
-                  post.getThumbs(),
-                  categoryDtos, // 댓글 수를 설정합니다.
-                  commentCount // 올바른 타입으로 설정
-                  );
+                      post.getId(),
+                      post.getTitle(),
+                      post.getUpdatedAt(),
+                      post.getThumbs(),
+                      categoryDtos,
+                      commentCount,
+                      userId,   // UserId 정보 추가
+                      nickname  // Nickname 정보 추가
+              );
             })
-        .collect(Collectors.toList());
-  }
+            .collect(Collectors.toList());
 
+}
   public Post createPost(
-      Post post,
-      MultipartFile[] imageFiles,
-      List<String> categoryNames,
-      Long post_type_id,
-      Integer thumbs) {
+          Post post,
+          MultipartFile[] imageFiles,
+          List<String> categoryNames,
+          Long post_type_id,
+          Integer thumbs) {  // User 파라미터 추가
 
-    //admin인지 확인
-      /*User loginuser = userRepository
-              .findByUserId(userId)
-              .map(UserDto::fromUsers)
-              .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
-
-      if (!"admin".equals(loginuser.getRole())) {
-        throw new RuntimeException("게시물 작성 권한이 없습니다.");
-      }*/
-
+    // User 설정
+    String userId = "user";
+    User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
     // Board 설정
-    Board board =
-        boardRepository
-            .findByPostTypeId(post_type_id)
-            .orElseGet(
-                () -> {
-                  Board newBoard = new Board();
-                  newBoard.setPostTypeId(post_type_id);
-                  // 새로운 Board 생성 시 필요한 다른 필드들도 설정합니다.
-                  // 예: newBoard.setName("Default Board Name");
-                  // 필요에 따라 다른 필드들을 설정합니다.
-                  return boardRepository.save(newBoard);
-                });
+    Board board = boardRepository.findByPostTypeId(post_type_id)
+            .orElseGet(() -> {
+              Board newBoard = new Board();
+              newBoard.setPostTypeId(post_type_id);
+              newBoard.setViewPost(0); // view_post 필드를 0으로 설정합니다.
+              return boardRepository.save(newBoard);
+            });
     post.setBoard(board);
 
     // Thumbs 설정
@@ -120,19 +105,19 @@ public class PostService {
     // Categories 설정
     Set<Category> categories = new HashSet<>();
     for (String categoryName : categoryNames) {
-      Category category =
-          categoryRepository
-              .findByName(categoryName)
-              .orElseGet(
-                  () -> {
-                    Category newCategory = new Category();
-                    newCategory.setName(categoryName);
-                    newCategory.setBoard(board); // 카테고리에도 Board 설정
-                    return categoryRepository.save(newCategory);
-                  });
+      Category category = categoryRepository.findByName(categoryName)
+              .orElseGet(() -> {
+                Category newCategory = new Category();
+                newCategory.setName(categoryName);
+                newCategory.setBoard(board); // 카테고리에도 Board 설정
+                return categoryRepository.save(newCategory);
+              });
       categories.add(category);
     }
     post.setCategories(categories);
+
+    // User 설정
+    post.setUser(user); // User 객체 설정
 
     if (post.getContent() != null) {
       String originalContent = post.getContent();
@@ -143,9 +128,10 @@ public class PostService {
 
       System.out.println("Updated content length: " + updatedContent.length());
     }
+
     Post savedPost = postRepository.save(post);
     System.out.println("Saved post content length: " + savedPost.getContent().length());
-    return postRepository.save(post);
+    return savedPost;
   }
 
   private String extractAndSaveImages(String content, Post post) {
@@ -268,33 +254,4 @@ public class PostService {
         .map(PostDto::fromPost)
         .orElseThrow(() -> new IllegalArgumentException("포스트를 찾을 수 없습니다."));
   }
-
-
-
-
-  //notice 작성
-  /*public PostDto createNoticePost(UserRequest.AdminDto adminDto, PostDto postDto) {
-    // 사용자 역할이 admin인지 확인
-    if (!"admin".equals(adminDto.getRole())) {
-      throw new RuntimeException("관리자만 작성할 수 있습니다.");
-    }
-    */
-    /*Post post = convertToPostDto(postDto);
-    post.setCreatedAt(LocalDateTime.now());
-    addPost(post);
-
-    return convertToPostDto(post);
-  }
-
-
-  private PostDto convertToPostDto(Post post) {
-    // Post 객체를 PostDto로 변환하는 로직
-    // 예: new PostDto(post.getTitle(), post.getContent(), ...)
-  }
-
-  // 게시물을 저장하는 메소드 (가정)
-  private void addPost(Post post) {
-    // 게시물을 데이터베이스 또는 저장소에 추가하는 로직
-    // 예: postRepository.save(post);
-  }*/
 }

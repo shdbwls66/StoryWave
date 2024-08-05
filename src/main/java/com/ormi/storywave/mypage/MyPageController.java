@@ -3,6 +3,9 @@ package com.ormi.storywave.mypage;
 import com.ormi.storywave.comment.CommentService;
 import com.ormi.storywave.posts.Post;
 import com.ormi.storywave.posts.PostService;
+import com.ormi.storywave.users.User;
+import com.ormi.storywave.users.UserDto;
+import com.ormi.storywave.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -11,10 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/myPage")
 public class MyPageController {
 
+  private List<User> users = new ArrayList<>();
   private final CommentService commentService;
   private final PostService postService;
 
@@ -48,4 +55,13 @@ public class MyPageController {
     model.addAttribute("totalPages", postPage.getTotalPages()); // 총 페이지 수
     return "mypage/mypost"; // myPage/myPost.html 템플릿을 반환
   }
+
+
+ /* //admin mypage중 suercontrol
+  @GetMapping("/admin/userControl")
+  public String getAllUsers(Model model){
+    List<UserDto> users = UserService.getAllUsers();
+    model.addAttribute("users", users);
+    return "admin/userList";
+  }*/
 }

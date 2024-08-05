@@ -30,13 +30,13 @@ public class UserAPIController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") String userId) {
+    /*@GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") String userId, @RequestBody UserDto userDto) {
         return userService
-                .getUserById(userId)
+                .getUserById(userId, userDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
+    }*/
 
 
     @PutMapping("/{userId}")

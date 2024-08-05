@@ -12,29 +12,19 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 public class UserService {
-    private final UserRepository userRepository;
+    private static UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(UserDto::fromUsers)
-                .collect(Collectors.toList());
-    }
 
     public UserDto createUser(UserDto usersDto) {
         User users = usersDto.toUsers();
         users.setCreatedAt(LocalDateTime.now());
         User savedUsers = userRepository.save(users);
         return UserDto.fromUsers(savedUsers);
-    }
-
-    public Optional<UserDto> getUserById(String userId) {
-        return userRepository.findById(userId)
-                .map(UserDto::fromUsers);
     }
 
 
@@ -133,7 +123,7 @@ public class UserService {
 
 
     //adminuser login
-    public String adminUserLogin(UserRequest.AdminDto adminDto) {
+    public static String adminUserLogin(UserRequest.AdminDto adminDto) {
 
         // 로그인 정보와 일치하는 객체 불러오기
         Optional<UserDto> foundUser = userRepository.findByRole(adminDto.getRole())
@@ -150,6 +140,33 @@ public class UserService {
         return foundUser.get().getUserId();
     }
 
+    public static boolean isAdmin(User user) {
+        return "admin".equals(user.getRole());
+    }
 
+
+    @Transactional(readOnly = true)
+    public static List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(UserDto::fromUsers)
+                .collect(Collectors.toList());
+    }
+
+    public static User getUserById(String userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+
+    public void updateUserStatus(String userId, String activeStatus, String reason) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            user.isActiveStatus();
+            userRepository.save(user);
+        }
+
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
 
 }

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 게시판</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #EDE7DF;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif; /* 기본 글꼴 설정 */
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 15px 0;
+            background-color: #EDE7DF;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #EDE7DF;
+            /*padding: 0 20px;*/
+            font-weight: bold;
+        }
+
+        .storywave-logo {
+            flex: 0;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .storywave-img {
+            height: 120px;
+        }
+
+        .menu-cont {
+            display: flex;
+            flex-direction: column;
+            flex: 2;
+        }
+
+        .menu-container {
+            display: flex;
+            align-items: center; /* 수직 가운데 정렬 */
+            width: 100%;
+        }
+
+        .menu-cont2 {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-right: 100px;
+            margin-top: 20px;
+            margin-left: 100px;
+            font-size: 20px;
+            gap: 80px; /* 메뉴 항목 간 간격 */
+            white-space: nowrap; /* 줄바꿈 없음 */
+        }
+
+        .sub-text {
+            font-size: 14px; /* 리뷰/서평 글씨 작게 */
+            margin-left: 10px;
+        }
+
+        .user-menu {
+            display: flex;
+            margin-top: 20px;
+            margin-left: auto; /* user_menu를 오른쪽 끝으로 밀어냄 */
+            font-size: 14px;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 9px;
+        }
+
+        #search-input {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        #search_btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search_img {
+            height: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .firstLine {
+            display: inline-flex;
+            border-style: solid;
+            width: 100%; /* 페이지 전체 너비 */
+            height: 0.5px; /* 두께 설정 */
+            background-color: #ddd;
+        }
+
+
+
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border-top: 1px solid #ddd; /* 상단 테두리만 유지 */
+            border-bottom: 1px solid #ddd; /* 하단 테두리만 유지 */
+            padding: 8px;
+            text-align: left;
+            font-size: 10pt;
+        }
+        th {
+            background-color: #ffffff;
+        }
+
+        tbody tr {
+            background-color: #F9F7F4;
+        }
+
+        tbody tr:hover {
+            background-color: #e0e0e0; /* 마우스 오버 시 배경 색상 */
+        }
+
+
+
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #EDE7DF;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            height: 40%;
+            max-width: 500px;
+            align-content: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+        /* 드롭다운!!!!!!!!!!!!!!!!!!! */
+        /*@import url('https://fonts.googleapis.com/icon?family=Material+Icons');*/
+
+        .change-status {
+            display : flex;
+            z-index: 999;
+            position : absolute;
+        }
+
+        .status-reason {
+            margin-top: 100px;
+            display : flex;
+            align-items: center;
+        }
+
+        .status-reason >span {
+            margin: 0 10px 0 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .dropdown-label{
+            font-size : 24px;
+            margin : 10px;
+            font-weight : bold;
+        }
+
+        .dropdown{
+            position : relative;
+            display : inline-block;
+        }
+
+        .user-status-reason {
+            border : 2px solid rgb(94, 94, 94);
+            border-radius : 4px;
+            height: 50px;
+            width :240px;
+
+        }
+
+
+        /*.dropbtn_icon{
+            font-family : 'Material Icons';
+        }*/
+
+        .dropbtn{
+            display : block;
+            border : 2px solid rgb(94, 94, 94);
+            border-radius : 4px;
+            background-color: #fcfcfc;
+            font-weight: 400;
+            height: 50px;
+            width :240px;
+            text-align: left;
+            padding-left: 20px;
+            cursor : pointer;
+            font-size : 13px;
+            z-index :999;
+            position : relative;
+        }
+        .dropdown-content{
+            display : none;
+            font-weight: 400;
+            background-color: #fcfcfc;
+            min-width : 240px;
+            border-radius: 8px;
+            height : 160px;
+            overflow : scroll;
+            box-shadow: 0px 0px 10px 3px rgba(190, 190, 190, 0.6);
+        }
+        .dropdown-content::-webkit-scrollbar{
+            width : 5px;
+            height : 10px;
+        }
+        .dropdown-content::-webkit-scrollbar-thumb{
+            border-radius : 2px;
+            background-color :rgb(194, 194, 194)
+        }
+
+        .dropdown-content div{
+            display : block;
+            text-decoration : none;
+            color : rgb(37, 37, 37);
+            font-size: 13px;
+            padding : 12px 20px;
+        }
+        .dropdown-content div:hover{
+            background-color: rgb(226, 226, 226);
+        }
+
+        .dropdown-content.show{
+            display : block;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: #ddd;
+        }
+        main {
+            padding-top: 120px;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
+    <div class="nav-bar">
+        <a class="storywave-logo" th:href="@{/home}">
+            <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+        </a>
+        <nav class="menu-cont">
+            <form class="search-form">
+                <label for="search-input" style="display:none;">검색</label>
+                <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
+                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
+            </form>
+            <div class="menu-container">
+                <div class="menu-cont2">
+                    <a href="#">공지사항</a>
+                    <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
+                </div>
+                <div class="user-menu">
+                    <a th:href="@{/templates/mypage/adminMypage.html}">마이페이지</a>
+                    <span>|</span>
+                    <a href="#">로그아웃</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <hr class="firstLine">
+</header>
+
+<main>
+    <table class="post-table">
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>닉네임</th>
+            <th>이메일</th>
+            <th>날짜</th>
+            <th>회원상태</th>
+            <th>회원관리</th>
+        </tr>
+        </thead>
+        <tbody id="post-list">
+        <tr th:each="user : ${users}">
+            <td th:text="${user.username}" > </td>
+            <td th:text="${user.nickname}" > </td>
+            <td th:text="${user.email}" > </td>
+            <td th:text="${user.createdAt}" > </td>
+            <td th:text="${user.activeStatus}"> </td>
+            <td><button class="btn-open-modal" onclick="openUserUpdateModal">회원 관리</button></td>
+
+        </tr>
+        </tbody>
+    </table>
+    <div class="pagination" id="pagination">
+        <!-- 페이지네이션 버튼이 여기 표시 -->
+    </div>
+
+
+    <script th:inline="javascript">
+
+        //get
+        function openUserUpdateModal(userId) {
+            $.ajax({
+                url: `/admin/mypage/${userId}`, // URL 수정
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    let statusHTML = `
+                <div class="modal" id="userModal">
+                    <div class='modal-content'>
+                        <span class="close">&times;</span>
+                        <div class="change-status">
+                            <label id="rejectduring" class="dropdown-label">정지 기간</label>
+                            <div class="dropdown">
+                                <button class="dropbtn">
+                                    <span class="dropbtn-click">${response.activeStatus}</span>
+                                </button>
+                                <div class="dropdown-content">
+                                    <div class="userControl" onclick="setStatus('회원')">회원</div>
+                                    <div class="userControl" onclick="setStatus('7일 정지')">7일 정지</div>
+                                    <div class="userControl" onclick="setStatus('15일 정지')">15일 정지</div>
+                                    <div class="userControl" onclick="setStatus('30일 정지')">30일 정지</div>
+                                    <div class="userControl" onclick="setStatus('영구 정지')">영구 정지</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="status-reason">
+                            <span>정지 사유</span>
+                            <input class="user-status-reason" id="statusReason" type="text" value="${response.reason}">
+                        </div>
+                        <input type="hidden" id="userId" value="${userId}">
+                        <button class="close" type="button" onclick="applyChanges()">적용하기</button>
+                    </div>
+                </div>
+            `;
+
+                    document.body.insertAdjacentHTML('beforeend', statusHTML);
+                    openModal(); // 모달 열기
+                },
+                error: function(request, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        // 적용하기 버튼 클릭 시 호출
+        function applyChanges() {
+            const userId = document.getElementById('userId').value;
+            const status = document.querySelector('.dropbtn-click').textContent;
+            const reason = document.getElementById('statusReason').value;
+
+            const params = {
+                status: status,
+                reason: reason,
+                userId: userId
+            };
+
+            $.ajax({
+                url: `/api/admin/${status}/reject`, // URL 수정
+                type: 'PUT',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(params),
+                success: function(response) {
+                    alert("수정되었습니다.");
+                    closeModal(); // 모달 닫기
+                },
+                error: function(request, status, error) {
+                    alert(error);
+                    closeModal(); // 모달 닫기
+                }
+            });
+        }
+
+        // 모달을 열기 위한 함수
+        function openModal() {
+            const modal = document.querySelector('.modal');
+            modal.style.display = 'flex'; // 모달을 보이게 설정
+        }
+
+        // 모달을 닫기 위한 함수
+        function closeModal() {
+            const modal = document.querySelector('.modal');
+            modal.style.display = 'none'; // 모달을 숨김
+        }
+
+        // 상태 설정 함수
+        function setStatus(newStatus) {
+            document.querySelector('.dropbtn-click').textContent = newStatus;
+        }
+
+
+
+        function toggleDropdown() {
+            dropdownContent.classList.toggle('show');
+        }
+
+        function selectMenuItem(event) {
+            if (event.target.classList.contains('userControl')) {
+                dropbtn.innerText = event.target.innerText;
+                dropdownContent.classList.remove('show');
+            }
+        }
+
+        dropbtn.addEventListener('click', toggleDropdown);
+        dropdownContent.addEventListener('click', selectMenuItem);
+
+        function setStatus(status) {
+            document.querySelector('.dropbtn_click').innerText = status;
+            document.querySelector('.user-status-reason').value = status;
+        }
+
+
+        /* 모달 열기 버튼 클릭 이벤트 설정
+        document.querySelectorAll('.btn-open-modal').forEach(button => {
+            button.addEventListener('click', () => {
+                openModal(); // 모달 열기
+            });
+        });
+
+        // 모달 닫기 버튼 클릭 이벤트 설정
+        document.querySelectorAll('.close').forEach(button => {
+            button.addEventListener('click', () => {
+                closeModal(); // 모달 닫기
+            });
+        });*/
+
+
+       /* function openUserUpdateModal(activeStatus) {
+            const userStatus = "${user.activeStatus}";
+            const reason = "${user.reason}";
+            const id = "${user.id}";
+                $.ajax({
+                    url: `/updateUserStatus/{id}`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        document.getElementById('modifyContent').value = response.content;
+                        document.getElementById('modal').setAttribute('onclick', `updateUserStatus(${user.activeStatus})`);
+                        openModal();
+                    },
+                    error: function (request, status, error) {
+                        console.log(error);
+                    }
+                })*/
+
+
+
+
+        /*function updateUserStatus(activeStatus) {
+            console.log("updateUserStatus 함수 실행")
+            const status = document.getElementById('rejectduring').value;
+
+            const reason = "${ban.banReason}";
+            console.log(reason);
+
+            const userId = "${user.id}";
+            console.log(userId);
+
+            const userStatus = "${user.activeStatus}";
+            console.log(userStatus);
+
+            const params = {
+                status: userStatus,
+                reason: reason,
+                userId: userId
+            };
+
+            $.ajax({
+                url: `/api/admin/${userStatus}/reject/userId=${userId}`,
+                type: 'PUT',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(params),
+                success: function (response) {
+                    alert("수정되었습니다.")
+                    getUserStatus();
+                    closeModal();
+                },
+                error: function (request, status, error) {
+                    alert(error);
+                    closeModal();
+                }
+            });
+*/
+
+    </script>
+</main>
+</body>
+</html>
