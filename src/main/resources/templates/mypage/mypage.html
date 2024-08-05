@@ -186,7 +186,7 @@
     <div class="button_cont">
         <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/mypost}'|">내 게시물</button>
         <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/mycomment}'|">내 댓글</button>
-        <button type="button" class="myPageMenu" >회원정보 수정</button>
+        <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/update-user}'|">회원 정보 수정</button>
         <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/quit}'|">탈퇴하기</button>
     </div>
 </main>

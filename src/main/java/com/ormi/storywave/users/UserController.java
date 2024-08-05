@@ -43,18 +43,20 @@ public class UserController {
     public String login(@ModelAttribute UserRequest.LoginDto loginDto, HttpSession session, Model model) {
 
         UserDto loginResult = userService.loginUser(loginDto);
-        BanDto banDto = banService.getBanByUserId(loginResult.getUserId());
 
         if (loginResult == null) { // 로그인 실패
             model.addAttribute("error", "아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
             return "login/login";
-        } else if (!loginResult.isActiveStatus() && banDto.getBanPeriod() >= 100) {
+        }
+        BanDto banDto = banService.getBanByUserId(loginResult.getUserId());
+
+        if (!loginResult.isActiveStatus() && banDto.getBanPeriod() >= 100) {
             // 영구 정지 회원의 경우
             model.addAttribute("ban", banDto);
             model.addAttribute("message", "영구 정지 회원입니다.");
 
             return "login/ban";
-        } else if(!loginResult.isActiveStatus() && banDto.getBanPeriod() < 100) {
+        } else if(!loginResult.isActiveStatus()) {
             // 비영구 정지 회원의 경우
             session.setAttribute("userId", loginResult.getUserId());
 

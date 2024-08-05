@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>StoryWave</title>
     <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
+    <!--    <link rel="stylesheet" th:href="@{/indexCss.css}">-->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         * {
@@ -129,7 +130,7 @@
             background-color: #ddd;
         }
 
-        .signup-container {
+        .update-container {
             width: 400px;
             height: 600px;
             padding: 40px;
@@ -139,8 +140,9 @@
             left: 50%;
             top: 50%;
         }
-        #signupForm > div> input {
-            width:100%;
+
+        #updateForm > div > input {
+            width: 100%;
             /*width: 320px;*/
             height: 30px;
             padding: 0 10px;
@@ -149,9 +151,11 @@
             border-radius: 6px;
             border: none;
         }
-        #signupForm > div {
+
+        #updateForm > div {
             margin-bottom: 20px;
         }
+
         button {
             background-color: white;
             border-width: medium;
@@ -159,8 +163,9 @@
             cursor: pointer
 
         }
-        #signupBtn {
-            width: 100px;
+
+        #updateBtn {
+            width: 120px;
             height: 40px;
             font-weight: bold;
             margin-left: 110px;
@@ -168,6 +173,7 @@
             box-shadow: 1px 1px 1px 1px gray;
 
         }
+
         .check-ok {
             padding: 3px;
             font-size: 10px;
@@ -204,98 +210,69 @@
     <hr class="firstLine">
 </header>
 <main>
-    <div class="signup-container">
-        <form th:action="@{/user/join}" method="post" id="signupForm">
+    <div class="update-container">
+        <form th:object="${user}" th:action="@{/user/update}" method="post" id="updateForm">
             <div>
                 <label for="id">아이디</label><br>
-                <input type="text" id="id" name="userId" required>
-                <!--                <button type="button" class="check-btn">중복확인</button>-->
-                <span id="confirmId" class="check-ok"></span>
+                <input type="text" id="id" name="userId" th:value="*{userId}" readonly>
             </div>
 
             <div>
                 <label for="password">비밀번호</label><br>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" th:value="*{password}" required>
             </div>
 
             <div>
                 <label for="passwordConfirm">비밀번호 확인</label><br>
-                <input type="password" id="passwordConfirm" name="passwordConfirm" required>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" th:value="*{password}" required>
                 <span id="confirmPassword" class="check-ok"></span>
             </div>
 
             <div>
                 <label for="username">이름</label><br>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" th:value="*{username}" required>
             </div>
 
             <div>
                 <label for="email">이메일</label><br>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" th:value="*{email}" required>
             </div>
 
             <div>
                 <label for="nickname">닉네임</label><br>
-                <input type="text" id="nickname" name="nickname" required>
+                <input type="text" id="nickname" name="nickname" th:value="*{nickname}" required>
                 <span id="confirmNickname" class="check-ok"></span>
             </div>
-            <button type="submit" id="signupBtn">회원가입</button>
+            <button type="submit" id="updateBtn">회원 정보 수정</button>
         </form>
     </div>
 </main>
 <script>
-    // 아이디 중복확인
-    // $(document).ready(function() {
-    $("#id").on("focusout", function () {
-        let id = $("#id").val();
 
-        // 아이디 조건 추가하기
-
-        if (id === '' || id.length === 0) {
-            $("#confirmId").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
-            return false;
-        } else if (id.includes(''))
-
-            $.ajax({
-                url : '/api/user/confirmId',
-                data: {
-                    userId: id
-                },
-                type : 'POST',
-                dataType : 'json',
-                success : function(result) {
-                    if (result === true) {
-                        $("#confirmId").css("color", "blue").text("사용 가능한 ID입니다.");
-                    } else {
-                        $("#confirmId").css("color", "red").text("중복된 ID가 존재합니다.");
-                        $("#id").val('');
-                    }
-                },
-                error : function() {
-                    alert("서버 요청 실패");
-                }
-            });
-    });
-    // })
+    const beforeNickname = document.getElementById('nickname').value
 
     // 닉네임 중복 확인
     // $(document).ready(function() {
     $("#nickname").on("focusout", function () {
         let nickname = $("#nickname").val();
 
-        if (nickname === '' || nickname.length === 0) {
+        if( beforeNickname === nickname) {
+            // $("#confirmNickname").css("color", "red").text("동일한 닉네임입니다.");
+            $("#confirmNickname").empty();
+            return false;
+        } else if (nickname === '' || nickname.length === 0) {
             $("#confirmNickname").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
             return false;
         } else if (nickname.includes(''))
 
             $.ajax({
-                url : '/api/user/confirmNickname',
+                url: '/api/user/confirmNickname',
                 data: {
-                    nickname : nickname
+                    nickname: nickname
                 },
-                type : 'POST',
-                dataType : 'json',
-                success : function(result) {
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
                     if (result === true) {
                         $("#confirmNickname").css("color", "blue").text("사용 가능한 닉네임입니다.");
                     } else {
@@ -303,7 +280,7 @@
                         $("#nickname").val('');
                     }
                 },
-                error : function() {
+                error: function () {
                     alert("서버 요청 실패");
                 }
             });
@@ -315,7 +292,7 @@
         let password = $("#password").val();
         let passwordConfirm = $("#passwordConfirm").val();
 
-        if(password.length === 0 && passwordConfirm.length === 0) {
+        if (password.length === 0 && passwordConfirm.length === 0) {
             $("#confirmPassword").css("color", "blue").text("");
         } else if (passwordConfirm === $("#password").val()) {
             $("#confirmPassword").css("color", "blue").text("비밀번호가 일치합니다.");
