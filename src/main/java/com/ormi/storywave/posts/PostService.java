@@ -2,8 +2,8 @@ package com.ormi.storywave.posts;
 
 import com.ormi.storywave.board.*;
 import com.ormi.storywave.users.User;
+import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,12 +35,8 @@ public class PostService {
 
   @Autowired private UserPostLikeRepository userPostLikeRepository;
 
-  @Autowired
-  private HttpSession session;
-
   @Value("${file.upload-dir}")
   private String uploadDir;
-
 
   // 페이지 번호, 크기를 기반으로 페이지네이션된 게시물 반환 메서드
   public Page<Post> findPaginated(int page, int pageSize) {
@@ -195,10 +191,11 @@ public class PostService {
     }
   }
 
-  @Transactional
-  public Optional<PostDto> updatePost(Long postTypeId, Long postId, PostDto updatePostDto) {
+  // 글쓴이만 포스트 수정 가능
+  public Optional<PostDto> updatePost(Long postId, PostDto updatePostDto, String userId) {
     return postRepository
-        .findByBoard_PostTypeIdAndId(postTypeId, postId)
+        .findById(postId)
+        .filter(posts -> posts.getUser().getUserId().equals(userId))
         .map(
             post -> {
               post.setTitle(updatePostDto.getTitle());
@@ -208,10 +205,17 @@ public class PostService {
             });
   }
 
-  @Transactional
-  public boolean deletePosts(Long postTypeId, Long postId) {
+  // 글쓴이나, role이 admin인 사람만 포스트 삭제 가능
+  public boolean deletePosts(Long postId, String userId) {
+    UserDto users =
+        userRepository
+            .findByUserId(userId)
+            .map(UserDto::fromUsers)
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
     return postRepository
         .findById(postId)
+        .filter(
+            posts -> posts.getUser().getUserId().equals(userId) || users.getRole().equals("admin"))
         .map(
             posts -> {
               postRepository.delete(posts);

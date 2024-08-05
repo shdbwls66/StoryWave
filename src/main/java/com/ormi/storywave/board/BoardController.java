@@ -31,6 +31,7 @@ public class BoardController {
         String userId = (String) session.getAttribute("userId");
 
         if (userId != null) {
+            // userId가 세션에 있는 경우, UserDto를 조회합니다.
             Optional<UserDto> user = userService.getUserById(userId);
             if (user.isPresent()) {
                 model.addAttribute("isLoggedIn", true);

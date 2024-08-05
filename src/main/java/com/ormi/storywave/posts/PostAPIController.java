@@ -1,11 +1,14 @@
 package com.ormi.storywave.posts;
 
 import com.ormi.storywave.board.PostListDto;
-import com.ormi.storywave.users.UserService;
+import com.ormi.storywave.users.User;
+import com.ormi.storywave.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
 import java.util.List;
 
 
@@ -14,12 +17,12 @@ import java.util.List;
 @RequestMapping("/post")
 public class PostAPIController {
   private final PostService postService;
-  private final UserService userService;
+  private final UserRepository userRepository;
 
   @Autowired
-  public PostAPIController(PostService postService, UserService userService) {
+  public PostAPIController(PostService postService, UserRepository userRepository) {
     this.postService = postService;
-    this.userService = userService;
+    this.userRepository = userRepository;
   }
 
   @PostMapping("/{post_type_id}")
@@ -52,7 +55,7 @@ public class PostAPIController {
     return ResponseEntity.ok(postSummaries);
   }
 
-  @GetMapping("/{post_type_id}/postDetail/{postId}")
+  @GetMapping("/{post_type_id}/post/{postId}")
   public ResponseEntity<PostDto> getPost(@PathVariable("post_type_id") Long post_type_id, @PathVariable("postId") Long postId) {
     PostDto postDto = postService.getPostByPostTypeIdAndPostId(post_type_id, postId);
     return ResponseEntity.ok(postDto);
@@ -62,18 +65,5 @@ public class PostAPIController {
   @PostMapping("/{postId}/like")
   public boolean likePost(@PathVariable("postId") Long postId, @RequestParam("userId") String userId){
     return postService.saveLike(postId, userId);
-  }
-
-  @PutMapping("{post_type_id}/post/{postId}")
-  public ResponseEntity<PostDto> updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, @RequestBody PostDto postDto){
-    return postService.updatePost(postTypeId, postId, postDto)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
-  }
-
-  @DeleteMapping("{post_type_id}/post/{postId}")
-  public ResponseEntity<Void> deletePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId){
-    postService.deletePosts(postTypeId, postId);
-    return ResponseEntity.noContent().build();
   }
 }

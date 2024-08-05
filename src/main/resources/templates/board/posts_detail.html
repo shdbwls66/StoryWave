@@ -39,37 +39,24 @@
 </header>
 <main class="mainCont">
     <h2 style="display: none">메인 컨텐츠</h2>
-    <!--   조건문을 사용하여, 포스트 타입에 따라 다른 url로 이어지도록 함 -->
-    <div class="post_menu" th:switch="${posts.postTypeId}">
-        <span th:case="0"><a th:href="@{/board/Noticepostlist}">◀ 목록</a></span>
-        <span th:case="1"><a th:href="@{/board/Moviepostlist}">◀ 목록</a></span>
-        <span th:case="2"><a th:href="@{/board/Bookpostlist}">◀ 목록</a></span>
-        <span th:case="*"><a th:href="@{/index_afterLogin}">◀ 목록</a></span>
-
-        <nav class="post_menu2" th:if="(${users.nickname} == ${writer})">
-            <a th:href="@{|/board/{post_type_id}/post/{postId}/edit|}">수정</a>
-            <a style="cursor: pointer" class="postDelete">삭제</a>
-            <a th:href="@{|/board/{post_type_id}/post/{postId}/edit|}">글쓰기</a>
-        </nav>
-        <nav class="post_menu2" th:if="${isAdmin}">
-            <a style="cursor: pointer" class="postDelete">삭제</a>
-            <a th:href="@{|/board/{post_type_id}/new/post|}">글쓰기</a>
-        </nav>
-        <nav class="post_menu2" th:if="${users.nickname} != ${writer} and ${isAdmin}">
-            <a th:href="@{|/board/{post_type_id}/new/post|}">글쓰기</a>
+    <div class="post_menu">
+        <a>◀ 목록</a>
+        <nav class="post_menu2">
+            <a>수정</a>
+            <a style="cursor: pointer" id="delete_btn" onclick="postModal()">삭제</a>
+            <a>글쓰기</a>
         </nav>
     </div>
 
     <!--    게시글 삭제 모달-->
-    <div id="postDeleteModal" class="modal">
+    <div id="deleteModal" class="modal">
         <div class="modalContent">
             <h3 class="modalTitle">게시글을 삭제하시겠습니까?</h3>
             <p class="modalP">삭제한 게시글은 다시 복구할 수 없습니다.</p>
-            <form class="modalBtnCont" th:action="@{/board/{post_type_id}/post/{postId}(post_type_id=${posts.postTypeId}, postId=${posts.postId})}" method="post">
-                <input type="hidden" name="userId" th:value="${users.userId}">
-                <button id="modalCancelBtn" class="postModalBtn" type="button" onclick="closePostModal()">취소하기</button>
-                <button id="modalDeleteBtn" class="postModalBtn" type="submit" onclick="deletePost()">삭제하기</button>
-            </form>
+            <div class="modalBtnCont">
+                <button id="modalCancelBtn" class="postModalBtn" onclick="closePostModal()">취소하기</button>
+                <button id="modalDeleteBtn" class="postModalBtn">삭제하기</button>
+            </div>
         </div>
     </div>
     <section class="post_cont">
@@ -77,7 +64,7 @@
         <p class="post_info">
             <span class="post_user">
                 글쓴이<span th:text="${writer}"></span>
-                날짜<span class="post_create" th:text="${#temporals.format(posts.createdAt, 'yyyy-MM-dd')}"></span>
+                날짜<span class="post_create" th:text="${posts.createdAt}"></span>
             </span>
             <span class="post_count">
                 공감<span class="thumbs" th:text="${posts.thumbs}">0</span>
@@ -136,10 +123,10 @@
 <script th:inline="javascript">
 
     //postid를 불러오는 부분 추가 (이렇게 불러오면 됨)
-    function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    }
+    // function getQueryParam(param) {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     return urlParams.get(param);
+    // }
     //
     // document.addEventListener('DOMContentLoaded', function() {
     //     const postId = getQueryParam('id');
@@ -160,7 +147,7 @@
     thumbBtn.addEventListener('click', (event) => {
         const postId = [[${posts.postId}]];
         const userId = [[${users.userId}]];
-        const likeCheck = [[${like}]]; // 게시물 공감 여부 확인
+        const likeCheck = [[${like}]];
 
         if (likeCheck === true) {
             alert('이미 공감한 게시물 입니다.');
@@ -200,9 +187,8 @@
                 }
 
                 response.forEach((comment) => {
-                    const currentUser = [[${users.userId}]]; // 현재 접속한 유저 아이디
-                    const isAdmin = [[${isAdmin}]]; // role이 admin인지 여부
-                    const commentUser = comment.userId; // 댓글을 작성한 유저 아이디
+                    const currentUser = [[${users.userId}]];
+                    const commentUser = comment.userId;
 
                     commentHtml += `
                         <div class="comment">
@@ -211,13 +197,9 @@
                             <p class="content_comment">${comment.content}</p>
                             <p class="created_comment">${comment.createdAt}</p>
                             <p>
-                            ${ // 현재 접속한 유저와 댓글 작성 유저가 같을 때 수정 버튼이 보이도록 설정
+                            ${
                         comment.userId === currentUser ? `
                                 <button type="button" class="modify_comment" onClick="openCommentUpdateModal(${comment.commentId}, '${comment.userId}')">수정</button>
-                                ` : ''
-                    }
-                            ${ // 현재 접속한 유저와 댓글 작성 유저가 같거나, role이 admin인 경우 삭제 버튼 보이도록 설정
-                        comment.userId === currentUser || isAdmin ? `
                                 <button type="button" class="remove_comment" onclick="openCommentDeleteModal(${comment.commentId}, '${comment.userId}')">삭제</button>
                                 ` : ' '
                     }
@@ -377,52 +359,6 @@
             error: function (request, status, error) {
                 alert("댓글 삭제하지 못하였습니다.");
                 closeCommentModal();
-            }
-        });
-    }
-
-    function openPostModal(){
-        const postId = [[${posts.postId}]];
-        const userId = [[${users.userId}]];
-        $.ajax({
-                url: `/post/${postId}?userId=${userId}`,
-                type: 'GET',
-                dataType: 'json',
-                success: function (response) {
-                    document.getElementById('modalCancelBtn').setAttribute('onclick', `closePostModal()`);
-                    document.getElementById('modalDeleteBtn').setAttribute('onclick', `deletePost()`);
-                    openPostModal();
-                },
-                error: function (request, status, error) {
-                    console.log(error);
-                    closePostModal();
-                }
-            }
-        )
-    }
-
-    function deletePost() {
-        const postId = [[${posts.postId}]];
-        const userId = [[${users.userId}]];
-        var csrfToken = $('meta[name="_csrf"]').attr('content');
-        var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
-        console.log(userId);
-
-        $.ajax({
-            url: `/post/${postId}?userId=${userId}`,
-            type: 'DELETE',
-            dataType: 'json',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader(csrfHeader, csrfToken);
-            },
-            success: function () {
-                console.log("댓글 삭제");
-                alert('게시글이 삭제되었습니다.');
-                closePostModal();
-            },
-            error: function (request, status, error) {
-                alert("게시글을 삭제하지 못하였습니다.");
-                closePostModal();
             }
         });
     }
