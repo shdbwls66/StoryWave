@@ -46,9 +46,15 @@ public class PostService {
 
   public List<PostListDto> getPostSummaries(Long post_type_id) {
     // 사용자 정보가 포함된 게시글 리스트를 조회합니다.
-    List<Post> posts = postRepository.findByPostTypeIdWithUser(post_type_id);
+    List<Post> posts = postRepository.findAll(); // 모든 게시글을 가져옵니다.
 
     return posts.stream()
+            .filter(post ->
+                    post.getCategories().stream().anyMatch(category ->
+                            category.getBoard().getPostTypeId().equals(0L) ||
+                                    category.getBoard().getPostTypeId().equals(post_type_id)
+                    )
+            )
             .map(post -> {
               Long commentCount = postRepository.countCommentsByPostId(post.getId());
               Set<CategoryDto> categoryDtos = post.getCategories().stream()
@@ -82,12 +88,11 @@ public class PostService {
           MultipartFile[] imageFiles,
           List<String> categoryNames,
           Long post_type_id,
-          Integer thumbs) {  // User 파라미터 추가
+          Integer thumbs,String userid) {  // User 파라미터 추가
 
-    // User 설정
-    String userId = "user";
-    User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+    User user = userRepository.findById(userid)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + userid));
 
     // Board 설정
     Board board = boardRepository.findByPostTypeId(post_type_id)
