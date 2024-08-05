@@ -1,6 +1,8 @@
 package com.ormi.storywave.users;
 
+import com.ormi.storywave.posts.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
+
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
         this.userRepository = userRepository;
+        this.mappingJackson2HttpMessageConverter = mappingJackson2HttpMessageConverter;
     }
 
     public List<UserDto> getAllUsers() {
@@ -34,6 +39,11 @@ public class UserService {
 
     public Optional<UserDto> getUserById(String userId) {
         return userRepository.findById(userId)
+                .map(UserDto::fromUsers);
+    }
+
+    public Optional<UserDto> getUserByPostId(Long postId){
+        return userRepository.findByPosts_Id(postId)
                 .map(UserDto::fromUsers);
     }
 

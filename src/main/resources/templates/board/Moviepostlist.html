@@ -473,6 +473,8 @@
         <tr>
           <td>${(page - 1) * postsPerPage - (page !== 1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
           <td><a href="http://localhost:8081/board/1/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
+          <td>${(page - 1) * postsPerPage -(page !==1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
+          <td><a href="./post/${post.id}?userId=${users.userId}">${post.title}</a></td>
           <td>${post.nickname}</td>
           <td>${new Date(post.updated_at).toLocaleString()}</td>
           <td>${post.thumbs}</td>

@@ -1,13 +1,16 @@
 // 게시글 삭제 모달
-function postModal(){
-    const deleteModal = document.querySelector('#deleteModal'); // 삭제 모달
-    deleteModal.style.display = 'flex';
+function openPostModal(){
+    const postDeleteModal = document.querySelector('#postDeleteModal'); // 삭제 모달
+    postDeleteModal.style.display = 'flex';
 }
 
 function closePostModal(){
-    const deleteModal = document.querySelector('#deleteModal');
-    deleteModal.style.display = 'none';
+    const postDeleteModal = document.querySelector('#postDeleteModal');
+    postDeleteModal.style.display = 'none';
 }
+
+const postDelete = document.querySelector('.postDelete');
+postDelete.addEventListener('click', openPostModal);
 
 // 댓글 수정 모달 창 열기
 function openModal(){
