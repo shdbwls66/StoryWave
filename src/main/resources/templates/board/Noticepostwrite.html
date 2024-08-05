@@ -414,7 +414,7 @@
               alert('작성 완료되었습니다.');
               this.reset();
               document.getElementById('content').innerHTML = '';
-              window.location.href = 'Noticepostlist.html';
+              window.location.href = 'http://localhost:8081/board/Noticepostlist';
             })
             .catch(error => {
               alert('제출 중 오류가 발생했습니다: ' + error.message);
