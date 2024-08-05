@@ -423,7 +423,7 @@
               alert('작성 완료되었습니다.');
               this.reset();
               document.getElementById('content').innerHTML = '';
-              window.location.href = 'Moviepostlist.html';
+              window.location.href = 'http://localhost:8081/board/Moviepostlist';
             })
             .catch(error => {
               alert('제출 중 오류가 발생했습니다: ' + error.message);

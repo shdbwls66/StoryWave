@@ -302,7 +302,7 @@
       <li><input type="checkbox" id="documentary" value="documentary"><label for="documentary">다큐멘터리</label></li>
       <li><input type="checkbox" id="sci-fi-fantasy" value="sci-fi-fantasy"><label for="sci-fi-fantasy">SF/판타지</label></li>
     </ul>
-    <a class="write-button" th:href="@{/board/Moviepostwrite}" onclick="checkLoginStatusAndRedirect(event)">
+    <a class="write-button" th:href="@{/board/Moviepostwrite}" onclick="checkLoginStatusAndRedirect1(event)">
       글쓰기
     </a>  </div>
   <table class="post-table">
@@ -327,7 +327,7 @@
 </body>
 <script>
 
-  function checkLoginStatusAndRedirect(event) {
+  function checkLoginStatusAndRedirect1(event) {
     event.preventDefault(); // 링크 클릭을 방지합니다.
 
     fetch('/check-login')
@@ -339,6 +339,25 @@
               } else {
                 // 로그인되지 않은 상태이면 로그인하라는 팝업을 띄움
                 alert('로그인 후 글쓰기 가능합니다. 로그인 해주세요!');
+                // 선택적으로 로그인 페이지로 리디렉션
+                // window.location.href = '/user/login';
+              }
+            })
+            .catch(error => console.error('로그인 상태 확인 중 오류 발생:', error));
+  }
+
+  function checkLoginStatusAndRedirect2(event){
+    event.preventDefault(); // 링크 클릭을 방지합니다.
+
+    fetch('/check-login')
+            .then(response => response.json())
+            .then(isLoggedIn => {
+              if (isLoggedIn) {
+                // 로그인된 상태이면 글쓰기 페이지로 이동
+                window.location.href = event.target.href;
+              } else {
+                // 로그인되지 않은 상태이면 로그인하라는 팝업을 띄움
+                alert('로그인 후 게시글 열람이 가능합니다. 로그인 해주세요!');
                 // 선택적으로 로그인 페이지로 리디렉션
                 // window.location.href = '/user/login';
               }
@@ -385,7 +404,7 @@
     });
     // 게시글 데이터 가져오기
     function fetchPosts() {
-      fetch('http://localhost:8081/post/1') // 상대경로를 사용하여 요청
+      fetch('http://localhost:8081/post/1') // 절대경로를 사용하여 요청
               .then(response => response.json())
               .then(data => {
                 totalPosts = data;
@@ -440,7 +459,7 @@
           return `
         <tr>
           <td>공지</td>
-          <td><a href="./posts_detail.html?id=${post.id}">${post.title}</a></td>
+<td><a href="http://localhost:8081/board/0/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
           <td>${post.nickname}</td>
           <td>${new Date(post.updated_at).toLocaleString()}</td>
           <td>${post.thumbs}</td>
@@ -450,7 +469,10 @@
         } else {
           nonNoticeCount++;
           return `
+
         <tr>
+          <td>${(page - 1) * postsPerPage - (page !== 1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
+          <td><a href="http://localhost:8081/board/1/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
           <td>${(page - 1) * postsPerPage -(page !==1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
           <td><a href="./post/${post.id}?userId=${users.userId}">${post.title}</a></td>
           <td>${post.nickname}</td>

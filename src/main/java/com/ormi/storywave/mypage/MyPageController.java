@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/mypage")
@@ -43,12 +40,20 @@ public class MyPageController {
   }
 
   @GetMapping("/update-user")
-  public String updateUser(Model model, HttpSession session) {
+  public String updateUserForm(Model model, HttpSession session) {
     String findUserId = (String)session.getAttribute("userId");
 
     UserDto userDto = userService.getUserById(findUserId).orElse(null);
 
     model.addAttribute("user", userDto);
+
+    return "mypage/update_user";
+  }
+
+  @PostMapping("/update-user")
+  public String updateUser(@ModelAttribute("user") UserDto userDto, Model model) {
+    UserDto updateduser = userService.updateUser(userDto.getUserId(),userDto).orElse(null);
+    model.addAttribute("user", updateduser);
 
     return "mypage/update_user";
   }

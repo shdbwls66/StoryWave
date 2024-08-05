@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="/posts_detailCss.css">
 </head>
 <body>
+
 <header>
-    <!-- 헤더 -->
-    <h1 style="display: none">게시물 상세 보기</h1>
+    <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
     <div class="nav-bar">
-        <a class="storywave-logo" th:href="@{|/home/login?userId=${users.userId}|}">
+        <a th:href="@{/home}" class="storywave-logo">
             <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu-cont">
@@ -28,9 +28,9 @@
                     <a th:href="@{/board/Bookpostlist}">도서 <span class="sub-text">리뷰/서평</span></a>
                 </div>
                 <div class="user-menu">
-                    <a th:href="@{/mypage}">마이페이지</a>
-                    <span>|</span>
-                    <a th:href="@{/home}">로그아웃</a>
+                        <a th:href="@{/mypage}">마이페이지</a>
+                        <span>|</span>
+                        <a th:href="@{/user/logout}">로그아웃</a>
                 </div>
             </div>
         </nav>
