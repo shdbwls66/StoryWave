@@ -28,17 +28,17 @@ public class AdminController {
         return "mypage/userList2";
     }
 
-    @PutMapping("/updateUserStatus/{id}")
+ /*   @PutMapping("/updateUserStatus/{userId}")
     public ResponseEntity<Map<String, String>> updateUserStatus(
-            @PathVariable("id") Long id,
+            @PathVariable("userId") String userId,
             @RequestBody User updateUserStatus) {
 
         User user = users.stream()
-                .filter(m -> m.getId().equals(id))
+                .filter(m -> m.getUserId().equals(userId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("멤버를 찾지못하였습니다."));
 
-        user.setActiveStatus(updateUserStatus.getActiveStatus());
+        user.setActiveStatus(updateUserStatus.isActiveStatus());
 
         Map<String, String> response = new HashMap<>();
         response.put("success", "true");
@@ -46,4 +46,29 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/mypage/{userId}")
+    @ResponseBody
+    public ResponseEntity<UserDto> getUserInfo(@PathVariable String userId) {
+        User user = userService.findById(userId);
+        if (user != null) {
+            UserDto userDto = UserDto.fromUsers(user);
+            return ResponseEntity.ok(userDto);
+        } else {
+            // 적절한 오류 처리
+            return ResponseEntity.notFound().build();
+        }
+    }*/
+
+    @GetMapping("/mypage/{userId}")
+    @ResponseBody
+    public UserDto getUserInfo(@PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user != null) {
+            return UserDto.fromUsers(user);
+        } else {
+            // 적절한 오류 처리 또는 기본값 반환
+            return new UserDto();
+        }
+
+    }
 }
