@@ -23,9 +23,9 @@
             </form>
             <div class="menu-container">
                 <div class="menu-cont2">
-                    <a th:href="@{/board/0/post}">공지사항</a>
-                    <a th:href="@{/board/1/post}">영화 <span class="sub-text">리뷰/서평</span></a>
-                    <a th:href="@{/board/2/post}">도서 <span class="sub-text">리뷰/서평</span></a>
+                    <a th:href="@{/board/Noticepostlist}">공지사항</a>
+                    <a th:href="@{/board/Moviepostlist}">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a th:href="@{/board/Bookpostlist}">도서 <span class="sub-text">리뷰/서평</span></a>
                 </div>
                 <div class="user-menu">
                     <a th:href="@{/mypage}">마이페이지</a>
@@ -41,15 +41,15 @@
     <h2 style="display: none">메인 컨텐츠</h2>
     <!--   조건문을 사용하여, 포스트 타입에 따라 다른 url로 이어지도록 함 -->
     <div class="post_menu" th:switch="${posts.postTypeId}">
-        <span th:case="0"><a th:href="@{/board/0/post}">◀ 목록</a></span>
-        <span th:case="1"><a th:href="@{/board/1/post}">◀ 목록</a></span>
-        <span th:case="2"><a th:href="@{/board/2/post}">◀ 목록</a></span>
+        <span th:case="0"><a th:href="@{/board/Noticepostlist}">◀ 목록</a></span>
+        <span th:case="1"><a th:href="@{/board/Moviepostlist}">◀ 목록</a></span>
+        <span th:case="2"><a th:href="@{/board/Bookpostlist}">◀ 목록</a></span>
         <span th:case="*"><a th:href="@{/index_afterLogin}">◀ 목록</a></span>
 
         <nav class="post_menu2" th:if="(${session.userNickname} == ${writer})">
             <a th:href="@{|/board/{post_type_id}/post/{postId}/edit|}">수정</a>
             <a style="cursor: pointer" class="postDelete">삭제</a>
-            <a th:href="@{|/board/{post_type_id}/new/post|}">글쓰기</a>
+            <a th:href="@{|/board/{post_type_id}/post/{postId}/edit|}">글쓰기</a>
         </nav>
         <nav class="post_menu2" th:if="${isAdmin}">
             <a style="cursor: pointer" class="postDelete">삭제</a>
@@ -136,10 +136,10 @@
 <script th:inline="javascript">
 
     //postid를 불러오는 부분 추가 (이렇게 불러오면 됨)
-    // function getQueryParam(param) {
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     return urlParams.get(param);
-    // }
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
     //
     // document.addEventListener('DOMContentLoaded', function() {
     //     const postId = getQueryParam('id');
@@ -381,26 +381,26 @@
         });
     }
 
-    // function openPostModal(){
-    //     const postId = [[${posts.postId}]];
-    //     const userId = [[${session.userId}]];
-    //     $.ajax({
-    //             url: `/post/${postId}?userId=${userId}`,
-    //             type: 'GET',
-    //             dataType: 'json',
-    //             success: function (response) {
-    //                 document.getElementById('modalCancelBtn').setAttribute('onclick', `closePostModal()`);
-    //                 document.getElementById('modalDeleteBtn').setAttribute('onclick', `deletePost(${postId})`);
-    //                 openPostModal();
-    //             },
-    //             error: function (request, status, error) {
-    //                 console.log(error);
-    //                 closePostModal();
-    //             }
-    //         }
-    //     )
-    // }
-    //
+    function openPostModal(){
+        const postId = [[${posts.postId}]];
+        const userId = [[${session.userId}]];
+        $.ajax({
+                url: `/post/${postId}?userId=${userId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    document.getElementById('modalCancelBtn').setAttribute('onclick', `closePostModal()`);
+                    document.getElementById('modalDeleteBtn').setAttribute('onclick', `deletePost(${postId})`);
+                    openPostModal();
+                },
+                error: function (request, status, error) {
+                    console.log(error);
+                    closePostModal();
+                }
+            }
+        )
+    }
+
     function deletePost(postId) {
         const userId = [[${session.userId}]];
         console.log(userId);
@@ -411,11 +411,11 @@
             dataType: 'json',
             success: function () {
                 console.log("댓글 삭제");
-                closeCommentModal();
+                closePostModal();
             },
             error: function (request, status, error) {
-                alert("댓글 삭제하지 못하였습니다.");
-                closeCommentModal();
+                alert("게시글을 삭제하지 못하였습니다.");
+                closePostModal();
             }
         });
     }

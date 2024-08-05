@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -194,7 +195,7 @@ public class PostService {
     }
   }
 
-  // 글쓴이만 포스트 수정 가능
+  @Transactional
   public Optional<PostDto> updatePost(Long postTypeId, Long postId, PostDto updatePostDto) {
     return postRepository
         .findByBoard_PostTypeIdAndId(postTypeId, postId)
@@ -207,7 +208,7 @@ public class PostService {
             });
   }
 
-  // 글쓴이나, role이 admin인 사람만 포스트 삭제 가능
+  @Transactional
   public boolean deletePosts(Long postTypeId, Long postId) {
     return postRepository
         .findById(postId)

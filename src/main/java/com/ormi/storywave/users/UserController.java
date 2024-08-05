@@ -65,9 +65,7 @@ public class UserController {
             model.addAttribute("endDate", endDate);
             return "login/ban";
         } else { // 로그인 성공
-            session.setAttribute("userId", loginResult.getUserId());
-            session.setAttribute("userRole", loginResult.getRole());
-            session.setAttribute("userNickname", loginResult.getNickname());
+            session.setAttribute("userId", loginResult.getUserId()); // 로그인 세션 유지
             return "index_afterLogin";
         }
     }

@@ -54,7 +54,7 @@ public class PostAPIController {
     return ResponseEntity.ok(postSummaries);
   }
 
-  @GetMapping("/{post_type_id}/post/{postId}")
+  @GetMapping("/{post_type_id}/postDetail/{postId}")
   public ResponseEntity<PostDto> getPost(@PathVariable("post_type_id") Long post_type_id, @PathVariable("postId") Long postId) {
     PostDto postDto = postService.getPostByPostTypeIdAndPostId(post_type_id, postId);
     return ResponseEntity.ok(postDto);
