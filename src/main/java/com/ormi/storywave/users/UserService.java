@@ -41,6 +41,8 @@ public class UserService {
         return userRepository.findById(userId)
                 .map(users -> {
                     users.setPassword(updatedUsers.getPassword());
+                    users.setUsername(updatedUsers.getUsername());
+                    users.setEmail(updatedUsers.getEmail());
                     users.setNickname(updatedUsers.getNickname());
                     users.setUpdatedAt(LocalDateTime.now());
                     return UserDto.fromUsers(userRepository.save(users));
