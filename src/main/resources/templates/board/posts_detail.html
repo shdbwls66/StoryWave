@@ -404,12 +404,17 @@
     function deletePost() {
         const postId = [[${posts.postId}]];
         const userId = [[${users.userId}]];
+        var csrfToken = $('meta[name="_csrf"]').attr('content');
+        var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
         console.log(userId);
 
         $.ajax({
             url: `/post/${postId}?userId=${userId}`,
             type: 'DELETE',
             dataType: 'json',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            },
             success: function () {
                 console.log("댓글 삭제");
                 alert('게시글이 삭제되었습니다.');

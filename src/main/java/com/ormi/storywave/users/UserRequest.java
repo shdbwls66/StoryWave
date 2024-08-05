@@ -2,6 +2,7 @@ package com.ormi.storywave.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class UserRequest {
     @Getter
@@ -18,6 +19,7 @@ public class UserRequest {
 
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class LoginDto{
         private String userId;
         private String password;
