@@ -5,12 +5,15 @@ import com.ormi.storywave.users.User;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserRepository;
 import com.ormi.storywave.users.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -91,22 +94,31 @@ public class PostService {
           MultipartFile[] imageFiles,
           List<String> categoryNames,
           Long post_type_id,
-          Integer thumbs,String userid) {  // User 파라미터 추가
+          Integer thumbs, HttpSession httpSession) {  // User 파라미터 추가
 
 
-    User user = userRepository.findById(userid)
-            .orElseThrow(() -> new RuntimeException("User not found with id: " + userid));
+    String findUserId = (String)httpSession.getAttribute("userId");
+
+    UserDto userDto = userService.getUserById(findUserId).orElse(null);
+
+    // 사용자 정보가 없으면 로그인 페이지로 리디렉션
+    /*if (userDto == null) {
+      return "redirect:/login";
+    }*/
+
+    // 사용자 정보를 데이터베이스에서 가져옵니다.
+    User user = userRepository.findById(findUserId)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + findUserId));
 
     String role = user.getRole();
-
     // 공지사항은 관리자만 가능
-    if ("USER".equals(role)) {
-      if (post_type_id == 0) {
+    if (post_type_id == 0) {
+      if (!"ADMIN".equals(role)) {
         throw new RuntimeException("공지사항은 관리자만 작성 가능합니다.");
       }
       //삭제 가능!
-    } else if ("ADMIN".equals(role)) {
-        if(post_type_id == 1 || post_type_id == 2) {
+    } else if (post_type_id == 1 || post_type_id == 2) {
+        if("ADMIN".equals(role) ){
           throw new RuntimeException("관리자는 공지사항만 작성 가능합니다.");
         }
     } else {
