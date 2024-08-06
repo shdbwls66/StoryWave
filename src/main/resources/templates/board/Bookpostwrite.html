@@ -278,39 +278,39 @@
 </head>
 <body>
 <header>
-    <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
-    <div class="nav-bar">
-        <a th:href="@{/home}" class="storywave-logo">
-            <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
-        </a>
-        <nav class="menu-cont">
-            <form class="search-form">
-                <label for="search-input" style="display:none;">검색</label>
-                <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
-                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
-            </form>
-            <div class="menu-container">
-                <div class="menu-cont2">
-                    <a th:href="@{/board/Noticepostlist}">공지사항</a>
-                    <a th:href="@{/board/Moviepostlist}">영화 <span class="sub-text">리뷰/서평</span></a>
-                    <a th:href="@{/board/Bookpostlist}">도서 <span class="sub-text">리뷰/서평</span></a>
-                </div>
-                <div class="user-menu">
-                    <div th:if="${!isLoggedIn}">
-                        <a th:href="@{/user/join}">회원가입</a>
-                        <span>|</span>
-                        <a th:href="@{/user/login}">로그인</a>
-                    </div>
-                    <div th:if="${isLoggedIn}">
-                        <a th:href="@{/mypage}">마이페이지</a>
-                        <span>|</span>
-                        <a th:href="@{/user/logout}">로그아웃</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <hr class="firstLine">
+  <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
+  <div class="nav-bar">
+    <a th:href="@{/home}" class="storywave-logo">
+      <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
+    </a>
+    <nav class="menu-cont">
+      <form class="search-form">
+        <label for="search-input" style="display:none;">검색</label>
+        <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
+        <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
+      </form>
+      <div class="menu-container">
+        <div class="menu-cont2">
+          <a th:href="@{/board/Noticepostlist}">공지사항</a>
+          <a th:href="@{/board/Moviepostlist}">영화 <span class="sub-text">리뷰/서평</span></a>
+          <a th:href="@{/board/Bookpostlist}">도서 <span class="sub-text">리뷰/서평</span></a>
+        </div>
+        <div class="user-menu">
+          <div th:if="${!isLoggedIn}">
+            <a th:href="@{/user/join}">회원가입</a>
+            <span>|</span>
+            <a th:href="@{/user/login}">로그인</a>
+          </div>
+          <div th:if="${isLoggedIn}">
+            <a th:href="@{/mypagecss}">마이페이지</a>
+            <span>|</span>
+            <a th:href="@{/user/logout}">로그아웃</a>
+        </div>
+      </div>
+      </div>
+    </nav>
+  </div>
+  <hr class="firstLine">
 </header>
 <main>
     <div class="container">
