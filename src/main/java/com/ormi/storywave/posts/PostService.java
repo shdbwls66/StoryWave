@@ -47,6 +47,10 @@ public class PostService {
     @Autowired
     private UserService userService;
 
+  public Page<Post> getPostsByUserId(String userId, Pageable pageable) {
+    return postRepository.findByUserUserId(userId, pageable);
+  }
+
   // 페이지 번호, 크기를 기반으로 페이지네이션된 게시물 반환 메서드
   public Page<Post> findPaginated(int page, int pageSize) {
     Pageable pageable = PageRequest.of(page - 1, pageSize);
