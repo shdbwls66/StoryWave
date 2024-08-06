@@ -1,11 +1,10 @@
 package com.ormi.storywave.users;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/user")
@@ -24,6 +23,7 @@ public class UserController {
     @PostMapping("/join")
     public String addUser(@ModelAttribute UserRequest.JoinDto joinDto) {
         UserDto addedUser = userService.addUser(joinDto);
+//        model.addAttribute("user", addedUser);
         return "join/welcome";
     }
 
@@ -33,35 +33,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserRequest.LoginDto loginDto, HttpSession session, Model model) {
+    public String login(@ModelAttribute UserRequest.LoginDto loginDto, Model model) {
 
-        UserDto loginResult = userService.loginUser(loginDto);
-
-        if (loginResult == null) { // 로그인 실패
-            model.addAttribute("error", "아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
+        try { // userId를 받는 게 나을까 객체를 받는 게 나을까
+            //String userId = userService.loginUser(loginDto);
+        } catch (IllegalArgumentException e){
+            model.addAttribute("message", e.getMessage());
             return "login/login";
-        } else if (!loginResult.isActiveStatus()) { // 정지회원의 경우
-            return "login/ban";
-        } else { // 로그인 성공
-            session.setAttribute("userId", loginResult.getUserId());
-            return "index_afterLogin";
         }
+
+        return "home"; // index_afterLogin에 맵핑이 안 된 게 많아서 오류 발생. 추후 변경
     }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        if (session.getAttribute("userId") != null) {
-            session.invalidate();
-        }
-        return "redirect:/home";
-    }
-
-    @GetMapping("/update-user")
-    public String updateUser(Model model, HttpSession session)
-        String findUserId = (String)session.getAttribute("userId");
-    UserDto userDto = userService.getUserById(findUserId);
-
-
-
-
 }
