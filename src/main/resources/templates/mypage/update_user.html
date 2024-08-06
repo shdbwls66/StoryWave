@@ -211,7 +211,7 @@
 </header>
 <main>
     <div class="update-container">
-        <form th:object="${user}" th:action="@{/mypagecss/update-user}" method="post" id="updateForm">
+        <form th:object="${user}" id="updateForm">
             <div>
                 <label for="id">아이디</label><br>
                 <input type="text" id="id" name="userId" th:value="*{userId}" readonly>
@@ -243,7 +243,7 @@
                 <input type="text" id="nickname" name="nickname" th:value="*{nickname}" required>
                 <span id="confirmNickname" class="check-ok"></span>
             </div>
-            <button type="submit" id="updateBtn">회원 정보 수정</button>
+            <button id="updateBtn">회원 정보 수정</button>
         </form>
     </div>
 </main>
@@ -256,7 +256,7 @@
     $("#nickname").on("focusout", function () {
         let nickname = $("#nickname").val();
 
-        if( beforeNickname === nickname) {
+        if (beforeNickname === nickname) {
             // $("#confirmNickname").css("color", "red").text("동일한 닉네임입니다.");
             $("#confirmNickname").empty();
             return false;
@@ -301,7 +301,29 @@
         }
     });
 
-
+    // 회원 정보 수정
+    $(document).on("click", "#updateBtn", function() {
+        const data = {
+            userId: $("#id").val(),
+            password: $("#password").val(),
+            username: $("#username").val(),
+            email: $("#email").val(),
+            nickname: $("#nickname").val()
+        };
+        $.ajax({
+            type: "put",
+            url: `/api/user/${data.userId}`,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }).done((result) => {
+            if (result != null) {
+                alert("회원 정보를 수정하였습니다.");
+            }
+        }).fail(() => {
+            alert("회원 정보 수정 실패");
+        });
+    })
 </script>
 </body>
 <!--</th:block>-->
