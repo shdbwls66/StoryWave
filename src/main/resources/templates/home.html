@@ -141,7 +141,8 @@
             padding: 30px 0;
             gap: 15px;
         }
-        .mainSection_second{
+
+        .mainSection_second {
             background-color: #F9F7F4;
             padding: 12px 14px;
             border-radius: 5px;
@@ -227,19 +228,19 @@
             font-weight: bold;
         }
 
-        #articleCont_firstImg{
+        #articleCont_firstImg {
             background-image: url(/photo/new_img.png);
             background-size: 25vh;
             background-position-y: 8vh;
         }
 
-        #articleCont_secondImg{
+        #articleCont_secondImg {
             background-image: url(/photo/popcorn_img.png);
             background-size: 13vh;
             background-position-y: 5vh;
         }
 
-        #articleCont_thirdImg{
+        #articleCont_thirdImg {
             background-image: url(/photo/book_img.png);
             background-size: 15vh;
             background-position-y: 6vh;
@@ -296,7 +297,8 @@
                 <tbody>
                 <tr th:each="noticePost : ${noticePosts}">
                     <td th:text="${noticePost.id}">id</td>
-                    <td><a th:text="${noticePost.title}" th:href="@{|/board/0/post/${noticePost.id}|}" onclick="checkLoginStatusAndRedirect2(event)">제목</a></td>
+                    <td><a th:text="${noticePost.title}" th:href="@{|/board/0/post/${noticePost.id}|}"
+                           onclick="checkLoginStatusAndRedirect2(event)">제목</a></td>
                     <td th:text="${#temporals.format(noticePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
@@ -328,7 +330,8 @@
                 <tbody>
                 <tr th:each="moviePost : ${moviePosts}">
                     <td th:text="${moviePost.id}">id</td>
-                    <td><a th:text="${moviePost.title}" th:href="@{|/board/1/post/${moviePost.id}|}" onclick="checkLoginStatusAndRedirect2(event)">제목</a></td>
+                    <td><a th:text="${moviePost.title}" th:href="@{|/board/1/post/${moviePost.id}|}"
+                           onclick="checkLoginStatusAndRedirect2(event)">제목</a></td>
                     <td th:text="${#temporals.format(moviePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
@@ -344,7 +347,8 @@
                 <tbody>
                 <tr th:each="bookPost : ${bookPosts}">
                     <td th:text="${bookPost.id}">id</td>
-                    <td><a th:text="${bookPost.title}" th:href="@{|/board/2/post/${bookPost.id}|}" onclick="checkLoginStatusAndRedirect2(event)">제목</a></td>
+                    <td><a th:text="${bookPost.title}" th:href="@{|/board/2/post/${bookPost.id}|}"
+                           onclick="checkLoginStatusAndRedirect2(event)">제목</a></td>
                     <td th:text="${#temporals.format(bookPost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
@@ -366,14 +370,14 @@
 </main>
 <script th:inline="javascript">
     //검색기능
-    document.getElementById('search-form').addEventListener('submit', function(event) {
+    document.getElementById('search-form').addEventListener('submit', function (event) {
         event.preventDefault();
         const searchInput = document.getElementById('search-input').value;
         const searchUrl = `/board/Searchlist?keyword=${encodeURIComponent(searchInput)}`;
         window.location.href = searchUrl;
     });
 
-    function checkLoginStatusAndRedirect2(event){
+    function checkLoginStatusAndRedirect2(event) {
         event.preventDefault(); // 링크 클릭을 방지합니다.
 
         fetch('/check-login')

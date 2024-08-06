@@ -75,9 +75,13 @@ public class PostAPIController {
   }
 
   @PutMapping("{post_type_id}/postDetail/{postId}")
-//  public ResponseEntity<PostDto> updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session, @RequestBody PostDto postDto){
-  public ResponseEntity<PostDto> updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, @RequestParam("userId") String userId, @RequestBody PostDto postDto){
-//    String userId = (String) session.getAttribute("userId");
+  public ResponseEntity<PostDto> updatePost(
+          @PathVariable("post_type_id") Long postTypeId,
+          @PathVariable("postId") Long postId,
+          HttpSession session,
+          @RequestBody PostDto postDto){
+//  public ResponseEntity<PostDto> updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, @RequestParam("userId") String userId, @RequestBody PostDto postDto){
+    String userId = (String) session.getAttribute("userId");
     return postService.updatePost(postId, postDto, userId)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
@@ -85,7 +89,7 @@ public class PostAPIController {
 
   @DeleteMapping("{post_type_id}/postDetail/{postId}")
   public ResponseEntity<Void> deletePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session){
-//    String userId = (String) session.getAttribute("userId");
+    String userId = (String) session.getAttribute("userId");
     postService.deletePosts(postTypeId, postId);
     return ResponseEntity.noContent().build();
   }
