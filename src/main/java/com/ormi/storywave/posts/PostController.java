@@ -14,9 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import java.util.List;
@@ -144,23 +142,28 @@ public class PostController {
     Post post = postService.getPostByPostTypeIdAndPostId(postTypeId, postId).toPost();
     post.setTitle(updatedPost.getTitle());
     post.setContent(updatedPost.getContent());
-
+//    post.setCategories(convertCategories(categories));
+//    post.setImages(processImages(images));
     return "redirect:board/" + postTypeId + "/post/" + postId;
   }
 
+//  private Set<Long> convertCategories(List<String> categories){
+//    return categories.stream()
+//            .map(Long::parseLong)
+//            .collect(Collectors.toSet());
+//  }
+//
 //  private List<Image> processImages(MultipartFile[] files){
-//    List<Image> images = new ArrayList<>();
+//    List<Image> imageList = new ArrayList<>();
 //    for (MultipartFile file : files) {
-//      try {
+//      if (!file.isEmpty()) {
 //        Image image = new Image();
-//        image.setData(file.getBytes());
-//        image.set(file.getOriginalFilename());
-//        images.add(image);
-//      } catch (IOException e) {
-//        e.printStackTrace();
+//        imageList.add(image);
 //      }
 //    }
-//    return images;
+//    return imageList;
 //  }
+
+
 
 }

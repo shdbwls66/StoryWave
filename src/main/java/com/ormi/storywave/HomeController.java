@@ -1,16 +1,30 @@
 package com.ormi.storywave;
 
+import com.ormi.storywave.board.PostListDto;
+import com.ormi.storywave.posts.PostService;
+import com.ormi.storywave.users.UserDto;
+import com.ormi.storywave.users.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class HomeController {
+    private UserService userService;
+    private PostService postService;
+
+    public HomeController(UserService userService, PostService postService) {
+        this.userService = userService;
+        this.postService = postService;
+    }
+
     @GetMapping("/home")
     public String home(Model model) {
 //        model.addAttribute("message", "Hello World!");
-        return "home";
-    }
 
     // 홈화면에 띄울 게시물 데이터 입니다.
     List<PostListDto> noticePosts = latestPosts(0L);

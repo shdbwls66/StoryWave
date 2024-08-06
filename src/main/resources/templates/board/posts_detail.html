@@ -49,11 +49,11 @@
 
         <nav class="post_menu2" th:if="(${users.nickname} == ${writer})">
             <a onclick="gotoUpdatePost()">수정</a>
-            <a style="cursor: pointer" class="postDelete" onclick="openPostModal()">삭제</a>
+            <a style="cursor: pointer" class="postDelete" onclick="postModal()">삭제</a>
             <a onclick="checkLoginStatusAndRedirect1(event)">글쓰기</a>
         </nav>
         <nav class="post_menu2" th:if="${isAdmin}">
-            <a style="cursor: pointer" class="postDelete" onclick="openPostModal()">삭제</a>
+            <a style="cursor: pointer" class="postDelete" onclick="postModal()">삭제</a>
             <a onclick="checkLoginStatusAndRedirect1(event)">글쓰기</a>
         </nav>
         <nav class="post_menu2" th:if="${users.nickname} != ${writer} and ${isAdmin}">

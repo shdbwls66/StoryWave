@@ -2,6 +2,7 @@ package com.ormi.storywave.users;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Range;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +37,8 @@ public class UserService {
         return fromUsers(savedUsers);
     }
 
-    public final Optional<UserDto> getUserById(String userId) {
-        return userRepository.findById(userId)
+    public Optional<UserDto> getUserById(String userId) {
+        return userRepository.findByUserId(userId)
                 .map(UserDto::fromUsers);
     }
 
@@ -140,10 +141,6 @@ public class UserService {
         // UserDto로 변환하여 반환
         return fromUsers(user); // User 객체를 UserDto로 변환
     }
-
-
-
-
     /*private User iaAdmin(String userId) {
         return users.stream()
                 .filter(p -> p.getId(id).equals(userId))
@@ -151,5 +148,10 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("id에 해당하는 글을 찾을 수 없습니다."));
     }*/
 
+
+    public Optional<UserDto> getUserByPostId(Long postId){
+        return userRepository.findByPosts_Id(postId)
+                .map(UserDto::fromUsers);
+    }
 
 }

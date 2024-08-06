@@ -70,9 +70,10 @@ public class PostAPIController {
   }
 
   @PutMapping("{post_type_id}/postDetail/{postId}")
-  public ResponseEntity<PostDto> updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session, @RequestBody PostDto postDto){
+//  public ResponseEntity<PostDto> updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session, @RequestBody PostDto postDto){
+  public ResponseEntity<PostDto> updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, @RequestParam("userId") String userId, @RequestBody PostDto postDto){
 //    String userId = (String) session.getAttribute("userId");
-    return postService.updatePost(postTypeId, postId, postDto)
+    return postService.updatePost(postId, postDto, userId)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
   }
