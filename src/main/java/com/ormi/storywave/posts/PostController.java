@@ -104,8 +104,8 @@ public class PostController {
 //    String userId = (String) session.getAttribute("userId");
     Post post = postService.getPostByPostTypeIdAndPostId(postTypeId, postId).toPost();
     List<ImageDto> imageList = post.getImages().stream().map(ImageDto::fromImage).toList();
-    Set<Category> categories = post.getCategories().stream().collect(Collectors.toSet());
-    post.setCategories(new HashSet<>(categories));
+    Set<Category> categories = new HashSet<>(post.getCategories());
+    post.setCategories(categories);
 
     UserDto user =
         userService.getUserById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저는 찾을 수 없습니다."));

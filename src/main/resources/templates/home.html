@@ -294,11 +294,7 @@
                 <tbody>
                 <tr th:each="noticePost : ${noticePosts}">
                     <td th:text="${noticePost.id}">id</td>
-<<<<<<< HEAD
                     <td><a th:text="${noticePost.title}" th:href="@{|/board/0/post/${noticePost.id}?userId=${userId}|}">제목</a></td>
-=======
-                    <td th:text="${noticePost.title}">제목</td>
->>>>>>> 3c2c0499d61e001fa8598431193fa87c16c1cba9
                     <td th:text="${#temporals.format(noticePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
@@ -313,9 +309,7 @@
                 <tbody>
                 <tr>
                     <td>id</td>
-                    <td>
-                        <a>베스트 게시물 제목</a>
-                    </td>
+                    <td><a>베스트 게시물 제목</a></td>
                     <td>게시물 날짜</td>
                 </tr>
                 </tbody>
