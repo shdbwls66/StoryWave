@@ -3,6 +3,9 @@ package com.ormi.storywave.mypage;
 import com.ormi.storywave.comment.CommentService;
 import com.ormi.storywave.posts.Post;
 import com.ormi.storywave.posts.PostService;
+import com.ormi.storywave.users.UserDto;
+import com.ormi.storywave.users.UserService;
+import jakarta.servlet.http.HttpSession;
 import com.ormi.storywave.users.User;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserService;
@@ -11,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,16 +38,17 @@ public class MyPageController {
   @GetMapping
   public String showMyPage(HttpSession httpSession, Model model) {
 
-    //사용자  로그인정보 확인 가능한지 해봐야함
-    User user = (User) httpSession.getAttribute("user");
+    String findUserId = (String)httpSession.getAttribute("userId");
+
+    UserDto userDto = userService.getUserById(findUserId).orElse(null);
 
     // 사용자 정보가 없으면 로그인 페이지로
-    if (user == null) {
+    if (userDto == null) {
       return "redirect:/login";
     }
 
-    String role = userService.getUserRole(user.getUserId());
-
+    String role = userService.getUserRole(userDto.getUserId());
+    System.out.println(role);
     if ("ADMIN".equals(role)){
       return "mypage/adminMypage";
     } else if ("USER".equals(role)) {
@@ -72,5 +74,24 @@ public class MyPageController {
     model.addAttribute("currentPage", page); // 현재 페이지 번호
     model.addAttribute("totalPages", postPage.getTotalPages()); // 총 페이지 수
     return "mypage/mypost"; // mypage/mypost.html 템플릿을 반환
+  }
+
+  @GetMapping("/update-user")
+  public String updateUserForm(Model model, HttpSession session) {
+    String findUserId = (String)session.getAttribute("userId");
+
+    UserDto userDto = userService.getUserById(findUserId).orElse(null);
+
+    model.addAttribute("user", userDto);
+
+    return "mypage/update_user";
+  }
+
+  @PostMapping("/update-user")
+  public String updateUser(@ModelAttribute("user") UserDto userDto, Model model) {
+    UserDto updateduser = userService.updateUser(userDto.getUserId(),userDto).orElse(null);
+    model.addAttribute("user", updateduser);
+
+    return "mypage/update_user";
   }
 }
