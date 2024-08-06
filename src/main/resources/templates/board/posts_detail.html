@@ -335,7 +335,7 @@
 <header>
     <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
     <div class="nav-bar">
-        <a th:href="@{/home/login}" class="storywave-logo">
+        <a th:href="@{/home}" class="storywave-logo">
             <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu-cont">
@@ -406,7 +406,7 @@
             </span>
         </p>
         <div class="post_contents_box">
-            <p class="post_contents" th:text="${posts.content}">
+            <p class="post_contents" th:utext="${posts.content}">
                 <!--                게시글의 내용이 들어갈 곳-->
             </p>
         </div>

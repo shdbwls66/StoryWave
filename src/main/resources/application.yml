@@ -38,10 +38,17 @@ spring:
     encoding: UTF-8
     enabled: true
 
+  web:
+    resources:
+      static-locations:
+      - classpath:/static/
+      - file:/var/www/images/
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 file:
-  upload-dir: /path/to/upload/directory
+  upload-dir: /var/www/images/
+

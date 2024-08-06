@@ -198,15 +198,27 @@ a {
     font-size: 10pt;
 }
 
-.post_cont, .comments_cont {
+.post_cont {
+    width: 100%;
+    height: 90%;
+    font-size: 10pt;
+    background-color: #F9F7F4;
+    display: flex;
+    flex-direction: column;
+}
+.post_contents img {
+    max-width: 100%;
+    height: auto;
+}
+.comments_cont{
     width: 100%;
     height: 100vh;
     font-size: 10pt;
     background-color: #F9F7F4;
     display: flex;
     flex-direction: column;
+    padding-top: 10px;
 }
-
 .post_title {
     background-color: white;
     padding: 6px 9px;
@@ -231,9 +243,10 @@ a {
     flex-direction: column;
     justify-content: space-between;
     padding: 17px 9px;
-    height: 100%;
+    height: auto;
+    overflow: auto;
+    box-sizing: border-box;
 }
-
 .post_thumbs {
     display: flex;
     flex-direction: row;

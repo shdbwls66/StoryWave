@@ -204,8 +204,11 @@ public class PostService {
     byte[] imageBytes = Base64.getDecoder().decode(base64Image);
     System.out.println("Decoded image size: " + imageBytes.length + " bytes");
 
+    // 파일 이름 생성
     String fileName = UUID.randomUUID().toString() + ".jpg";
-    File file = new File(uploadDir + fileName);
+    // 파일을 저장할 디렉토리 경로
+    String filePath = uploadDir + fileName; // 전체 파일 경로
+    File file = new File(filePath);
 
     try {
       if (!file.exists()) {
@@ -213,15 +216,20 @@ public class PostService {
         file.createNewFile();
       }
 
+      // 파일에 이미지 바이트를 기록
       FileUtils.writeByteArrayToFile(file, imageBytes);
       System.out.println("Image saved to file: " + file.getAbsolutePath());
 
+      // 웹에서 접근할 URL 경로
+      String imageUrl = "/images/" + fileName;
+
+      // 이미지 객체 설정
       Image image = new Image();
-      image.setUrl(file.getAbsolutePath());
+      image.setUrl(imageUrl);  // 웹 경로를 URL로 설정
       image.setPost(post);
       post.getImages().add(image);
 
-      return file.getAbsolutePath();
+      return imageUrl;  // 반환값을 URL로 설정
     } catch (IOException e) {
       e.printStackTrace();
       System.err.println("Failed to save image: " + e.getMessage());
