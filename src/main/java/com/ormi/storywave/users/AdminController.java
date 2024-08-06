@@ -15,27 +15,28 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
-
     private List<User> users = new ArrayList<>();
 
-    @GetMapping("/userList")
-    public String getAllUsers(HttpSession session, Model model) {
 
-        //사용자 정보 확인 가능한지 해봐야함
-        User user = (User) session.getAttribute("user");
+
+    @GetMapping("/userList")
+    public String getAllUsers(HttpSession httpSession, Model model) {
+
+        String findUserId = (String)httpSession.getAttribute("userId");
+
+        UserDto userDto = userService.getUserById(findUserId).orElse(null);
 
         // 사용자 정보가 없으면 로그인 페이지로 리디렉션
-        if (user == null) {
+        if (userDto == null) {
             return "redirect:/login";
         }
 
-        String userId = user.getUserId();
-        String role = userService.getUserRole(userId);
+        List<UserDto> users = userService.getAllUsers();
+        model.addAttribute("users", users);
 
+        String role = userService.getUserRole(userDto.getUserId());
 
         if ("ADMIN".equals(role)){
-            List<UserDto> users = userService.getAllUsers();
-            model.addAttribute("users", users);
             return "mypage/userList";
         } else if ("USER".equals(role)) {
             return "donotaccess";
