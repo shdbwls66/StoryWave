@@ -1,8 +1,7 @@
 package com.ormi.storywave.users;
 
-import com.ormi.storywave.posts.PostDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,18 +10,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.ormi.storywave.users.UserDto.fromUsers;
+
 @Transactional
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
-
 
     @Autowired
-    public UserService(UserRepository userRepository, MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.mappingJackson2HttpMessageConverter = mappingJackson2HttpMessageConverter;
     }
+
 
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
@@ -34,16 +33,11 @@ public class UserService {
         User users = usersDto.toUsers();
         users.setCreatedAt(LocalDateTime.now());
         User savedUsers = userRepository.save(users);
-        return UserDto.fromUsers(savedUsers);
+        return fromUsers(savedUsers);
     }
 
-    public Optional<UserDto> getUserById(String userId) {
+    public final Optional<UserDto> getUserById(String userId) {
         return userRepository.findById(userId)
-                .map(UserDto::fromUsers);
-    }
-
-    public Optional<UserDto> getUserByPostId(Long postId){
-        return userRepository.findByPosts_Id(postId)
                 .map(UserDto::fromUsers);
     }
 
@@ -55,7 +49,7 @@ public class UserService {
                     users.setEmail(updatedUsers.getEmail());
                     users.setNickname(updatedUsers.getNickname());
                     users.setUpdatedAt(LocalDateTime.now());
-                    return UserDto.fromUsers(userRepository.save(users));
+                    return fromUsers(userRepository.save(users));
                 });
     }
 
@@ -95,7 +89,7 @@ public class UserService {
                         .activeStatus(defaultStatus)
                         .createdAt(LocalDateTime.now())
                         .build());
-        return UserDto.fromUsers(savedUser);
+        return fromUsers(savedUser);
     }
 
     public UserDto loginUser(UserRequest.LoginDto loginDto) {
@@ -116,4 +110,46 @@ public class UserService {
 
         return foundUser.orElse(null);
     }
+
+
+
+    public String getUserRole(String userId) {
+        return findByUserId(userId).getRole();
+    }
+
+    public User findByUserId(String userId) {
+        return userRepository.findByUserId(userId).orElse(null);
+    }
+
+    public UserDto changeUserStatus(String userId, UserDto userDto) {
+        User user = findByUserId(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+
+        // User 상태 업데이트
+        user.setActiveStatus(userDto.isActiveStatus());
+        user.setBanReason(userDto.getBanReason()); // UserDto에 추가된 banReason 설정
+        user.setBanPeriod(userDto.getBanPeriod()); // UserDto에 추가된 banPeriod 설정
+
+        // 변경 사항 저장
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user); // 사용자 정보 저장
+
+        // UserDto로 변환하여 반환
+        return fromUsers(user); // User 객체를 UserDto로 변환
+    }
+
+
+
+
+    /*private User iaAdmin(String userId) {
+        return users.stream()
+                .filter(p -> p.getId(id).equals(userId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("id에 해당하는 글을 찾을 수 없습니다."));
+    }*/
+
+
 }

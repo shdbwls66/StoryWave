@@ -2,9 +2,13 @@ package com.ormi.storywave.posts;
 
 import com.ormi.storywave.board.Category;
 import com.ormi.storywave.board.CategoryDto;
+import com.ormi.storywave.board.PostListDto;
+import com.ormi.storywave.comment.CommentRepository;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserService;
+import com.ormi.storywave.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import java.util.List;
 
 
 @Controller
@@ -52,8 +58,9 @@ public class PostController {
     }
 
     // 게시물
-    PostDto posts = postService
-            .getPostByPostTypeIdAndPostId(postTypeId, postId);
+    PostDto posts =
+            postService
+                    .getPostByPostTypeIdAndPostId(postTypeId, postId);
 
     UserDto users = userService.getUserById(userId)
             .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
@@ -70,12 +77,21 @@ public class PostController {
     }
 
     boolean isAdmin = users.getRole().equals("admin");
+    model.addAttribute("like", like);
+
+    // 권한 테스트를 위해 임시로 작성
+    String role = users.getRole();
 
     model.addAttribute("like", like); // 공감
     model.addAttribute("users", users); // 유저
     model.addAttribute("writer", writer); // 글쓴이
     model.addAttribute("posts", posts); //게시물
     model.addAttribute("isAdmin", isAdmin); // 권한
+
+    model.addAttribute("users", users); // 유저
+
+    model.addAttribute("role", role); // 권한
+
     model.addAttribute("comments", posts.getComments().size()); // 댓글 개수
 
     return "board/posts_detail";

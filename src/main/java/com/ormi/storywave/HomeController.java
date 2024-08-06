@@ -1,45 +1,15 @@
 package com.ormi.storywave;
 
-import com.ormi.storywave.users.UserDto;
-import com.ormi.storywave.users.UserService;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.ormi.storywave.board.PostListDto;
-import com.ormi.storywave.posts.Post;
-import com.ormi.storywave.posts.PostDto;
-import com.ormi.storywave.posts.PostService;
-import com.ormi.storywave.users.UserDto;
-import com.ormi.storywave.users.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import java.util.Optional;
 
 @Controller
 public class HomeController {
-  @Autowired private PostService postService;
-  @Autowired private UserService userService; // UserService를 주입받아야 합니다.
-
-  @GetMapping("/home")
-  public String home(Model model, HttpSession session) {
-    // 세션에서 userId를 가져옵니다.
-    String userId = (String) session.getAttribute("userId");
-
-    if (userId != null) {
-      Optional<UserDto> user = userService.getUserById(userId);
-      if (user.isPresent()) {
-        model.addAttribute("isLoggedIn", true);
-        model.addAttribute("userId", userId);
-      } else {
-        model.addAttribute("isLoggedIn", false);
-      }
-    } else {
-      model.addAttribute("isLoggedIn", false);
+    @GetMapping("/home")
+    public String home(Model model) {
+//        model.addAttribute("message", "Hello World!");
+        return "home";
     }
 
     // 홈화면에 띄울 게시물 데이터 입니다.

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>마이페이지</title>
-    <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
+    <link rel="icon" href="photo/StoryWaveLogo.png" type="image/x-icon">
+    <!--    <link rel="stylesheet" th:href="@{/indexCss.css}">-->
     <style>
         * {
             padding: 0;
@@ -35,6 +36,7 @@
             justify-content: space-between;
             align-items: center;
             background-color: #EDE7DF;
+            /*padding: 0 20px;*/
             font-weight: bold;
         }
 
@@ -154,7 +156,7 @@
 </head>
 <body>
 <header>
-    <h1 style="display: none">마이페이지</h1>
+    <h1 style="display: none">스토리웨이브 사이트 홈 화면</h1>
     <div class="nav-bar">
         <a class="storywave-logo" th:href="@{/home}">
             <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">

@@ -1,5 +1,7 @@
 package com.ormi.storywave.users;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
 import com.ormi.storywave.comment.Comment;
 import com.ormi.storywave.posts.Post;
 import com.ormi.storywave.posts.UserPostLike;
@@ -49,6 +51,19 @@ public class User {
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
+
+//ban 추가
+  @Column(name="ban_period")
+  private String banPeriod;
+
+  @Column(name="ban_reason")
+  private String banReason;
+
+
+
+
+
+
   @Column
   @OneToMany(mappedBy = "user")
   private List<Comment> comments = new ArrayList<>();
@@ -60,6 +75,7 @@ public class User {
   @Column
   @OneToMany(mappedBy = "user")
   private List<UserPostLike> likes = new ArrayList<>();
+
 
   @PrePersist
   protected void onCreate() {

@@ -3,10 +3,14 @@ package com.ormi.storywave.posts;
 import com.ormi.storywave.board.PostListDto;
 import com.ormi.storywave.users.UserService;
 import jakarta.servlet.http.HttpSession;
+import com.ormi.storywave.users.User;
+import com.ormi.storywave.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
 import java.util.List;
 
 

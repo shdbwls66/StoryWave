@@ -27,6 +27,11 @@ public class UserDto implements Serializable {
   private boolean activeStatus;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+
+  private String banPeriod;
+  private String banReason;
+
+
 //  private List<CommentDto> comments = new ArrayList<>();
 //  private List<PostDto> posts = new ArrayList<>();
 
@@ -43,6 +48,8 @@ public class UserDto implements Serializable {
                     .activeStatus(user.isActiveStatus())
                     .createdAt(user.getCreatedAt())
                     .updatedAt(user.getUpdatedAt())
+                    .banReason(user.getBanReason())
+                    .banPeriod(user.getBanPeriod())
                     .build();
 //    if (user.getComments() != null) {
 //      usersDto.setComments(
@@ -67,6 +74,8 @@ public class UserDto implements Serializable {
     user.setActiveStatus(this.activeStatus);
     user.setCreatedAt(this.createdAt);
     user.setUpdatedAt(this.updatedAt);
+    user.setBanReason(this.banReason);
+    user.setBanPeriod(this.banPeriod);
 
 //    if (this.comments != null) {
 //      this.comments.forEach(
@@ -83,5 +92,24 @@ public class UserDto implements Serializable {
 //              });
 //    }
     return user;
+  }
+
+  public Integer getBanPeriodAsInteger() {
+    return extractNumberFromString(banPeriod);
+  }
+
+
+
+  private Integer extractNumberFromString(String input) {
+    if (input == null || input.isEmpty()) {
+      return null;
+    }
+    try {
+      // 문자열에서 숫자만 추출
+      return Integer.parseInt(input.replaceAll("[^0-9]", ""));
+    } catch (NumberFormatException e) {
+      // 변환 실패 시 null 반환
+      return null;
+    }
   }
 }

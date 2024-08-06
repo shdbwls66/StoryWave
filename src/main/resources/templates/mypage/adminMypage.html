@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<!--<th:block th:fragment="headerLayout">-->
 <head>
     <meta charset="UTF-8">
-    <title>StoryWave</title>
-    <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
+    <title>마이페이지</title>
+    <link rel="icon" href="photo/StoryWaveLogo.png" type="image/x-icon">
     <!--    <link rel="stylesheet" th:href="@{/indexCss.css}">-->
     <style>
         * {
@@ -128,49 +127,31 @@
             height: 0.5px; /* 두께 설정 */
             background-color: #ddd;
         }
-        .login-container {
-            width: 400px;
-            height: 400px;
-            padding: 40px;
-            position: absolute;
-            margin-left: -200px;
-            margin-top: -200px;
-            left: 50%;
-            top: 50%;
+
+        .mainCont {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        #loginForm > input {
-            width: 100%;
-            height: 48px;
-            padding: 0 10px;
-            margin-bottom: 20px;
-            border-radius: 6px;
+        .button_cont {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .myPageMenu {
+            width: 125px;
+            height: 33px;
+            color: black;
             background-color: white;
-            border: none;
+            border-radius: 4px;
+            font-size: 12pt;
+            cursor: pointer;
         }
 
-        #loginBtn {
-            width: 100px;
-            height: 48px;
-            background-color: white;
-            border-width: medium;
-            border-radius: 10px;
-            box-shadow: 1px 1px 1px 1px gray;
-            margin-top: 30px;
-            margin-left: 110px;
-            margin-bottom: 40px;
-            cursor: pointer
-        }
-
-        #errorMessage {
-            font-size: 10px;
-            color: red;
-        }
-
-        .login-container > div {
-            text-align: center;
-            margin-bottom: 30px;
-        }
     </style>
 </head>
 <body>
@@ -188,37 +169,30 @@
             </form>
             <div class="menu-container">
                 <div class="menu-cont2">
-                    <a th:href="@{/board/Noticepostlist}">공지사항</a>
-                    <a th:href="@{/board/Moviepostlist}">영화 <span class="sub-text">리뷰/서평</span></a>
-                    <a th:href="@{/board/Bookpostlist}">도서 <span class="sub-text">리뷰/서평</span></a>
+                    <a href="#">공지사항</a>
+                    <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
+                    <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
                 </div>
                 <div class="user-menu">
-                    <a th:href="@{/user/join}">회원가입</a>
+                    <a th:href="@{myPage}">마이페이지</a>
                     <span>|</span>
-                    <a th:href="@{/user/login}">로그인</a>
+                    <a href="#">로그아웃</a>
                 </div>
             </div>
         </nav>
     </div>
     <hr class="firstLine">
 </header>
-<main>
-    <div class="login-container">
-        <form th:action="@{/user/login}" method="post" id="loginForm">
-            <input type="text" name="userId" placeholder="아이디" required>
-            <input type="password" name="password" placeholder="패스워드" required>
-            <div id="errorMessage" th:text="${error}"></div>
-<!--            <span th:text="${message}"></span>-->
-            <button id="loginBtn">로그인</button>
-        </form>
-        <div><a th:href="@{/user/join}">회원가입</a></div>
-        <div>
-            <a th:href="@{/foundId}">아이디 찾기</a>
-            <span>/ </span>
-            <a th:href="@{/foundpw}">비밀번호 찾기</a>
-        </div>
+<main class="mainCont">
+    <h2 style="display: none">메인 컨텐츠</h2>
+    <div class="button_cont">
+        <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/mypost}'|">내 게시물</button>
+        <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/mycomment}'|">내 댓글</button>
+        <button type="button" class="myPageMenu" >회원정보 수정</button>
+        <button type="button" class="myPageMenu" th:onclick="|location.href='@{/userList}'|">회원 관리</button>
+        <button type="button" class="myPageMenu" th:onclick="|location.href='@{/mypage/quit}'|">탈퇴하기</button>
     </div>
 </main>
 </body>
-<!--</th:block>-->
+
 </html>
