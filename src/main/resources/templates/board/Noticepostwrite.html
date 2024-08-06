@@ -278,10 +278,12 @@
       <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
     </a>
     <nav class="menu-cont">
-      <form class="search-form">
+      <form class="search-form" id="search-form" th:action="@{/board/Searchlist}" method="get">
         <label for="search-input" style="display:none;">검색</label>
-        <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
-        <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
+        <input id="search-input" class="search_box" type="search" name="keyword" placeholder="검색">
+        <button type="submit" id="search_btn">
+          <img class="search_img" src="/photo/search.png" alt="검색 버튼">
+        </button>
       </form>
       <div class="menu-container">
         <div class="menu-cont2">
@@ -343,6 +345,14 @@
   </div>
 </main>
 <script>
+  //검색기능
+  document.getElementById('search-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const searchInput = document.getElementById('search-input').value;
+    const searchUrl = `/board/Searchlist?keyword=${encodeURIComponent(searchInput)}`;
+    window.location.href = searchUrl;
+  });
+
   document.getElementById('images').addEventListener('change', function(event) {
     const files = event.target.files;
     if (files.length > 0) {
