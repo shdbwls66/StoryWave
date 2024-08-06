@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -29,6 +30,7 @@ public class BoardController {
     public String showNoticePostList(Model model, HttpSession session){
         // 세션에서 userId를 가져옵니다.
         String userId = (String) session.getAttribute("userId");
+        String role = (String) session.getAttribute("role");
 
         if (userId != null) {
             // userId가 세션에 있는 경우, UserDto를 조회합니다.
@@ -36,6 +38,7 @@ public class BoardController {
             if (user.isPresent()) {
                 model.addAttribute("isLoggedIn", true);
                 model.addAttribute("userId", userId); // userId를 모델에 추가
+                model.addAttribute("role", role);
 
             } else {
                 // UserDto가 null인 경우, 로그인 상태가 아님

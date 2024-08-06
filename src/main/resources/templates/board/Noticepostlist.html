@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>공지사항 게시판</title>
-
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <style>
     * {
       padding: 0;
@@ -185,6 +185,7 @@
       cursor: pointer;
       text-align: center;
       font-size: 12px;
+      pointer-events: auto;
     }
 
     table {
@@ -278,7 +279,7 @@
 <main>
   <div class="filter-section">
     <span id="categroy">공지사항</span>
-    <a class="write-button" th:href="@{/board/Noticepostwrite}" onclick="checkLoginStatusAndRedirect1(event)">
+    <a class="write-button" id="writeBtn" th:href="@{/board/Noticepostwrite}" onclick="checkLoginStatusAndRedirect1(event)">
       글쓰기
     </a>
   </div>
@@ -315,6 +316,12 @@
   </div>
 </main>
 <script th:inline="javascript">
+  window.onload = () => {
+    const role = [[${role}]];
+    if (role === 'USER'){ // 일반 사용자의 경우 글쓰기 제한
+      document.getElementById("writeBtn").style.pointerEvents = "none";
+    }
+  }
   function checkLoginStatusAndRedirect1(event) {
     event.preventDefault(); // 링크 클릭을 방지합니다.
 
