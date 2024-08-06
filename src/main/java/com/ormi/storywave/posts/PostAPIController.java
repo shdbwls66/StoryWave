@@ -5,6 +5,7 @@ import com.ormi.storywave.users.UserService;
 import jakarta.servlet.http.HttpSession;
 import com.ormi.storywave.users.User;
 import com.ormi.storywave.users.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,15 @@ import java.util.List;
 @RequestMapping("/post")
 public class PostAPIController {
   private final PostService postService;
+  private final UserRepository userRepository;
+  private final HttpSession httpSession;
   private final UserService userService;
 
   @Autowired
-  public PostAPIController(PostService postService, UserService userService) {
+  public PostAPIController(PostService postService, UserRepository userRepository, UserService userService, HttpSession httpSession) {
     this.postService = postService;
+    this.userRepository = userRepository;
+    this.httpSession = httpSession;
     this.userService = userService;
   }
 
@@ -44,7 +49,7 @@ public class PostAPIController {
 
 
     // dto에서 엔티티로 변환
-    Post createdPost = postService.createPost(post, imageFiles, categoryNames, post_type_id, thumbs,userid);
+    Post createdPost = postService.createPost(post, imageFiles, categoryNames, post_type_id, thumbs, httpSession);
 
     // 엔티티에서 Dto로 변환
     PostDto postDto = PostMapper.INSTANCE.postToPostDto(createdPost);
