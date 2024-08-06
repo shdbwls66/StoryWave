@@ -3,14 +3,13 @@ package com.ormi.storywave.mypage;
 import com.ormi.storywave.comment.CommentService;
 import com.ormi.storywave.posts.Post;
 import com.ormi.storywave.posts.PostService;
-import com.ormi.storywave.users.UserDto;
-import com.ormi.storywave.users.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/mypage")
@@ -18,13 +17,11 @@ public class MyPageController {
 
   private final CommentService commentService;
   private final PostService postService;
-  private final UserService userService;
 
   @Autowired
-  public MyPageController(CommentService commentService, PostService postsService, UserService userService) {
+  public MyPageController(CommentService commentService, PostService postsService) {
     this.commentService = commentService;
     this.postService = postsService;
-    this.userService = userService;
   }
 
   // 마이페이지 컨트롤러 안에 내 댓글, 내 게시물 기능 넣을지? 아님 각 컨트롤러에 넣을지?
@@ -37,25 +34,6 @@ public class MyPageController {
   @GetMapping("/quit")
   public String showQuitPage(Model model) {
     return "mypage/quit";
-  }
-
-  @GetMapping("/update-user")
-  public String updateUserForm(Model model, HttpSession session) {
-    String findUserId = (String)session.getAttribute("userId");
-
-    UserDto userDto = userService.getUserById(findUserId).orElse(null);
-
-    model.addAttribute("user", userDto);
-
-    return "mypage/update_user";
-  }
-
-  @PostMapping("/update-user")
-  public String updateUser(@ModelAttribute("user") UserDto userDto, Model model) {
-    UserDto updateduser = userService.updateUser(userDto.getUserId(),userDto).orElse(null);
-    model.addAttribute("user", updateduser);
-
-    return "mypage/update_user";
   }
 
   @GetMapping("/mypost")

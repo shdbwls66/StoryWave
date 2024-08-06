@@ -22,4 +22,12 @@ public class UserRequest {
         private String userId;
         private String password;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class AdminDto{
+        private String role;
+    }
+
+    
 }
