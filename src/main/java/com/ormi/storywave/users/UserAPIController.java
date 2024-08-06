@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -38,9 +39,25 @@ public class UserAPIController {
                 .orElse(ResponseEntity.notFound().build());
     }*/
 
-
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("userId") String userId, @RequestBody UserDto userDto) {
+
+        if (!userId.equals(userDto.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if (userDto.getEmail() == null || userDto.getEmail().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if (userDto.getUsername() == null || userDto.getUsername().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if (userDto.getNickname() == null || userDto.getNickname().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
         return userService
                 .updateUser(userId, userDto)
                 .map(ResponseEntity::ok)
