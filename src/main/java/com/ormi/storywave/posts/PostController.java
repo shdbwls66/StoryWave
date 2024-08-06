@@ -144,32 +144,8 @@ public class PostController {
     Post post = postService.getPostByPostTypeIdAndPostId(postTypeId, postId).toPost();
     post.setTitle(updatedPost.getTitle());
     post.setContent(updatedPost.getContent());
-    post.setCategories(updatedPost.getCategories());
-    post.setImages(updatedPost.getImages());
 
     return "redirect:board/" + postTypeId + "/post/" + postId;
   }
-
-  //    post.setCategories(convertCategories(categories));
-//    post.setImages(processImages(images));
-
-//  private Set<Long> convertCategories(List<String> categories){
-//    return categories.stream()
-//            .map(Long::parseLong)
-//            .collect(Collectors.toSet());
-//  }
-//
-//  private List<Image> processImages(MultipartFile[] files){
-//    List<Image> imageList = new ArrayList<>();
-//    for (MultipartFile file : files) {
-//      if (!file.isEmpty()) {
-//        Image image = new Image();
-//        imageList.add(image);
-//      }
-//    }
-//    return imageList;
-//  }
-
-
 
 }

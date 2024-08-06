@@ -367,6 +367,20 @@
     }
   });
 
+
+  function removeImage(file) {
+    // 이미지 컨테이너에서 해당 파일 제거
+    const container = document.getElementById('image-upload-container');
+    const imageWrappers = container.getElementsByClassName('images');
+    for (let i = 0; i < imageWrappers.length; i++) {
+      const wrapper = imageWrappers[i];
+      if (wrapper.dataset.file === file) {
+        container.removeChild(wrapper);
+        break;
+      }
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     const image = [[${image}]];
 
@@ -383,6 +397,14 @@
     imgElement.style.maxWidth = '100%';
     imgElement.style.height = 'auto';
     contentDiv.appendChild(imgElement);
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'X';
+    cancelBtn.className = 'cancel-btn';
+    cancelBtn.onclick = function () {
+      removeImage(imageSrc);
+    };
+
   }
 
   document.getElementById('postForm').addEventListener('submit', function(event) {
@@ -434,7 +456,6 @@
               alert('수정 완료되었습니다.');
               this.reset();
               document.getElementById('content').innerHTML = '';
-
               returnPostlist();
             })
             .catch(error => {
