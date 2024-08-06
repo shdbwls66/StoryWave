@@ -33,11 +33,16 @@ public class UserService {
         User users = usersDto.toUsers();
         users.setCreatedAt(LocalDateTime.now());
         User savedUsers = userRepository.save(users);
-        return fromUsers(savedUsers);
+        return UserDto.fromUsers(savedUsers);
     }
 
-    public final Optional<UserDto> getUserById(String userId) {
+    public Optional<UserDto> getUserById(String userId) {
         return userRepository.findById(userId)
+                .map(UserDto::fromUsers);
+    }
+
+    public Optional<UserDto> getUserByPostId(Long postId){
+        return userRepository.findByPosts_Id(postId)
                 .map(UserDto::fromUsers);
     }
 
@@ -49,7 +54,7 @@ public class UserService {
                     users.setEmail(updatedUsers.getEmail());
                     users.setNickname(updatedUsers.getNickname());
                     users.setUpdatedAt(LocalDateTime.now());
-                    return fromUsers(userRepository.save(users));
+                    return UserDto.fromUsers(userRepository.save(users));
                 });
     }
 
@@ -74,7 +79,7 @@ public class UserService {
     @Transactional
     public UserDto addUser(UserRequest.JoinDto joinDto) {
         //default 값 부여
-        String defaultRole = "user";
+        String defaultRole = "USER";
         boolean defaultStatus = true;
 
         // 유저 객체 저장
@@ -89,7 +94,7 @@ public class UserService {
                         .activeStatus(defaultStatus)
                         .createdAt(LocalDateTime.now())
                         .build());
-        return fromUsers(savedUser);
+        return UserDto.fromUsers(savedUser);
     }
 
     public UserDto loginUser(UserRequest.LoginDto loginDto) {
