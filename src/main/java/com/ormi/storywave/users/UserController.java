@@ -3,6 +3,7 @@ package com.ormi.storywave.users;
 import com.ormi.storywave.admin.BanDto;
 import com.ormi.storywave.admin.BanService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +18,7 @@ public class UserController {
     private final UserService userService;
     private final BanService banService;
 
+    @Autowired
     public UserController(UserService userService, BanService banService) {
         this.userService = userService;
         this.banService = banService;
