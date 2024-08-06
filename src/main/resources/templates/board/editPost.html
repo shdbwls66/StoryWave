@@ -368,7 +368,7 @@
   });
 
   document.addEventListener('DOMContentLoaded', function() {
-    const image = [[${image}]];
+    const image = JSON.parse('${image}');
 
     const imagePreviewDiv = document.getElementById('image-preview');
     image.forEach(imageSrc => {

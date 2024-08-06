@@ -35,7 +35,6 @@ public class PostController {
 
   // 게시물 상세화면 조회
   @GetMapping("/{post_type_id}/post/{postId}")
-  // 권한 관련 에러가 계속 떠서 코드 만들기만 하고 바로 주석 처리 하였습니다.
   public String postsDetail(@PathVariable("post_type_id") Long postTypeId,
                             @PathVariable("postId") Long postId, HttpSession session, Model model) {
 //  public String postsDetail(@PathVariable("post_type_id") Long postTypeId,
