@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>도서 게시판</title>
-
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <style>
     * {
       padding: 0;
@@ -280,8 +280,8 @@
             <a th:href="@{/mypage}">마이페이지</a>
             <span>|</span>
             <a th:href="@{/user/logout}">로그아웃</a>
+          </div>
         </div>
-      </div>
       </div>
     </nav>
   </div>
@@ -330,19 +330,26 @@
   <div class="pagination" id="pagination">
     <!-- 페이지네이션 버튼이 여기 표시 -->
   </div>
+  <input id="activeStatus" type="checkbox" th:value="${session.activeStatus}" style="display: none">
 </main>
 </body>
 <script th:inline="javascript">
 
+  // 글쓰기 버튼 제한 조건
   function checkLoginStatusAndRedirect1(event) {
     event.preventDefault(); // 링크 클릭을 방지합니다.
+
+    let isActive = $("#activeStatus").val();
 
     fetch('/check-login')
             .then(response => response.json())
             .then(isLoggedIn => {
-              if (isLoggedIn) {
+              if (isLoggedIn && isActive === "") {
                 // 로그인된 상태이면 글쓰기 페이지로 이동
                 window.location.href = event.target.href;
+              } else if (isLoggedIn) {
+                // 정지회원인 경우 (isActive === "false")
+                alert('정지 회원입니다. 글쓰기가 제한됩니다.')
               } else {
                 // 로그인되지 않은 상태이면 로그인하라는 팝업을 띄움
                 alert('로그인 후 글쓰기 가능합니다. 로그인 해주세요!');
@@ -352,15 +359,22 @@
             })
             .catch(error => console.error('로그인 상태 확인 중 오류 발생:', error));
   }
+
+  // 게시글 상세 화면 링크 제한
   function checkLoginStatusAndRedirect2(event){
     event.preventDefault(); // 링크 클릭을 방지합니다.
+
+    const isActive = $("#activeStatus").val();
 
     fetch('/check-login')
             .then(response => response.json())
             .then(isLoggedIn => {
-              if (isLoggedIn) {
-                // 로그인된 상태이면 글쓰기 페이지로 이동
+              if (isLoggedIn && isActive === "") {
+                // 로그인된 상태이면 상세 화면 페이지로 이동
                 window.location.href = event.target.href;
+              } else if (isLoggedIn) {
+                // 정지회원인 경우 (isActive === "false")
+                alert('정지 회원입니다. 게시글 열람이 제한됩니다.')
               } else {
                 // 로그인되지 않은 상태이면 로그인하라는 팝업을 띄움
                 alert('로그인 후 게시글 열람이 가능합니다. 로그인 해주세요!');
@@ -468,7 +482,7 @@
           return `
                     <tr>
                         <td>공지</td>
-          <td><a href="/board/0/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
+          <td><a id="noticePost" href="/board/0/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
                         <td>${post.nickname}</td>
                         <td>${new Date(post.updated_at).toLocaleString()}</td>
                         <td>${post.thumbs}</td>
@@ -480,7 +494,7 @@
           return `
                     <tr>
                         <td>${(page - 1) * postsPerPage - (page !== 1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
-          <td><a href="/board/2/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
+          <td><a id="bookPost" href="/board/2/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
                         <td>${post.nickname}</td>
                         <td>${new Date(post.updated_at).toLocaleString()}</td>
                         <td>${post.thumbs}</td>
