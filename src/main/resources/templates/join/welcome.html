@@ -134,7 +134,7 @@
                 height: 400px;
                 padding: 40px;
                 position: absolute;
-                margin-left: -250px;
+                margin-left: -200px;
                 margin-top: -120px;
                 left: 50%;
                 top: 50%;
@@ -180,9 +180,9 @@
                 </form>
                 <div class="menu-container">
                     <div class="menu-cont2">
-                        <a href="#">공지사항</a>
-                        <a href="#">영화 <span class="sub-text">리뷰/서평</span></a>
-                        <a href="#">도서 <span class="sub-text">리뷰/서평</span></a>
+                        <a th:href="@{/board/Noticepostlist}">공지사항</a>
+                        <a th:href="@{/board/Moviepostlist}">영화 <span class="sub-text">리뷰/서평</span></a>
+                        <a th:href="@{/board/Bookpostlist}">도서 <span class="sub-text">리뷰/서평</span></a>
                     </div>
                     <div class="user-menu">
                         <a th:href="@{/user/join}">회원가입</a>

@@ -33,22 +33,16 @@ public class PostAPIController {
           @RequestPart(value = "images", required = false) MultipartFile[] imageFiles,
           @RequestParam(value = "thumbs", required = false) Integer thumbs,
           @PathVariable("post_type_id") Long post_type_id,
-          Principal principal)
+          @RequestParam("userid") String userid)
   {
 
     Post post = new Post();
     post.setTitle(title);
     post.setContent(content);
 
-//    // 현재 로그인된 사용자의 정보를 가져옴
-//    String username = principal.getName();
-//    User user = userService.findByUsername(username);
-
-//    // User의 name 정보 가져오기
-//    String name = user.getUsername(); // username 대신 name 필드로 수정
 
     // dto에서 엔티티로 변환
-    Post createdPost = postService.createPost(post, imageFiles, categoryNames, post_type_id, thumbs);
+    Post createdPost = postService.createPost(post, imageFiles, categoryNames, post_type_id, thumbs,userid);
 
     // 엔티티에서 Dto로 변환
     PostDto postDto = PostMapper.INSTANCE.postToPostDto(createdPost);
