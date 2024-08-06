@@ -116,15 +116,13 @@
         a {
             text-decoration: none;
             color: black;
-            cursor: pointer;
         }
 
         .firstLine {
-            display: inline-flex;
+            display: flex;
             border-style: solid;
             width: 100%; /* 페이지 전체 너비 */
             height: 0.5px; /* 두께 설정 */
-            background-color: #ddd;
         }
 
         .mainCont {
@@ -296,7 +294,11 @@
                 <tbody>
                 <tr th:each="noticePost : ${noticePosts}">
                     <td th:text="${noticePost.id}">id</td>
+<<<<<<< HEAD
                     <td><a th:text="${noticePost.title}" th:href="@{|/board/0/post/${noticePost.id}?userId=${userId}|}">제목</a></td>
+=======
+                    <td th:text="${noticePost.title}">제목</td>
+>>>>>>> 3c2c0499d61e001fa8598431193fa87c16c1cba9
                     <td th:text="${#temporals.format(noticePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
@@ -330,7 +332,11 @@
                 <tbody>
                 <tr th:each="moviePost : ${moviePosts}">
                     <td th:text="${moviePost.id}">id</td>
+<<<<<<< HEAD
                     <td><a th:text="${moviePost.title}" th:href="@{|/board/1/post/${moviePost.id}|}">제목</a></td>
+=======
+                    <td th:text="${moviePost.title}">제목</td>
+>>>>>>> 3c2c0499d61e001fa8598431193fa87c16c1cba9
                     <td th:text="${#temporals.format(moviePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
@@ -346,7 +352,11 @@
                 <tbody>
                 <tr th:each="bookPost : ${bookPosts}">
                     <td th:text="${bookPost.id}">id</td>
+<<<<<<< HEAD
                     <td><a th:text="${bookPost.title}" th:href="@{|/board/2/post/${bookPost.id}?userId=${userId}|}">제목</a></td>
+=======
+                    <td th:text="${bookPost.title}">제목</td>
+>>>>>>> 3c2c0499d61e001fa8598431193fa87c16c1cba9
                     <td th:text="${#temporals.format(bookPost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
