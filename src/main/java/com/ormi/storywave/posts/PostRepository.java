@@ -15,7 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Optional<Post> findByBoard_PostTypeIdAndId(Long postTypeId, Long id);
 
-    List<Post> findByTitleContaining(String keyword);
+    List<Post> findByTitleContaining(String titleKeyword);
 
     @Transactional
     @Modifying
@@ -30,4 +30,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.board.postTypeId = :postTypeId")
     List<Post> findByPostTypeIdWithUser(@Param("postTypeId") Long postTypeId);
 
+    // 제목 또는 내용에 검색어가 포함된 게시물 조회
+    //List<Post> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
 }

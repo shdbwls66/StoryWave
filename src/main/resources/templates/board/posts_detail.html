@@ -16,10 +16,12 @@
             <img class="storywave-img" src="/photo/StoryWaveLogo.png" alt="홈 화면 이동">
         </a>
         <nav class="menu-cont">
-            <form class="search-form">
+            <form class="search-form" id="search-form" th:action="@{/board/Searchlist}" method="get">
                 <label for="search-input" style="display:none;">검색</label>
-                <input id="search-input" class="search_box" type="search" name="search_input" placeholder="검색">
-                <button id="search_btn"><img class="search_img" src="/photo/search.png" alt="검색 버튼"></button>
+                <input id="search-input" class="search_box" type="search" name="keyword" placeholder="검색">
+                <button type="submit" id="search_btn">
+                    <img class="search_img" src="/photo/search.png" alt="검색 버튼">
+                </button>
             </form>
             <div class="menu-container">
                 <div class="menu-cont2">
@@ -131,21 +133,13 @@
 <script src="/postsDetailScript.js"></script>
 <script th:inline="javascript">
 
-    //postid를 불러오는 부분 추가 (이렇게 불러오면 됨)
-    // function getQueryParam(param) {
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     return urlParams.get(param);
-    // }
-    //
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     const postId = getQueryParam('id');
-    //     if (postId) {
-    //         console.log('Post ID:', postId);
-    //         // postId를 사용하여 서버에서 게시글을 가져오거나, 페이지 내용을 로드합니다.
-    //     } else {
-    //         console.log('No Post ID provided.');
-    //     }
-    // });
+    //검색기능
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const searchInput = document.getElementById('search-input').value;
+        const searchUrl = `/board/Searchlist?keyword=${encodeURIComponent(searchInput)}`;
+        window.location.href = searchUrl;
+    });
 
     function checkLoginStatusAndRedirect1(event) {
         event.preventDefault(); // 링크 클릭을 방지합니다.
