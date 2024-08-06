@@ -59,7 +59,9 @@ public class UserController {
         } else if(!loginResult.isActiveStatus()) {
             // 비영구 정지 회원의 경우
             session.setAttribute("userId", loginResult.getUserId());
+            session.setAttribute("activeStatus", loginResult.isActiveStatus());
 
+            model.addAttribute("message", "정지 회원입니다.");
             String endDate = banDto.getBanDate().plusDays(banDto.getBanPeriod())
                     .format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
 
