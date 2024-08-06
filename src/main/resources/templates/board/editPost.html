@@ -340,7 +340,7 @@
             <input type="file" id="images" name="images" accept="image/*" multiple>
           </div>
         </div>
-        <div id="content" class="content-editable" contenteditable="true" th:text="${post.content}"></div>
+        <div id="content" class="content-editable" contenteditable="true" th:utext="${post.content}"></div>
         <span class="error-message" id="content-error">내용을 입력하세요.</span>
         <div id="image-preview"></div>
       </div>
