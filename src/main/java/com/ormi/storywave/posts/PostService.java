@@ -5,6 +5,7 @@ import com.ormi.storywave.comment.CommentService;
 import com.ormi.storywave.users.User;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserRepository;
+import com.ormi.storywave.users.UserService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +41,8 @@ public class PostService {
   private String uploadDir;
   @Autowired
   private CommentService commentService;
+    @Autowired
+    private UserService userService;
 
   // 페이지 번호, 크기를 기반으로 페이지네이션된 게시물 반환 메서드
   public Page<Post> findPaginated(int page, int pageSize) {
@@ -96,6 +99,22 @@ public class PostService {
 
     User user = userRepository.findById(userid)
             .orElseThrow(() -> new RuntimeException("User not found with id: " + userid));
+
+    String role = user.getRole();
+
+    // 공지사항은 관리자만 가능
+    if ("USER".equals(role)) {
+      if (post_type_id == 0) {
+        throw new RuntimeException("공지사항은 관리자만 작성 가능합니다.");
+      }
+      //삭제 가능!
+    } else if ("ADMIN".equals(role)) {
+        if(post_type_id == 1 || post_type_id == 2) {
+          throw new RuntimeException("관리자는 공지사항만 작성 가능합니다.");
+        }
+    } else {
+      throw new RuntimeException("비정상적인 접근입니다.");
+    }
 
     // Board 설정
     Board board = boardRepository.findByPostTypeId(post_type_id)
