@@ -314,7 +314,7 @@
     </button>
   </div>
 </main>
-<script>
+<script th:inline="javascript">
   function checkLoginStatusAndRedirect1(event) {
     event.preventDefault(); // 링크 클릭을 방지합니다.
 
@@ -367,7 +367,7 @@
 
     // 게시글 데이터 가져오기
     function fetchPosts() {
-      fetch('http://localhost:8081/post/0')  // 절대경로를 사용하여 요청
+      fetch('/post/0')
               .then(response => response.json())
               .then(data => {
                 // 모든 게시글을 저장
@@ -396,7 +396,7 @@
         return `
                 <tr>
                     <td>${displayIndex}</td>
-          <td><a href="http://localhost:8081/board/0/post/${post.id}?userId=${post.userId}"  onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
+          <td><a href="/board/0/post/${post.id}?userId=${post.userId}"  onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
                     <td>${post.nickname}</td>
                      <td>${new Date(post.updated_at).toLocaleString()}</td>
                     <td>${post.thumbs}</td>

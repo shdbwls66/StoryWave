@@ -325,8 +325,7 @@
   </div>
 </main>
 </body>
-<script>
-
+<script th:inline="javascript">
   function checkLoginStatusAndRedirect1(event) {
     event.preventDefault(); // 링크 클릭을 방지합니다.
 
@@ -404,7 +403,8 @@
     });
     // 게시글 데이터 가져오기
     function fetchPosts() {
-      fetch('http://localhost:8081/post/1') // 절대경로를 사용하여 요청
+      const url ='/post/1';
+      fetch(url)
               .then(response => response.json())
               .then(data => {
                 totalPosts = data;
@@ -459,7 +459,7 @@
           return `
         <tr>
           <td>공지</td>
-<td><a href="http://localhost:8081/board/0/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
+<td><a href="/board/0/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
           <td>${post.nickname}</td>
           <td>${new Date(post.updated_at).toLocaleString()}</td>
           <td>${post.thumbs}</td>
@@ -472,7 +472,7 @@
 
         <tr>
           <td>${(page - 1) * postsPerPage - (page !== 1 ? nonNoticePostsBeforePage : 0) + nonNoticeCount}</td>
-          <td><a href="http://localhost:8081/board/1/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
+          <td><a href="/board/1/post/${post.id}?userId=${post.userId}" onclick="checkLoginStatusAndRedirect2(event)">${post.title}</a></td>
           <td>${post.nickname}</td>
           <td>${new Date(post.updated_at).toLocaleString()}</td>
           <td>${post.thumbs}</td>
