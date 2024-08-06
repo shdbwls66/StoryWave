@@ -35,12 +35,12 @@ public class PostController {
 
   // 게시물 상세화면 조회
   @GetMapping("/{post_type_id}/post/{postId}")
-  public String postsDetail(@PathVariable("post_type_id") Long postTypeId,
-                            @PathVariable("postId") Long postId, HttpSession session, Model model) {
 //  public String postsDetail(@PathVariable("post_type_id") Long postTypeId,
-//          @PathVariable("postId") Long postId, @RequestParam("userId") String userId, Model model) {
+//                            @PathVariable("postId") Long postId, HttpSession session, Model model) {
+  public String postsDetail(@PathVariable("post_type_id") Long postTypeId,
+          @PathVariable("postId") Long postId, @RequestParam("userId") String userId, Model model) {
     System.out.println("postsDetail 실행");
-        String userId = (String) session.getAttribute("userId");
+//        String userId = (String) session.getAttribute("userId");
 
     if (userId != null){
       Optional<UserDto> user = userService.getUserById(userId);
@@ -97,11 +97,11 @@ public class PostController {
 
   // 게시물 수정 페이지 조회
   @GetMapping("/{post_type_id}/post/{postId}/edit")
-  public String updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session, Model model){
-//  public String updatePost(@PathVariable("post_type_id") Long postTypeId,
-//                           @PathVariable("postId") Long postId,
-//                           @RequestParam("userId") String userId, Model model){
-    String userId = (String) session.getAttribute("userId");
+//  public String updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session, Model model){
+  public String updatePost(@PathVariable("post_type_id") Long postTypeId,
+                           @PathVariable("postId") Long postId,
+                           @RequestParam("userId") String userId, Model model){
+//    String userId = (String) session.getAttribute("userId");
     Post post = postService.getPostByPostTypeIdAndPostId(postTypeId, postId).toPost();
     List<ImageDto> imageList = post.getImages().stream().map(ImageDto::fromImage).toList();
     Set<Category> categories = new HashSet<>(post.getCategories());
@@ -144,6 +144,13 @@ public class PostController {
     Post post = postService.getPostByPostTypeIdAndPostId(postTypeId, postId).toPost();
     post.setTitle(updatedPost.getTitle());
     post.setContent(updatedPost.getContent());
+
+    if (images != null) {
+      // 이미지 업로드 및 처리를 여기서 수행
+      for (MultipartFile image : images) {
+        // 이미지 파일 처리 로직
+      }
+    }
 
     return "redirect:board/" + postTypeId + "/post/" + postId;
   }

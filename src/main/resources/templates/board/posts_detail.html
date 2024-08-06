@@ -6,6 +6,329 @@
     <title>게시글 상세 보기</title>
     <link rel="icon" href="/photo/StoryWaveLogo.png" type="image/x-icon">
     <link rel="stylesheet" href="/posts_detailCss.css">
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #EDE7DF;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif; /* 기본 글꼴 설정 */
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding-top: 15px;
+            background-color: #EDE7DF;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #EDE7DF;
+            /*padding: 0 20px;*/
+            font-weight: bold;
+        }
+
+        .storywave-logo {
+            flex: 0;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .storywave-img {
+            height: 120px;
+        }
+
+        .menu-cont {
+            display: flex;
+            flex-direction: column;
+            flex: 2;
+        }
+
+        .menu-container {
+            display: flex;
+            align-items: center; /* 수직 가운데 정렬 */
+            width: 100%;
+        }
+
+        .menu-cont2 {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-right: 100px;
+            margin-top: 20px;
+            margin-left: 100px;
+            font-size: 20px;
+            gap: 80px; /* 메뉴 항목 간 간격 */
+            white-space: nowrap; /* 줄바꿈 없음 */
+        }
+
+        .sub-text {
+            font-size: 14px; /* 리뷰/서평 글씨 작게 */
+            margin-left: 10px;
+        }
+
+        .user-menu {
+            display: flex;
+            margin-top: 20px;
+            margin-left: auto; /* user_menu를 오른쪽 끝으로 밀어냄 */
+            font-size: 14px;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 9px;
+        }
+
+        #search-input {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        #search_btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search_img {
+            height: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            cursor: pointer;
+        }
+
+        .firstLine {
+            display: inline-flex;
+            border-style: solid;
+            width: 100%; /* 페이지 전체 너비 */
+            height: 0.5px; /* 두께 설정 */
+            background-color: #ddd;
+        }
+
+        .mainCont {
+            display: flex;
+            padding: 135px 16px 23px 16px;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post_menu {
+            display: flex;
+            width: 100%;
+            /* height: 65px; */
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        /*모달*/
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            z-index: 20;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            box-shadow: 0 0 30px 0 #00000033;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /*모달 내용*/
+        .modalContent {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 500px;
+            height: 250px;
+            gap: 6px;
+            background-color: #EDE7DF;
+        }
+
+        .modalTitle {
+            font-size: 20pt;
+
+        }
+
+        .modalP {
+            font-size: 12pt;
+        }
+
+        .commentModalBtn, .postModalBtn {
+            width: 125px;
+            height: 33px;
+            color: black;
+            background-color: white;
+            border-radius: 4px;
+            font-size: 12pt;
+            cursor: pointer;
+        }
+
+        .modalBtnCont {
+            display: flex;
+            flex-direction: row;
+            padding-top: 12px;
+            gap: 24px;
+        }
+
+        .post_menu2 {
+            align-self: end;
+            font-size: 10pt;
+        }
+
+        .post_cont, .comments_cont {
+            width: 100%;
+            height: 50vh;
+            font-size: 10pt;
+            background-color: #F9F7F4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post_title {
+            background-color: white;
+            padding: 6px 9px;
+        }
+
+        .post_info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 9px;
+            font-size: 10pt;
+            list-style: none;
+        }
+
+        .post_user, .post_count {
+            display: flex;
+            gap: 29px;
+        }
+
+        .post_contents_box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 17px 9px;
+            height: 100%;
+        }
+
+        .post_thumbs {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: end;
+            align-self: center;
+            gap: 5px;
+            padding-bottom: 9px;
+        }
+
+        #thumbs_btn {
+            width: 15px;
+            height: 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .thumbs_img {
+            width: 15px;
+            height: 15px;
+        }
+
+        /* 댓글 리스트를 감싸는 박스 */
+        .comments_box {
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: start;
+            padding: 36px 16px;
+        }
+
+        /* 생성되는 댓글 데이터 리스트 */
+        .comments{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        /* 하나의 댓글 */
+        .comment{
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .content_comment {
+            padding: 10px 6px;
+            text-align: start;
+            background-color: white;
+        }
+
+        .created_comment {
+            font-size: 8pt;
+        }
+
+        .comment_write, .updateModal {
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+            align-items: end;
+            gap: 21px;
+            padding: 20px 52px;
+        }
+
+        #comment, #modifyContent {
+            height: 54px;
+            border: none;
+            width: 100%;
+            font-size: 10pt;
+            text-align: start;
+            padding: 19px 10px;
+        }
+
+        #comment_btn, #update_btn, #cancel_Btn {
+            width: 70px;
+            height: 33px;
+            color: black;
+            background-color: white;
+            border: none;
+            font-size: 10pt;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
