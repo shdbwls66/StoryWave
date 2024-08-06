@@ -60,10 +60,6 @@ public class User {
   private String banReason;
 
 
-
-
-
-
   @Column
   @OneToMany(mappedBy = "user")
   private List<Comment> comments = new ArrayList<>();
