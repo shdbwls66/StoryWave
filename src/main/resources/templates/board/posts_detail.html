@@ -39,13 +39,8 @@
 </header>
 <main class="mainCont">
     <h2 style="display: none">메인 컨텐츠</h2>
-    <!--   조건문을 사용하여, 포스트 타입에 따라 다른 url로 이어지도록 함 -->
-    <div class="post_menu" th:switch="${posts.postTypeId}">
-<!--        <span th:case="0"><a th:href="@{/board/Noticepostlist}">◀ 목록</a></span>-->
-<!--        <span th:case="1"><a th:href="@{/board/Moviepostlist}">◀ 목록</a></span>-->
-<!--        <span th:case="2"><a th:href="@{/board/Bookpostlist}">◀ 목록</a></span>-->
-<!--        <span th:case="*"><a th:href="@{/index_afterLogin}">◀ 목록</a></span>-->
-        <span th:case="*"><a onclick="returnPostlist()">◀ 목록</a></span>
+    <div class="post_menu">
+        <span><a onclick="returnPostlist()">◀ 목록</a></span>
 
         <nav class="post_menu2" th:if="(${users.nickname} == ${writer})">
             <a onclick="gotoUpdatePost()">수정</a>
@@ -312,7 +307,7 @@
         };
 
         $.ajax({
-            url: `/api/post/${postId}/comments?userId=${userId}`,
+            url: `/api/post/${postId}/comments`,
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
@@ -334,7 +329,7 @@
         const postId = [[${posts.postId}]];
         const userId = [[${users.userId}]];
         $.ajax({
-                url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
+                url: `/api/post/${postId}/comments/${commentId}`,
                 type: 'GET',
                 dataType: 'json',
                 success: function (response) {
@@ -367,7 +362,7 @@
         };
 
         $.ajax({
-            url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
+            url: `/api/post/${postId}/comments/${commentId}`,
             type: 'PUT',
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
@@ -391,7 +386,7 @@
         const userId = [[${users.userId}]];
 
         $.ajax({
-                url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
+                url: `/api/post/${postId}/comments/${commentId}`,
                 type: 'GET',
                 dataType: 'json',
                 success: function (response) {
@@ -416,7 +411,7 @@
         console.log(userId);
 
         $.ajax({
-            url: `/api/post/${postId}/comments/${commentId}?userId=${userId}`,
+            url: `/api/post/${postId}/comments/${commentId}`,
             type: 'DELETE',
             dataType: 'json',
             success: function () {

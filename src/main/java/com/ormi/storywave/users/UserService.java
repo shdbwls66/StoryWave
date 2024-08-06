@@ -63,6 +63,7 @@ public class UserService {
 
     public boolean selectNickname(String nickname) {
         System.out.println(nickname);
+
         return userRepository.existsByNickname(nickname);
     }
 

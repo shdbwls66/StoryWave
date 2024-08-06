@@ -7,6 +7,7 @@ import com.ormi.storywave.comment.CommentRepository;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserService;
 import com.ormi.storywave.users.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -35,12 +36,12 @@ public class PostController {
   // 게시물 상세화면 조회
   @GetMapping("/{post_type_id}/post/{postId}")
   // 권한 관련 에러가 계속 떠서 코드 만들기만 하고 바로 주석 처리 하였습니다.
-//  public String postsDetail(@PathVariable("post_type_id") Long postTypeId,
-//                            @PathVariable("postId") Long postId, HttpSession session, Model model) {
   public String postsDetail(@PathVariable("post_type_id") Long postTypeId,
-          @PathVariable("postId") Long postId, @RequestParam("userId") String userId, Model model) {
+                            @PathVariable("postId") Long postId, HttpSession session, Model model) {
+//  public String postsDetail(@PathVariable("post_type_id") Long postTypeId,
+//          @PathVariable("postId") Long postId, @RequestParam("userId") String userId, Model model) {
     System.out.println("postsDetail 실행");
-//        String userId = (String) session.getAttribute("userId");
+        String userId = (String) session.getAttribute("userId");
 
     if (userId != null){
       Optional<UserDto> user = userService.getUserById(userId);
@@ -97,11 +98,11 @@ public class PostController {
 
   // 게시물 수정 페이지 조회
   @GetMapping("/{post_type_id}/post/{postId}/edit")
-//  public String updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session, Model model){
-  public String updatePost(@PathVariable("post_type_id") Long postTypeId,
-                           @PathVariable("postId") Long postId,
-                           @RequestParam("userId") String userId, Model model){
-//    String userId = (String) session.getAttribute("userId");
+  public String updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session, Model model){
+//  public String updatePost(@PathVariable("post_type_id") Long postTypeId,
+//                           @PathVariable("postId") Long postId,
+//                           @RequestParam("userId") String userId, Model model){
+    String userId = (String) session.getAttribute("userId");
     Post post = postService.getPostByPostTypeIdAndPostId(postTypeId, postId).toPost();
     List<ImageDto> imageList = post.getImages().stream().map(ImageDto::fromImage).toList();
     Set<Category> categories = new HashSet<>(post.getCategories());

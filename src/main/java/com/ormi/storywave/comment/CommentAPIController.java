@@ -1,5 +1,6 @@
 package com.ormi.storywave.comment;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,12 @@ public class CommentAPIController {
   }
 
   @PostMapping("/{postId}/comments")
-  public ResponseEntity<CommentDto> createComment(
-          @RequestBody CommentDto commentDto,
-          @PathVariable("postId") Long postId,
-          @RequestParam("userId") String userId) {
+//  public ResponseEntity<CommentDto> createComment(
+//          @RequestBody CommentDto commentDto,
+//          @PathVariable("postId") Long postId,
+//          @RequestParam("userId") String userId) {
+  public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto, @PathVariable("postId") Long postId, HttpSession session){
+    String userId = (String) session.getAttribute("userId");
     CommentDto createdComment = commentService.createComment(commentDto, postId, userId);
     return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
   }
@@ -39,11 +42,17 @@ public class CommentAPIController {
   }
 
   @PutMapping("/{postId}/comments/{commentId}")
+//  public ResponseEntity<CommentDto> updateComment(
+//          @PathVariable("postId") Long postId,
+//          @PathVariable("commentId") Long commentId,
+//          @RequestBody CommentDto commentDto,
+//          @RequestParam("userId") String userId) {
   public ResponseEntity<CommentDto> updateComment(
           @PathVariable("postId") Long postId,
           @PathVariable("commentId") Long commentId,
           @RequestBody CommentDto commentDto,
-          @RequestParam("userId") String userId) {
+          HttpSession session) {
+    String userId = (String) session.getAttribute("userId");
     return commentService
             .updateComment(postId, commentId, commentDto, userId)
             .map(ResponseEntity::ok)
@@ -51,7 +60,15 @@ public class CommentAPIController {
   }
 
   @DeleteMapping("/{postId}/comments/{commentId}")
-  public ResponseEntity<Integer> deleteComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @RequestParam("userId") String userId) {
+//  public ResponseEntity<Integer> deleteComment(
+//          @PathVariable("postId") Long postId,
+//          @PathVariable("commentId") Long commentId,
+//          @RequestParam("userId") String userId) {
+  public ResponseEntity<Integer> deleteComment(
+          @PathVariable("postId") Long postId,
+          @PathVariable("commentId") Long commentId,
+          HttpSession session) {
+    String userId = (String) session.getAttribute("userId");
     commentService.deleteComment(postId, commentId, userId);
     return ResponseEntity.noContent().build();
   }
