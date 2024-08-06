@@ -200,7 +200,7 @@
                     <a th:href="@{/board/Bookpostlist}">도서 <span class="sub-text">리뷰/서평</span></a>
                 </div>
                 <div class="user-menu">
-                    <a th:href="@{/mypage}">마이페이지</a>
+                    <a th:href="@{/mypagecss}">마이페이지</a>
                     <span>|</span>
                     <a th:href="@{/user/logout}">로그아웃</a>
                 </div>
@@ -211,7 +211,7 @@
 </header>
 <main>
     <div class="update-container">
-        <form th:object="${user}" th:action="@{/mypage/update-user}" method="post" id="updateForm">
+        <form th:object="${user}" th:action="@{/mypagecss/update-user}" method="post" id="updateForm">
             <div>
                 <label for="id">아이디</label><br>
                 <input type="text" id="id" name="userId" th:value="*{userId}" readonly>
