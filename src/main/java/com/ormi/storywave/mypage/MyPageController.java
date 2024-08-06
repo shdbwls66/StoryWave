@@ -55,6 +55,7 @@ public class MyPageController {
       return "redirect:/error";
     }
   }
+
   @GetMapping("/quit")
   public String showQuitPage(Model model) {
     return "mypage/quit";
