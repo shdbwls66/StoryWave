@@ -201,12 +201,9 @@
     <main>
         <div class="ban-container">
             <p th:text="${message}"></p>
-<!--            <p>2024년 5월 30일까지 일부 기능이 제한됩니다.</p>-->
-<!--            <p th:text="${endDate}까지 일부 기능이 제한됩니다."></p>-->
             <p th:unless="${ban.getBanPeriod()==100}"><span th:text="${endDate}"></span>까지 일부 기능이 제한됩니다.</p>
             <p>정지사유: <span th:text="${ban.getBanReason()}"></span></p>
-            <a th:if="${ban.getBanPeriod()==100}" th:href="@{/home}" class="goHomeBtn">홈으로 이동</a>
-            <a th:unless="${ban.getBanPeriod()==100}" th:href="@{/index_afterLogin}" class="goHomeBtn">홈으로 이동</a>
+            <a th:href="@{/home}" class="goHomeBtn">홈으로 이동</a>
         </div>
     </main>
     </body>
