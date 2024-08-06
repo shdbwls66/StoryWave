@@ -5,6 +5,7 @@ import com.ormi.storywave.posts.PostRepository;
 import com.ormi.storywave.users.User;
 import com.ormi.storywave.users.UserDto;
 import com.ormi.storywave.users.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -74,7 +75,9 @@ public class CommentService {
 
   // 댓글 작성자만 수정 가능
   public Optional<CommentDto> updateComment(
+//          Long postId, Long commentId, CommentDto commentDto, String userId, HttpSession session) {
           Long postId, Long commentId, CommentDto commentDto, String userId) {
+//    String userId = session.getAttribute("userId");
     return commentRepository
             .findByPost_IdAndCommentId(postId, commentId)
             .filter(comment -> comment.getUser().getUserId().equals(userId))
@@ -87,7 +90,9 @@ public class CommentService {
   }
 
   // 댓글 작성자나, 운영자만 댓글 삭제 가능
+//  public boolean deleteComment(Long postId, Long commentId, HttpSession session) {
   public boolean deleteComment(Long postId, Long commentId, String userId) {
+    //    String userId = session.getAttribute("userId");
     Post posts = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Post not found"));
     UserDto users =
             userRepository
@@ -113,5 +118,10 @@ public class CommentService {
 
   public Integer commentCount(Long postId){
     return commentRepository.countCommentsByPost_Id(postId);
+  }
+
+  public void deleteCommentsByPostId(Long postId) {
+    Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Post not found"));
+    commentRepository.deleteByPost(post);
   }
 }

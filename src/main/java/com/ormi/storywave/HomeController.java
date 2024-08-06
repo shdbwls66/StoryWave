@@ -55,9 +55,9 @@ public class HomeController {
   }
 
   @GetMapping("/home/login")
-  public String afterLogin(Model model, HttpSession session) {
-    String userId = (String) session.getAttribute("userId");
-
+//  public String afterLogin(Model model, HttpSession session) {
+//    String userId = (String) session.getAttribute("userId");
+  public String afterLogin(Model model, @RequestParam("userId") String userId) {
     if (userId != null) {
       Optional<UserDto> user = userService.getUserById(userId);
       if (user.isPresent()) {

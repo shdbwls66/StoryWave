@@ -283,13 +283,13 @@
         <section class="notice_cont">
             <div class="post_title">
                 <h3>공지사항</h3>
-                <a class="showMore" th:href="@{/board/0/post}">Show More</a>
+                <a class="showMore" th:href="@{/board/Noticepostlist}">Show More</a>
             </div>
             <table>
                 <tbody>
                 <tr th:each="noticePost : ${noticePosts}">
                     <td th:text="${noticePost.id}">id</td>
-                    <td><a th:text="${noticePost.title}" th:href="@{|/board/Noticepostlist/post/${noticePost.id}?userId=${userId}|}">제목</a></td>
+                    <td><a th:text="${noticePost.title}" th:href="@{|/board/0/post/${noticePost.id}?userId=${userId}|}">제목</a></td>
                     <td th:text="${#temporals.format(noticePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>
@@ -317,49 +317,9 @@
         <section class="moviePost_cont">
             <div class="post_title">
                 <h3>영화<span> 리뷰 / 서평</span></h3>
-                <a class="showMore">Show More</a>
+                <a class="showMore" th:href="@{/board/Moviepostlist}">Show More</a>
             </div>
             <table>
-                <tbody>
-                <tr th:each="moviePost : ${moviePosts}">
-                    <td th:text="${moviePost.id}">id</td>
-                    <td><a th:text="${moviePost.title}" th:href="@{|/board/Moviepostlist/post/${moviePost.id}?userId=${userId}|}">제목</a></td>
-                    <td th:text="${#temporals.format(moviePost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-        <hr class="secondLine">
-        <section class="bookPost_cont">
-            <div class="post_title">
-                <h3>도서<span> 리뷰 / 서평</span></h3>
-                <span><a class="showMore">Show More</a></span>
-            </div>
-            <table>
-                <tbody>
-                <tr th:each="bookPost : ${bookPosts}">
-                    <td th:text="${bookPost.id}">id</td>
-                    <td><a th:text="${bookPost.title}" th:href="@{|/board/Bookpostlist/post/${bookPost.id}?userId=${userId}|}">제목</a></td>
-                    <td th:text="${#temporals.format(bookPost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-    </div>
-    <div class="mainSection_second">
-        <section class="moviePost_cont">
-            <div class="post_title">
-                <h3>영화<span> 리뷰 / 서평</span></h3>
-                <a class="showMore">Show More</a>
-            </div>
-            <table> <!--best 게시판 번호 -->
-                <thead>
-                <tr>
-                    <th>id</th>
-                    <th>영화 게시물 제목</th>
-                    <th>날짜</th>
-                </tr>
-                </thead>
                 <tbody>
                 <tr th:each="moviePost : ${moviePosts}">
                     <td th:text="${moviePost.id}">id</td>
@@ -373,20 +333,13 @@
         <section class="bookPost_cont">
             <div class="post_title">
                 <h3>도서<span> 리뷰 / 서평</span></h3>
-                <span><a class="showMore">Show More</a></span>
+                <span><a class="showMore" th:href="@{/board/Bookpostlist}">Show More</a></span>
             </div>
             <table>
-                <thead>
-                <tr>
-                    <th>id</th>
-                    <th>도서 게시물 제목</th>
-                    <th>날짜</th>
-                </tr>
-                </thead>
                 <tbody>
                 <tr th:each="bookPost : ${bookPosts}">
                     <td th:text="${bookPost.id}">id</td>
-                    <td th:text="${bookPost.title}"><a>제목</a></td>
+                    <td><a th:text="${bookPost.title}" th:href="@{|/board/2/post/${bookPost.id}?userId=${userId}|}">제목</a></td>
                     <td th:text="${#temporals.format(bookPost.updated_at, 'yyyy-MM-dd')}">게시물 날짜</td>
                 </tr>
                 </tbody>

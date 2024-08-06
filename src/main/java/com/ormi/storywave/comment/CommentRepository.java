@@ -1,5 +1,6 @@
 package com.ormi.storywave.comment;
 
+import com.ormi.storywave.posts.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,5 +13,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
   Optional<Comment> findByPost_IdAndCommentId(Long postId, Long commentId);
 
   Integer countCommentsByPost_Id(Long postId);
+
+  void deleteByPost(Post post);
 }
 

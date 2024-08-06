@@ -7,11 +7,6 @@ spring:
   application:
     name: storywave
 
-  security:
-    user:
-      name=
-      password=
-
   datasource:
     url: jdbc:mysql://localhost:3306/storywave
     username: root

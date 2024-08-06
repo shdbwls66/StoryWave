@@ -2,6 +2,7 @@ package com.ormi.storywave.posts;
 
 import com.ormi.storywave.board.PostListDto;
 import com.ormi.storywave.users.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,15 +65,17 @@ public class PostAPIController {
     return postService.saveLike(postId, userId);
   }
 
-  @PutMapping("{post_type_id}/post/{postId}")
-  public ResponseEntity<PostDto> updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, @RequestBody PostDto postDto){
+  @PutMapping("{post_type_id}/postDetail/{postId}")
+  public ResponseEntity<PostDto> updatePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session, @RequestBody PostDto postDto){
+//    String userId = (String) session.getAttribute("userId");
     return postService.updatePost(postTypeId, postId, postDto)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
   }
 
-  @DeleteMapping("{post_type_id}/post/{postId}")
-  public ResponseEntity<Void> deletePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId){
+  @DeleteMapping("{post_type_id}/postDetail/{postId}")
+  public ResponseEntity<Void> deletePost(@PathVariable("post_type_id") Long postTypeId, @PathVariable("postId") Long postId, HttpSession session){
+//    String userId = (String) session.getAttribute("userId");
     postService.deletePosts(postTypeId, postId);
     return ResponseEntity.noContent().build();
   }

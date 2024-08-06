@@ -310,10 +310,10 @@
 </header>
 <main>
   <div class="container">
-    <form id="postForm" action='http://localhost:8081/post/1' method="post" enctype="multipart/form-data">
+    <form id="postForm" th:action="@{|/board/${postTypeId}/post/${postId}/edit|}" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label for="title">제목</label>
-        <input type="text" id="title" name="title" th:text="${post.title}">
+        <input th:value="${post.title}" type="text" id="title" name="title">
         <span class="error-message" id="title-error">제목을 입력하세요.</span>
       </div>
       <div class="form-group">
@@ -342,18 +342,18 @@
         </div>
         <div id="content" class="content-editable" contenteditable="true" th:text="${post.content}"></div>
         <span class="error-message" id="content-error">내용을 입력하세요.</span>
+        <div id="image-preview"></div>
       </div>
       <input type="hidden" id="hiddenContent" name="content">
-      <input type="hidden" id="userid" name="userid" th:value="${session.userId}">
+      <input type="hidden" id="userid" name="userid" th:value="${userId}">
       <div class="submit-container">
-        <button id="cancel" type="button" th:onclick="@{/board/}">취소</button>
+        <button id="cancel" type="button" onclick="returnPostlist()">취소</button>
         <button id="submit" type="submit">확인</button>
       </div>
     </form>
   </div>
 </main>
-<script>
-
+<script th:inline="javascript">
   document.getElementById('images').addEventListener('change', function(event) {
     const files = event.target.files;
     if (files.length > 0) {
@@ -365,6 +365,15 @@
         reader.readAsDataURL(file);
       }
     }
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const image = [[${image}]];
+
+    const imagePreviewDiv = document.getElementById('image-preview');
+    image.forEach(imageSrc => {
+      insertImage(imageSrc);
+    });
   });
 
   function insertImage(imageSrc) {
@@ -425,12 +434,28 @@
               alert('수정 완료되었습니다.');
               this.reset();
               document.getElementById('content').innerHTML = '';
-              window.location.href = 'Moviepostlist.html';
+
+              returnPostlist();
             })
             .catch(error => {
               alert('제출 중 오류가 발생했습니다: ' + error.message);
             });
   });
+
+  // postTypeId에 따라 반환되는 게시판 링크가 다르게 설정
+  function returnPostlist() {
+    const post_type_id = Number([[${postTypeId}]]);
+
+    if (post_type_id === 0){
+      window.location.href = '/board/Noticepostlist';
+    } else if (post_type_id === 1){
+      window.location.href = '/board/Moviepostlist';
+    } else if (post_type_id === 2) {
+      window.location.href = '/board/Bookpostlist';
+    } else {
+      window.location.href = '/home/login'
+    }
+  }
 </script>
 </body>
 </html>

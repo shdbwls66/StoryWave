@@ -1,6 +1,7 @@
 package com.ormi.storywave.posts;
 
 import com.ormi.storywave.board.*;
+import com.ormi.storywave.comment.CommentService;
 import com.ormi.storywave.users.User;
 import com.ormi.storywave.users.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -40,6 +41,8 @@ public class PostService {
 
   @Value("${file.upload-dir}")
   private String uploadDir;
+  @Autowired
+  private CommentService commentService;
 
 
   // 페이지 번호, 크기를 기반으로 페이지네이션된 게시물 반환 메서드
@@ -210,6 +213,12 @@ public class PostService {
 
   @Transactional
   public boolean deletePosts(Long postTypeId, Long postId) {
+    Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("포스트를 찾을 수 없습니다"));
+    // 댓글 삭제
+    commentService.deleteCommentsByPostId(postId);
+    // 공감 기록 삭제
+    userPostLikeRepository.deleteByPost(post);
     return postRepository
         .findById(postId)
         .map(
