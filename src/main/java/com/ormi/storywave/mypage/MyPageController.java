@@ -47,7 +47,6 @@ public class MyPageController {
 
     String role = userService.getUserRole(user.getUserId());
 
-
     if ("ADMIN".equals(role)){
       return "mypage/adminMypage";
     } else if ("USER".equals(role)) {
@@ -55,9 +54,7 @@ public class MyPageController {
     } else {
       return "redirect:/error";
     }
-
   }
-
   @GetMapping("/quit")
   public String showQuitPage(Model model) {
     return "mypage/quit";
