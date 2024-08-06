@@ -104,7 +104,9 @@ public class PostController {
 //    String userId = (String) session.getAttribute("userId");
     Post post = postService.getPostByPostTypeIdAndPostId(postTypeId, postId).toPost();
     List<ImageDto> imageList = post.getImages().stream().map(ImageDto::fromImage).toList();
-//    post.setCategories(categories.stream().collect(Collectors.toSet()));
+    Set<Category> categories = post.getCategories().stream().collect(Collectors.toSet());
+    post.setCategories(new HashSet<>(categories));
+
     UserDto user =
         userService.getUserById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저는 찾을 수 없습니다."));
 
@@ -142,10 +144,14 @@ public class PostController {
     Post post = postService.getPostByPostTypeIdAndPostId(postTypeId, postId).toPost();
     post.setTitle(updatedPost.getTitle());
     post.setContent(updatedPost.getContent());
-//    post.setCategories(convertCategories(categories));
-//    post.setImages(processImages(images));
+    post.setCategories(updatedPost.getCategories());
+    post.setImages(updatedPost.getImages());
+
     return "redirect:board/" + postTypeId + "/post/" + postId;
   }
+
+  //    post.setCategories(convertCategories(categories));
+//    post.setImages(processImages(images));
 
 //  private Set<Long> convertCategories(List<String> categories){
 //    return categories.stream()
